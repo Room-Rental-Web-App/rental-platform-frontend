@@ -23,7 +23,7 @@ const Register = () => {
     setError("");
     try {
       // Backend ko email, password aur role teeno bhej rahe hain
-      await axios.post(API_ENDPOINTS.LOGIN_REQUEST, {
+      await axios.post(API_ENDPOINTS.REGISTER_REQUEST, {
         email: formData.email,
         password: formData.password,
         role: formData.role,

@@ -29,29 +29,24 @@ const Login = ({ onLoginSuccess }) => {
       });
 
       if (res.data.token) {
-        // 1. Token save karein session maintain karne ke liye
         localStorage.setItem("token", res.data.token);
-
-        // 2. Role save karein dashboard access ke liye (agar backend bhej raha hai)
+        localStorage.setItem("email", res.data.email);
+      
         if (res.data.role) {
           localStorage.setItem("role", res.data.role);
         }
 
-        // 3. App.jsx ki state update karein
         onLoginSuccess();
 
-        // 4. Home page par redirect karein
         navigate("/home");
       }
     } catch (err) {
-      // Backend error handle karein (User not found, Invalid Pass, Not Enabled)
       const errMsg =
         err.response?.data?.message ||
         err.response?.data ||
         "Invalid Email or Password";
       setError(errMsg);
 
-      // Agar account verify nahi hai toh optional redirection logic bhi laga sakte hain
       if (errMsg.toLowerCase().includes("verify")) {
         setError("Account not verified! Please register/verify again.");
       }
