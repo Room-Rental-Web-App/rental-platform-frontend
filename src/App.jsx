@@ -7,52 +7,92 @@ import {
 } from "react-router-dom";
 import Navbar from "./Navbar";
 import Login from "./Login";
-import Register from "./Register"; // <-- Register ko import karein
+import Register from "./Register";
+import AddRoom from "./AddRoom"; 
+import MyListings from "./MyListings";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const savedRole = localStorage.getItem("role");
     if (token) {
       setIsLoggedIn(true);
+      setRole(savedRole);
     }
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("email"); // Email bhi clear karein
     setIsLoggedIn(false);
+    setRole(null);
+  };
+
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
+    setRole(localStorage.getItem("role"));
   };
 
   return (
     <Router>
       <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+
       <Routes>
         <Route
           path="/home"
-          element={isLoggedIn ? <h1>Home Page</h1> : <Navigate to="/login" />}
+          element={
+            isLoggedIn ? (
+              <h1>Home Page - Welcome {role}</h1>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
+
+        {/* --- 2. Add Room Route (Only for OWNER) --- */}
+        <Route
+          path="/add-room"
+          element={
+            isLoggedIn && role === "ROLE_OWNER" ? (
+              <AddRoom />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/my-listings"
+          element={
+            isLoggedIn && role === "ROLE_OWNER" ? (
+              <MyListings />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+
         <Route path="/about" element={<h1>About Page</h1>} />
 
-        {/* Login Route */}
         <Route
           path="/login"
           element={
             isLoggedIn ? (
               <Navigate to="/home" />
             ) : (
-              <Login onLoginSuccess={() => setIsLoggedIn(true)} />
+              <Login onLoginSuccess={handleLoginSuccess} />
             )
           }
         />
 
-        {/* Register Route - Ye add karna zaruri hai */}
         <Route
           path="/register"
           element={isLoggedIn ? <Navigate to="/home" /> : <Register />}
         />
 
-        {/* Default redirect (Agar koi galat URL dale toh login pe bhej do) */}
         <Route
           path="*"
           element={<Navigate to={isLoggedIn ? "/home" : "/login"} />}
