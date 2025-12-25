@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { API_ENDPOINTS } from "./apiConfig";
-import "./CSS/Login.css";
+import { API_ENDPOINTS } from "../../api/apiConfig.js";
+import "../../css/Login.css";
 import { Lock, Mail, ShieldCheck, ArrowRight, UserCircle } from "lucide-react";
 
 const Register = () => {
