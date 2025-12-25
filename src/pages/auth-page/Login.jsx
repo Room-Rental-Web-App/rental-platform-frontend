@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { API_ENDPOINTS } from "./apiConfig"; // Ensure login: http://localhost:8080/api/auth/login is here
-import "./CSS/Login.css";
+import { API_ENDPOINTS } from "../../api/apiConfig.js"; // Ensure login: http://localhost:8080/api/auth/login is here
+import "../../css/Login.css";
 import { Lock, Mail, LogIn, AlertCircle } from "lucide-react";
 
 const Login = ({ onLoginSuccess }) => {

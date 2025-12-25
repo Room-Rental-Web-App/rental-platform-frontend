@@ -10,7 +10,7 @@ import {
   X,
 } from "lucide-react";
 import axios from "axios";
-import "./CSS/AddRoom.css";
+import "../../css/AddRoom.css";
 
 const AddRoom = () => {
   const [formData, setFormData] = useState({

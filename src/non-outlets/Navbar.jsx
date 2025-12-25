@@ -8,7 +8,7 @@ import {
   Settings,
   Search,
 } from "lucide-react";
-import "./CSS/Navbar.css";
+import "../css/Navbar.css";
 
 const Navbar = ({ isLoggedIn, onLogout }) => {
   // LocalStorage se role nikal rahe hain

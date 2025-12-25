@@ -5,11 +5,11 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Navbar from "./Navbar";
-import Login from "./Login";
-import Register from "./Register";
-import AddRoom from "./AddRoom"; 
-import MyListings from "./MyListings";
+import Navbar from "./non-outlets/Navbar";
+import Login from "./pages/auth-page/Login";
+import Register from "./pages/auth-page/Register";
+import AddRoom from "./pages/room-owner-page/AddRoom"; 
+import MyListings from "./pages/MyListings";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

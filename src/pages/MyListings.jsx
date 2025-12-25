@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Edit, Trash2, MapPin, IndianRupee } from "lucide-react";
-import "./CSS/MyListings.css";
+import "../css/MyListings.css";
 
 const MyListings = () => {
   const [rooms, setRooms] = useState([]);
