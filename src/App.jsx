@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
@@ -8,8 +9,9 @@ import {
 import Navbar from "./non-outlets/Navbar";
 import Login from "./pages/auth-page/Login";
 import Register from "./pages/auth-page/Register";
-import AddRoom from "./pages/room-owner-page/AddRoom"; 
-import MyListings from "./pages/MyListings";
+import AddRoom from "./pages/room-owner-page/AddRoom";
+import MyListings from "./pages/room-owner-page/MyListings";
+import Home from "./pages/Home";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -46,7 +48,7 @@ const App = () => {
           path="/home"
           element={
             isLoggedIn ? (
-              <h1>Home Page - Welcome {role}</h1>
+              <Home />
             ) : (
               <Navigate to="/login" />
             )

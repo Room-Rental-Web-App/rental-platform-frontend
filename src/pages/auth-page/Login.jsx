@@ -29,6 +29,7 @@ const Login = ({ onLoginSuccess }) => {
       });
 
       if (res.data.token) {
+        console.log("Login Successful:", res.data);
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("email", res.data.email);
       
