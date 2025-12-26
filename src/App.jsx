@@ -9,9 +9,13 @@ import {
 import Navbar from "./non-outlets/Navbar";
 import Login from "./pages/auth-page/Login";
 import Register from "./pages/auth-page/Register";
-import AddRoom from "./pages/room-owner-page/AddRoom";
+
+import AddRoom from "./pages/room-owner-page/AddRoom"; 
 import MyListings from "./pages/room-owner-page/MyListings";
-import HomePage from "./pages/Home";
+
+import Home from "./pages/Home";
+
+
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
