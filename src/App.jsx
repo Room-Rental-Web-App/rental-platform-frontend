@@ -13,8 +13,8 @@ import Register from "./pages/auth-page/Register";
 import AddRoom from "./pages/room-owner-page/AddRoom"; 
 import MyListings from "./pages/room-owner-page/MyListings";
 
-
 import Home from "./pages/Home";
+
 
 
 const App = () => {
@@ -52,7 +52,7 @@ const App = () => {
           path="/home"
           element={
             isLoggedIn ? (
-              <Home />
+              <HomePage />
             ) : (
               <Navigate to="/login" />
             )
