@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import ThemeToggle from "../components/ThemeToggle"
 import {
   User,
   LogOut,
@@ -13,6 +14,8 @@ import "../css/Navbar.css";
 const Navbar = ({ isLoggedIn, onLogout }) => {
   // LocalStorage se role nikal rahe hain
   const userRole = localStorage.getItem("role");
+
+
 
   return (
     <nav className="navbar">
@@ -90,6 +93,8 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
           )}
         </li>
       </ul>
+
+      <ThemeToggle />
     </nav>
   );
 };
