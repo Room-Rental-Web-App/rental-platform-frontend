@@ -1,18 +1,43 @@
 import React, { useState } from "react";
-import {
-  MapPin,
-  IndianRupee,
-  Home,
-  Camera,
-  Video,
-  Navigation,
-  Upload,
-  X,
-} from "lucide-react";
 import axios from "axios";
-import "../../css/AddRoom.css";
+import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
+import {
+  Home,
+  MapPin,
+  Camera,
+  ChevronRight,
+  ChevronLeft,
+  CheckCircle,
+  Wifi,
+  Wind,
+  Car,
+  Utensils,
+  Navigation,
+  Video,
+  X,
+  Upload,
+} from "lucide-react";
+
+
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import "../../CSS/AddRoom.css";
+
+// Leaflet Icon Fix (Standard icons don't load sometimes in React)
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
+
+let DefaultIcon = L.icon({
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+});
+L.Marker.prototype.options.icon = DefaultIcon;
 
 const AddRoom = () => {
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -22,250 +47,325 @@ const AddRoom = () => {
     city: "",
     pincode: "",
     contactNumber: "",
-    latitude: null,
-    longitude: null,
+    latitude: 20.5937, // Default India Center
+    longitude: 78.9629,
+    amenities: [],
   });
-
   const [images, setImages] = useState([]);
   const [video, setVideo] = useState(null);
   const [previews, setPreviews] = useState([]);
 
-  // --- Functions ---
+  const allAmenities = [
+    { id: "wifi", label: "WiFi", icon: <Wifi size={16} /> },
+    { id: "ac", label: "AC", icon: <Wind size={16} /> },
+    { id: "parking", label: "Parking", icon: <Car size={16} /> },
+    { id: "kitchen", label: "Kitchen", icon: <Utensils size={16} /> },
+  ];
 
-  // 1. Get Current Location
-  const getGeoLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
+  // Helper for Map Clicks
+  const LocationPicker = () => {
+    useMapEvents({
+      click(e) {
         setFormData({
           ...formData,
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
+          latitude: e.latlng.lat,
+          longitude: e.latlng.lng,
         });
-        alert("Current location fetched successfully!");
-      });
-    } else {
-      alert("Geolocation is not supported by this browser.");
+      },
+    });
+    return <Marker position={[formData.latitude, formData.longitude]} />;
+  };
+
+  const handleAmenityChange = (id) => {
+    const updated = formData.amenities.includes(id)
+      ? formData.amenities.filter((a) => a !== id)
+      : [...formData.amenities, id];
+    setFormData({ ...formData, amenities: updated });
+  };
+
+  const getGeoLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setFormData({
+            ...formData,
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude,
+          });
+        },
+        () => alert("Enable GPS to fetch location.")
+      );
     }
   };
 
-  // 2. Handle Multiple Image Previews
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    setImages([...images, ...files]);
-
-    const newPreviews = files.map((file) => URL.createObjectURL(file));
-    setPreviews([...previews, ...newPreviews]);
-  };
-
-  
+  const nextStep = () => setStep(step + 1);
+  const prevStep = () => setStep(step - 1);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
-
-  
-    const roomData = {
-      ...formData,
-      ownerEmail: localStorage.getItem("email"), // Email include 
-    };
-
-  
+    const roomData = { ...formData, ownerEmail: localStorage.getItem("email") };
     data.append("roomData", JSON.stringify(roomData));
-
-    
-    images.forEach((img) => {
-      data.append("images", img);
-    });
-
-  
-    if (video) {
-      data.append("video", video);
-    }
+    images.forEach((img) => data.append("images", img));
+    if (video) data.append("video", video);
 
     try {
-      const token = localStorage.getItem("token");
-
-      const res = await axios.post(
-        "http://localhost:8080/api/rooms/add",
-        data,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      alert("Room Added Successfully!");
-      // Reset form or redirect
+      await axios.post(API_ENDPOINTS.ADD_ROOM, data, {
+        headers: { ...getAuthHeaders(), "Content-Type": "multipart/form-data" },
+      });
+      setStep(4);
     } catch (err) {
-      console.error("Upload Error:", err);
-      alert(
-        "Network Error: Make sure file size is okay and server is running."
-      );
+      alert("Upload failed. Check file size or connection.");
     }
   };
 
-  
   return (
-    <div className="add-room-container">
-      <form onSubmit={handleSubmit} className="add-room-form">
-        <h2>Post New Property Listing</h2>
-
-        {/* --- SECTION 1: BASIC INFO --- */}
-        <div className="form-section">
-          <h3>
-            <Home size={20} /> Basic Information
-          </h3>
-          <div className="input-group">
-            <label>Property Title</label>
-            <input
-              type="text"
-              placeholder="e.g. Modern Studio near Metro"
-              required
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
-              }
-            />
+    <div className="add-room-wrapper">
+      <div className="stepper">
+        {[1, 2, 3].map((s) => (
+          <div key={s} className={`step-item ${step >= s ? "active" : ""}`}>
+            {step > s ? <CheckCircle size={20} /> : s}
           </div>
-          <div className="row">
-            <div className="input-group">
-              <label>Room Type</label>
-              <select
+        ))}
+      </div>
+
+      <form onSubmit={handleSubmit} className="modern-form">
+        {/* STEP 1: BASIC INFO */}
+        {step === 1 && (
+          <div className="fade-in">
+            <h3>
+              <Home /> Basic Information
+            </h3>
+            <div className="input-box">
+              <label>Property Title</label>
+              <input
+                type="text"
+                required
+                value={formData.title}
                 onChange={(e) =>
-                  setFormData({ ...formData, roomType: e.target.value })
+                  setFormData({ ...formData, title: e.target.value })
                 }
-              >
-                <option>Single Room</option>
-                <option>Double Room</option>
-                <option>Flat / Apartment</option>
-                <option>Studio</option>
-              </select>
+                placeholder="e.g. Luxury PG near Main Road"
+              />
             </div>
-            <div className="input-group">
-              <label>Monthly Rent (₹)</label>
-              <div className="icon-input">
-                <IndianRupee size={16} />
+            <div className="input-box">
+              <label>Description</label>
+              <textarea
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+                placeholder="Describe your property..."
+              />
+            </div>
+            <div className="row">
+              <div className="input-box">
+                <label>Monthly Rent (₹)</label>
                 <input
                   type="number"
                   required
+                  value={formData.price}
                   onChange={(e) =>
                     setFormData({ ...formData, price: e.target.value })
                   }
                 />
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* --- SECTION 2: LOCATION & CONTACT --- */}
-        <div className="form-section">
-          <h3>
-            <MapPin size={20} /> Location & Contact
-          </h3>
-          <button type="button" className="geo-btn" onClick={getGeoLocation}>
-            <Navigation size={16} /> Use Current Location
-          </button>
-
-          <div className="input-group">
-            <label>Full Address</label>
-            <textarea
-              placeholder="Society name, Street, Landmark"
-              required
-              onChange={(e) =>
-                setFormData({ ...formData, address: e.target.value })
-              }
-            />
-          </div>
-
-          <div className="row">
-            <div className="input-group">
-              <label>City</label>
-              <input
-                type="text"
-                required
-                onChange={(e) =>
-                  setFormData({ ...formData, city: e.target.value })
-                }
-              />
-            </div>
-            <div className="input-group">
-              <label>Pincode</label>
-              <input
-                type="text"
-                required
-                onChange={(e) =>
-                  setFormData({ ...formData, pincode: e.target.value })
-                }
-              />
-            </div>
-          </div>
-
-          <div className="input-group">
-            <label>Contact Number (Visible to Premium Users)</label>
-            <input
-              type="text"
-              required
-              onChange={(e) =>
-                setFormData({ ...formData, contactNumber: e.target.value })
-              }
-            />
-          </div>
-        </div>
-
-        {/* --- SECTION 3: MEDIA UPLOAD --- */}
-        <div className="form-section">
-          <h3>
-            <Camera size={20} /> Property Photos & Video
-          </h3>
-          <div className="upload-box">
-            <label htmlFor="image-upload" className="upload-label">
-              <Upload /> Click to upload multiple photos
-            </label>
-            <input
-              id="image-upload"
-              type="file"
-              multiple
-              hidden
-              accept="image/*"
-              onChange={handleImageChange}
-            />
-          </div>
-
-          {/* Image Previews */}
-          <div className="preview-container">
-            {previews.map((src, index) => (
-              <div key={index} className="preview-card">
-                <img src={src} alt="Preview" />
-                <button
-                  type="button"
-                  onClick={() => {
-                    const newImgs = images.filter((_, i) => i !== index);
-                    const newPrevs = previews.filter((_, i) => i !== index);
-                    setImages(newImgs);
-                    setPreviews(newPrevs);
-                  }}
+              <div className="input-box">
+                <label>Room Type</label>
+                <select
+                  value={formData.roomType}
+                  onChange={(e) =>
+                    setFormData({ ...formData, roomType: e.target.value })
+                  }
                 >
-                  <X size={12} />
-                </button>
+                  <option>Single Room</option>
+                  <option>Double Room</option>
+                  <option>Flat / Apartment</option>
+                  <option>Studio</option>
+                </select>
               </div>
-            ))}
+            </div>
+            <div className="input-box">
+              <label>Amenities</label>
+              <div className="amenities-grid">
+                {allAmenities.map((item) => (
+                  <div
+                    key={item.id}
+                    className={`amenity-card ${
+                      formData.amenities.includes(item.id) ? "selected" : ""
+                    }`}
+                    onClick={() => handleAmenityChange(item.id)}
+                  >
+                    {item.icon} <span>{item.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <button type="button" onClick={nextStep} className="btn-next">
+              Next <ChevronRight size={18} />
+            </button>
           </div>
+        )}
 
-          <div className="input-group">
-            <label>
-              <Video size={18} /> Room Tour Video (Optional)
-            </label>
-            <input
-              type="file"
-              accept="video/*"
-              onChange={(e) => setVideo(e.target.files[0])}
-            />
+        {/* STEP 2: LOCATION & MAP */}
+        {step === 2 && (
+          <div className="fade-in">
+            <h3>
+              <MapPin /> Location Details
+            </h3>
+
+            <button type="button" className="geo-btn" onClick={getGeoLocation}>
+              <Navigation size={16} /> Fetch Current Location
+            </button>
+
+            {/* MAP SECTION */}
+            <div
+              className="map-container"
+              style={{ height: "250px", margin: "15px 0" }}
+            >
+              <MapContainer
+                center={[formData.latitude, formData.longitude]}
+                zoom={13}
+                style={{ height: "100%", width: "100%", borderRadius: "12px" }}
+              >
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                <LocationPicker />
+              </MapContainer>
+            </div>
+            <p className="hint-text">Click on the map to set exact marker 📍</p>
+
+            <div className="input-box">
+              <label>Full Address</label>
+              <textarea
+                required
+                value={formData.address}
+                onChange={(e) =>
+                  setFormData({ ...formData, address: e.target.value })
+                }
+              />
+            </div>
+            <div className="row">
+              <div className="input-box">
+                <label>City</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.city}
+                  onChange={(e) =>
+                    setFormData({ ...formData, city: e.target.value })
+                  }
+                />
+              </div>
+              <div className="input-box">
+                <label>Pincode</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.pincode}
+                  onChange={(e) =>
+                    setFormData({ ...formData, pincode: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+            <div className="input-box">
+              <label>Contact Number</label>
+              <input
+                type="text"
+                required
+                value={formData.contactNumber}
+                onChange={(e) =>
+                  setFormData({ ...formData, contactNumber: e.target.value })
+                }
+              />
+            </div>
+            <div className="btn-row">
+              <button type="button" onClick={prevStep} className="btn-prev">
+                Back
+              </button>
+              <button type="button" onClick={nextStep} className="btn-next">
+                Next <ChevronRight size={18} />
+              </button>
+            </div>
           </div>
-        </div>
+        )}
 
-        <button type="submit" className="submit-btn">
-          Publish Listing
-        </button>
+        {/* STEP 3: MEDIA */}
+        {step === 3 && (
+          <div className="fade-in">
+            <h3>
+              <Camera /> Photos & Video
+            </h3>
+            <div className="upload-section">
+              <label className="upload-card">
+                <Upload />
+                <span>Upload Photos</span>
+                <input
+                  type="file"
+                  multiple
+                  hidden
+                  accept="image/*"
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files);
+                    setImages([...images, ...files]);
+                    setPreviews([
+                      ...previews,
+                      ...files.map((f) => URL.createObjectURL(f)),
+                    ]);
+                  }}
+                />
+              </label>
+            </div>
+            <div className="previews">
+              {previews.map((p, i) => (
+                <div key={i} className="preview-item">
+                  <img src={p} alt="preview" className="thumb" />
+                  <X
+                    className="remove-icon"
+                    size={14}
+                    onClick={() => {
+                      setImages(images.filter((_, idx) => idx !== i));
+                      setPreviews(previews.filter((_, idx) => idx !== i));
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="input-box" style={{ marginTop: "20px" }}>
+              <label>
+                <Video size={18} /> Tour Video
+              </label>
+              <input
+                type="file"
+                accept="video/*"
+                onChange={(e) => setVideo(e.target.files[0])}
+              />
+            </div>
+            <div className="btn-row">
+              <button type="button" onClick={prevStep} className="btn-prev">
+                Back
+              </button>
+              <button type="submit" className="btn-publish">
+                Publish Listing
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* SUCCESS MESSAGE */}
+        {step === 4 && (
+          <div className="success-msg">
+            <CheckCircle size={60} color="#10b981" />
+            <h2>Listing Published!</h2>
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              className="btn-next"
+            >
+              Add Another
+            </button>
+          </div>
+        )}
       </form>
     </div>
   );

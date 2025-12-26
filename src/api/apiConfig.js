@@ -1,9 +1,23 @@
-// Base URL - In future sirf ye change karke aap pura project server pe daal sakte hain
-export const BASE_URL = "http://localhost:8080/api/auth";
+// src/apiConfig.js
+const BASE_URL = "http://localhost:8080/api";
 
-// Endpoints mapping
 export const API_ENDPOINTS = {
-  REGISTER_REQUEST: `${BASE_URL}/register-request`,
-  LOGIN_REQUEST: `${BASE_URL}/login-request`,
-  VERIFY_OTP: `${BASE_URL}/verify-otp`,
+  // Auth Endpoints
+  REGISTER_REQUEST: `${BASE_URL}/auth/register-request`,
+  LOGIN_REQUEST: `${BASE_URL}/auth/login-request`,
+  VERIFY_OTP: `${BASE_URL}/auth/verify-otp`,
+
+  // Room Endpoints
+  ADD_ROOM: `${BASE_URL}/rooms/add`,
+  UPDATE_ROOM: (id) => `${BASE_URL}/rooms/update/${id}`,
+  DELETE_ROOM: (id) => `${BASE_URL}/rooms/delete/${id}`,
+  MY_LISTINGS: `${BASE_URL}/rooms/my-listings`,
+  SEARCH_ROOMS: `${BASE_URL}/rooms/search`,
+};
+
+export const getAuthHeaders = () => {
+  const token = localStorage.getItem("token");
+  return {
+    Authorization: `Bearer ${token}`,
+  };
 };

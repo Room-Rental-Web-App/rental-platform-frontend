@@ -9,7 +9,7 @@ import Navbar from "./non-outlets/Navbar";
 import Login from "./pages/auth-page/Login";
 import Register from "./pages/auth-page/Register";
 import AddRoom from "./pages/room-owner-page/AddRoom"; 
-import MyListings from "./pages/MyListings";
+import MyListings from "./pages/room-owner-page/MyListings";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
