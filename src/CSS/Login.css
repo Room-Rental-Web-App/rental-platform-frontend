@@ -1,143 +1,148 @@
-/* Container for the Auth Page */
+/* Base Container */
 .login-container {
-  min-height: 100vh;
+  max-height: fit-content;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(to bottom, var(--bg-body-grad-start), var(--bg-body-grad-end));
-  padding: 2rem;
-  transition: background 0.3s ease;
+  background-color: var(--bg-body-grad-start);
+  padding: 1.5rem;
+  transition: background 0.5s ease;
+  margin: auto auto;
 }
 
-/* The Main Form Card */
-.login-form {
-  background: var(--bg-surface);
-  padding: 3rem;
-  border-radius: var(--radius-lg);
+/* Smooth Card Flip */
+.auth-card-wrapper {
+  display: flex;
   width: 100%;
-  max-width: 450px;
+  max-width: 1050px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
   box-shadow: var(--shadow-lg);
-  text-align: center;
-  transition: background 0.3s ease, transform 0.3s ease;
+  transition: flex-direction 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55), background 0.3s ease;
 }
 
-.login-form h2 {
-  font-size: 2rem;
-  color: var(--text-main);
-  margin-bottom: 2rem;
-  font-weight: 700;
+.auth-card-wrapper.reverse {
+  flex-direction: row-reverse;
 }
 
-/* Error Message Styling */
-.error-banner {
-  background-color: #fee2e2;
-  color: #b91c1c;
-  padding: 0.8rem;
-  border-radius: var(--radius-sm);
-  margin-bottom: 1.5rem;
+/* Visual Side Styling */
+.visual-side {
+  flex: 1;
+  position: relative;
+  background: linear-gradient(135deg, var(--primary), #4f46e5);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  border: 1px solid #fecaca;
+  padding: 4rem;
+  color: var(--text-inverse);
+  transition: all 0.5s ease;
 }
 
-/* Input Group Container */
+/* Form Side Entry Animation */
+.form-side {
+  flex: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  /* This animation runs whenever the 'key' in React changes */
+  animation: formAppear 0.6s ease-out forwards;
+}
+
+@keyframes formAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered Input Animation */
 .input-group {
   position: relative;
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
+  margin-bottom: 1.2rem;
+  animation: slideIn 0.4s ease-out forwards;
 }
 
-/* Icon Positioning Inside Inputs */
-.input-group svg {
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Inputs and Icons */
+.field-icon {
   position: absolute;
-  left: 1rem;
+  left: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
   color: var(--text-muted);
-  pointer-events: none;
 }
 
-/* Input and Select Styling */
 .input-group input,
 .input-group select {
   width: 100%;
-  padding: 0.9rem 1rem 0.9rem 3rem;
-  background: var(--bg-surface);
+  padding: 1rem 1rem 1rem 3.5rem;
   border: 2px solid var(--border-light);
   border-radius: var(--radius-sm);
+  background: var(--bg-surface);
   color: var(--text-main);
-  font-size: 1rem;
   transition: all 0.3s ease;
-  outline: none;
 }
 
-.input-group input:focus,
-.input-group select:focus {
+.input-group input:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 4px var(--shadow-blue);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
-/* Special Case for Select (Owner/Tenant) */
-.input-group select {
-  cursor: pointer;
-  appearance: none;
-}
-
-/* Login/Action Button */
+/* Button & Links */
 .login-btn {
   width: 100%;
   padding: 1rem;
   background: var(--primary);
-  color: var(--text-inverse);
+  color: white;
   border: none;
   border-radius: var(--radius-sm);
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  transition: all 0.3s ease;
-  margin-top: 1rem;
+  gap: 0.8rem;
+  transition: 0.3s;
 }
 
 .login-btn:hover:not(:disabled) {
   background: var(--primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px var(--shadow-blue);
 }
 
-.login-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-/* Toggle Link Text (New here? Create Account) */
-.toggle-text {
-  margin-top: 1.5rem;
-  color: var(--text-muted);
-  font-size: 0.95rem;
-}
-
-.toggle-text span {
+.toggle-container span {
   color: var(--primary);
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  margin-left: 0.3rem;
   text-decoration: underline;
-  transition: color 0.2s;
 }
 
-.toggle-text span:hover {
-  color: var(--primary-hover);
-}
+/* Responsive */
+@media (max-width: 900px) {
+  .visual-side {
+    display: none;
+  }
 
-/* Responsive adjustments */
-@media (max-width: 480px) {
-  .login-form {
-    padding: 2rem 1.5rem;
+  .auth-card-wrapper {
+    max-width: 500px;
   }
 }

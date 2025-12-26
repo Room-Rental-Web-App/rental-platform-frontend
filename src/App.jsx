@@ -9,7 +9,7 @@ import {
 import Navbar from "./non-outlets/Navbar";
 import Login from "./components/Login";
 
-import AddRoom from "./pages/room-owner-page/AddRoom"; 
+import AddRoom from "./pages/room-owner-page/AddRoom";
 import MyListings from "./pages/room-owner-page/MyListings";
 
 import HomePage from "./pages/HomePage";
@@ -21,7 +21,7 @@ const App = () => {
   const [role, setRole] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");  
     const savedRole = localStorage.getItem("role");
     if (token) {
       setIsLoggedIn(true);
@@ -50,11 +50,8 @@ const App = () => {
         <Route
           path="/home"
           element={
-            isLoggedIn ? (
-              <HomePage />
-            ) : (
-              <Navigate to="/login" />
-            )
+
+            <HomePage />
           }
         />
 
@@ -93,7 +90,7 @@ const App = () => {
           }
         />
 
-    
+
 
         <Route
           path="*"

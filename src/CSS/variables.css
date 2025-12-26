@@ -1,6 +1,4 @@
-/* =========================================
-   1. CSS VARIABLES (Custom Properties)
-   ========================================= */
+
 :root {
   /* --- Brand Colors --- */
   --primary: #2563eb;
@@ -42,19 +40,15 @@
   --radius-lg: 20px;
   --radius-pill: 25px;
   
-  /* --- Font --- */
   --font-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* =========================================
-   2. DARK THEME OVERRIDES
-   ========================================= */
 [data-theme="dark"] {
   /* --- Backgrounds --- */
-  --bg-body-grad-start: #111827; /* Very dark gray */
-  --bg-body-grad-end: #0f172a;   /* Slightly different dark */
-  --bg-surface: #1f2937;         /* Dark gray for cards */
-  --bg-surface-alt: #374151;     /* Lighter gray for secondary areas */
+  --bg-body-grad-start: #111827;  
+  --bg-body-grad-end: #0f172a;    
+  --bg-surface: #1f2937;          
+  --bg-surface-alt: #374151;       
   
   /* --- Text Colors --- */
   --text-main: #f9fafb;          /* White-ish */
