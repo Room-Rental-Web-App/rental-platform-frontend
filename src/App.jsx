@@ -7,13 +7,12 @@ import {
   Navigate,
 } from "react-router-dom";
 import Navbar from "./non-outlets/Navbar";
-import Login from "./pages/auth-page/Login";
-import Register from "./pages/auth-page/Register";
+import Login from "./components/Login";
 
 import AddRoom from "./pages/room-owner-page/AddRoom"; 
 import MyListings from "./pages/room-owner-page/MyListings";
 
-import Home from "./pages/Home";
+import HomePage from "./pages/HomePage";
 
 
 
@@ -94,10 +93,7 @@ const App = () => {
           }
         />
 
-        <Route
-          path="/register"
-          element={isLoggedIn ? <Navigate to="/home" /> : <Register />}
-        />
+    
 
         <Route
           path="*"
