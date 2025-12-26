@@ -11,17 +11,19 @@ import Login from "./components/Login";
 
 import AddRoom from "./pages/room-owner-page/AddRoom";
 import MyListings from "./pages/room-owner-page/MyListings";
-
 import HomePage from "./pages/HomePage";
 
-
+// Admin Pages
+import AllUsers from "./pages/admin-page/AllUsers";
+import AllRooms from "./pages/admin-page/AllRooms";
+import AllOwner from "./pages/admin-page/AllOwners";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [role, setRole] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");  
+    const token = localStorage.getItem("token");
     const savedRole = localStorage.getItem("role");
     if (token) {
       setIsLoggedIn(true);
@@ -32,7 +34,7 @@ const App = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
-    localStorage.removeItem("email"); // Email bhi clear karein
+    localStorage.removeItem("email");
     setIsLoggedIn(false);
     setRole(null);
   };
@@ -47,15 +49,22 @@ const App = () => {
       <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
 
       <Routes>
-        <Route
-          path="/home"
-          element={
+        {/* 1. Public Routes */}
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/about" element={<h1>About Page</h1>} />
 
-            <HomePage />
+        <Route
+          path="/login"
+          element={
+            isLoggedIn ? (
+              <Navigate to="/home" />
+            ) : (
+              <Login onLoginSuccess={handleLoginSuccess} />
+            )
           }
         />
 
-        {/* --- 2. Add Room Route (Only for OWNER) --- */}
+        {/* 2. Owner Routes */}
         <Route
           path="/add-room"
           element={
@@ -77,21 +86,39 @@ const App = () => {
           }
         />
 
-        <Route path="/about" element={<h1>About Page</h1>} />
-
+        {/* 3. Admin Routes */}
         <Route
-          path="/login"
+          path="/admin/all-users"
           element={
-            isLoggedIn ? (
-              <Navigate to="/home" />
+            isLoggedIn && role === "ROLE_ADMIN" ? (
+              <AllUsers />
             ) : (
-              <Login onLoginSuccess={handleLoginSuccess} />
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/admin/all-rooms"
+          element={
+            isLoggedIn && role === "ROLE_ADMIN" ? (
+              <AllRooms />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/admin/all-owners"
+          element={
+            isLoggedIn && role === "ROLE_ADMIN" ? (
+              <AllOwner />
+            ) : (
+              <Navigate to="/login" />
             )
           }
         />
 
-
-
+        {/* 4. Wildcard Route (Hamesha Last mein rakhein) */}
         <Route
           path="*"
           element={<Navigate to={isLoggedIn ? "/home" : "/login"} />}

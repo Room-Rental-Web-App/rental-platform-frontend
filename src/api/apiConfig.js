@@ -13,6 +13,11 @@ export const API_ENDPOINTS = {
   DELETE_ROOM: (id) => `${BASE_URL}/rooms/delete/${id}`,
   MY_LISTINGS: `${BASE_URL}/rooms/my-listings`,
   SEARCH_ROOMS: `${BASE_URL}/rooms/search`,
+  // Admin Endpoints
+  ADMIN_ALL_USERS: `${BASE_URL}/admin/users`,
+  ADMIN_ALL_ROOMS: `${BASE_URL}/admin/rooms`,
+  ADMIN_ALL_OWNERS: `${BASE_URL}/admin/owners`,
+  DELETE_USER: (id) => `${BASE_URL}/admin/users/${id}`,
 };
 
 export const getAuthHeaders = () => {
