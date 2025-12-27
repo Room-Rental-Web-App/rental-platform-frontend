@@ -32,11 +32,20 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
           <>
             {/* 1. TENANT / USER LINKS */}
             {userRole === "ROLE_USER" && (
-              <li>
-                <Link to="/search">
-                  <Search size={18} /> Search Rooms
-                </Link>
-              </li>
+              <>
+                <li>
+                  <Link to="/search">
+                    <Search size={18} /> Search Rooms
+                  </Link>
+                </li>
+
+                  <li>
+                  <Link to="/wishlist">
+                    <Search size={18} /> wishlist
+                  </Link>
+                </li>
+              
+              </>
             )}
             {/* 2. ROOM OWNER LINKS */}
             {userRole === "ROLE_OWNER" && (
@@ -53,14 +62,14 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                 </li>
               </>
             )}
-         {/* 3. SUPER ADMIN LINKS */}
-{userRole === "ROLE_ADMIN" && (
-  <li>
-    <Link to="/admin/all-users">
-      <LayoutDashboard size={18} /> Admin Dashboard
-    </Link>
-  </li>
-)}          </>
+            {/* 3. SUPER ADMIN LINKS */}
+            {userRole === "ROLE_ADMIN" && (
+              <li>
+                <Link to="/admin/all-users">
+                  <LayoutDashboard size={18} /> Admin Dashboard
+                </Link>
+              </li>
+            )}          </>
         )}
         {/* --- ROLE BASED LINKS END --- */}
 
