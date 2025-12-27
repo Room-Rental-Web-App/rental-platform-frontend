@@ -1,7 +1,15 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Users, Home, UserCheck, Shield, LayoutDashboard } from "lucide-react";
+import {
+  Users,
+  Home,
+  UserCheck,
+  Shield,
+  LayoutDashboard,
+  Clock,
+} from "lucide-react";
 import "../../CSS/AdminSidebar.css";
+
 const AdminSidebar = () => {
   return (
     <div className="admin-sidebar">
@@ -16,12 +24,22 @@ const AdminSidebar = () => {
         >
           <LayoutDashboard size={20} /> All Users
         </NavLink>
+
+        {/* New Link for Pending Approvals */}
+        <NavLink
+          to="/admin/pending-approvals"
+          className={({ isActive }) => (isActive ? "active-link" : "")}
+        >
+          <Clock size={20} /> Pending Approvals
+        </NavLink>
+
         <NavLink
           to="/admin/all-rooms"
           className={({ isActive }) => (isActive ? "active-link" : "")}
         >
           <Home size={20} /> All Rooms
         </NavLink>
+
         <NavLink
           to="/admin/all-owners"
           className={({ isActive }) => (isActive ? "active-link" : "")}

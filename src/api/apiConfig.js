@@ -18,6 +18,10 @@ export const API_ENDPOINTS = {
   ADMIN_ALL_ROOMS: `${BASE_URL}/admin/rooms`,
   ADMIN_ALL_OWNERS: `${BASE_URL}/admin/owners`,
   DELETE_USER: (id) => `${BASE_URL}/admin/users/${id}`,
+  // Add these in your API_ENDPOINTS inside apiConfig.js
+  ADMIN_PENDING_OWNERS: `${BASE_URL}/admin/pending-owners`,
+  APPROVE_OWNER: (id) => `${BASE_URL}/admin/approve-owner/${id}`,
+  REJECT_OWNER: (id) => `${BASE_URL}/admin/reject-owner/${id}`,
 };
 
 export const getAuthHeaders = () => {
