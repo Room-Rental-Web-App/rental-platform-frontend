@@ -17,6 +17,9 @@ import HomePage from "./pages/HomePage";
 import AllUsers from "./pages/admin-page/AllUsers";
 import AllRooms from "./pages/admin-page/AllRooms";
 import AllOwner from "./pages/admin-page/AllOwners";
+import Wishlist from "./pages/user-page/Wishlist";
+import { Search } from "lucide-react";
+import SearchRoom from "./pages/user-page/SearchRoom";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -52,6 +55,8 @@ const App = () => {
         {/* 1. Public Routes */}
         <Route path="/home" element={<HomePage />} />
         <Route path="/about" element={<h1>About Page</h1>} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/search" element={<SearchRoom />} />
 
         <Route
           path="/login"
@@ -119,10 +124,10 @@ const App = () => {
         />
 
         {/* 4. Wildcard Route (Hamesha Last mein rakhein) */}
-        <Route
+        {/* <Route
           path="*"
           element={<Navigate to={isLoggedIn ? "/home" : "/login"} />}
-        />
+        /> */}
       </Routes>
     </Router>
   );
