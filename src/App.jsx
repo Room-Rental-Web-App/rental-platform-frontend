@@ -17,8 +17,9 @@ import HomePage from "./pages/HomePage";
 import AllUsers from "./pages/admin-page/AllUsers";
 import AllRooms from "./pages/admin-page/AllRooms";
 import AllOwner from "./pages/admin-page/AllOwners";
+import PendingOwners from "./pages/admin-page/PendingOwners"; // IMPORT NEW PAGE
+
 import Wishlist from "./pages/user-page/Wishlist";
-import { Search } from "lucide-react";
 import SearchRoom from "./pages/user-page/SearchRoom";
 
 const App = () => {
@@ -53,6 +54,7 @@ const App = () => {
 
       <Routes>
         {/* 1. Public Routes */}
+        <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/about" element={<h1>About Page</h1>} />
         <Route path="/wishlist" element={<Wishlist />} />
@@ -123,11 +125,23 @@ const App = () => {
           }
         />
 
-        {/* 4. Wildcard Route (Hamesha Last mein rakhein) */}
-        {/* <Route
+        {/* NEW: Admin Approval Route */}
+        <Route
+          path="/admin/pending-approvals"
+          element={
+            isLoggedIn && role === "ROLE_ADMIN" ? (
+              <PendingOwners />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+
+        {/* 4. Wildcard Route */}
+        <Route
           path="*"
           element={<Navigate to={isLoggedIn ? "/home" : "/login"} />}
-        /> */}
+        />
       </Routes>
     </Router>
   );
