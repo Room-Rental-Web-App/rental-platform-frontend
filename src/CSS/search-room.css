@@ -1,22 +1,52 @@
+/* Filter Bar */
+.filter-bar {
+  background: white;
+  border-radius: 16px;
+  margin: 20px;
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.filter-bar input,
+.filter-bar select {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  min-width: 140px;
+}
+
+.filter-bar button {
+  background: #111;
+  color: #fff;
+  padding: 10px 22px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Cards */
 .room-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
   gap: 22px;
-  padding: 30px;
+  padding: 25px;
 }
 
 .room-card {
-  background: #ffffff;
+  background: #fff;
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 10px 28px rgba(0,0,0,0.08);
-  transition: 0.3s ease;
   position: relative;
+  transition: .3s;
+  box-shadow: 0 12px 32px rgba(0,0,0,.08);
 }
 
 .room-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+  box-shadow: 0 20px 45px rgba(0,0,0,.15);
 }
 
 .room-card img {
@@ -25,35 +55,21 @@
   object-fit: cover;
 }
 
-.room-body {
-  padding: 15px 18px;
-}
+.room-body { padding: 16px }
 
-.room-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
+.room-title { font-size: 18px; font-weight: 600 }
+.room-location { font-size: 14px; color: #777 }
+.room-price { font-size: 20px; font-weight: 700; margin-top: 10px }
 
-.room-location {
-  font-size: 14px;
-  color: #777;
-}
-
-.room-price {
-  font-size: 20px;
-  font-weight: 700;
-  color: #111;
-  margin-top: 10px;
-}
-
-.badge.pending {
+/* Wishlist */
+.wishlist-btn {
   position: absolute;
   top: 12px;
-  left: 12px;
-  background: #ff9800;
-  color: #fff;
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: 20px;
+  right: 12px;
+  background: white;
+  border-radius: 50%;
+  padding: 6px;
+  border: none;
+  box-shadow: 0 4px 14px rgba(0,0,0,.18);
 }
+.wishlist-btn.active svg { fill: #ff3b3b; stroke: #ff3b3b }
