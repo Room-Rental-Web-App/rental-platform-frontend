@@ -7,6 +7,7 @@ import {
   Shield,
   LayoutDashboard,
   Clock,
+  FileText, // Added for Room verification context
 } from "lucide-react";
 import "../../CSS/AdminSidebar.css";
 
@@ -25,12 +26,19 @@ const AdminSidebar = () => {
           <LayoutDashboard size={20} /> All Users
         </NavLink>
 
-        {/* New Link for Pending Approvals */}
         <NavLink
           to="/admin/pending-approvals"
           className={({ isActive }) => (isActive ? "active-link" : "")}
         >
-          <Clock size={20} /> Pending Approvals
+          <UserCheck size={20} /> Pending Owners
+        </NavLink>
+
+        {/* NEW: Link for Room Verification */}
+        <NavLink
+          to="/admin/pending-rooms"
+          className={({ isActive }) => (isActive ? "active-link" : "")}
+        >
+          <Clock size={20} /> Pending Rooms
         </NavLink>
 
         <NavLink
@@ -44,7 +52,7 @@ const AdminSidebar = () => {
           to="/admin/all-owners"
           className={({ isActive }) => (isActive ? "active-link" : "")}
         >
-          <UserCheck size={20} /> All Owners
+          <Users size={20} /> All Owners
         </NavLink>
       </nav>
     </div>
