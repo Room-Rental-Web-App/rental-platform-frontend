@@ -17,7 +17,8 @@ import HomePage from "./pages/HomePage";
 import AllUsers from "./pages/admin-page/AllUsers";
 import AllRooms from "./pages/admin-page/AllRooms";
 import AllOwner from "./pages/admin-page/AllOwners";
-import PendingOwners from "./pages/admin-page/PendingOwners"; // IMPORT NEW PAGE
+import PendingOwners from "./pages/admin-page/PendingOwners";
+import PendingRooms from "./pages/admin-page/PendingRooms"; // IMPORTED NEW PAGE
 
 import Wishlist from "./pages/user-page/Wishlist";
 import SearchRoom from "./pages/user-page/SearchRoom";
@@ -125,12 +126,24 @@ const App = () => {
           }
         />
 
-        {/* NEW: Admin Approval Route */}
+        {/* Verification Route for Owners */}
         <Route
           path="/admin/pending-approvals"
           element={
             isLoggedIn && role === "ROLE_ADMIN" ? (
               <PendingOwners />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+
+        {/* NEW: Verification Route for Room Listings */}
+        <Route
+          path="/admin/pending-rooms"
+          element={
+            isLoggedIn && role === "ROLE_ADMIN" ? (
+              <PendingRooms />
             ) : (
               <Navigate to="/login" />
             )
