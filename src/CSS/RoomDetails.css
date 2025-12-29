@@ -1,0 +1,159 @@
+.room-details-page {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: 'Inter', sans-serif;
+  color: #1e293b;
+}
+
+/* Image Gallery Layout */
+.image-gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 200px);
+  gap: 10px;
+  margin-bottom: 2rem;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.image-gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.image-gallery img:hover {
+  transform: scale(1.02);
+}
+
+/* Make the first image larger (Hero style) */
+.image-gallery img:first-child {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+/* Room Content Styling */
+.room-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.room-content h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  color: #0f172a;
+}
+
+.price {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #10b981;
+  margin-bottom: 1.5rem;
+}
+
+/* Information Grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.info-grid span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  color: #475569;
+}
+
+.description {
+  line-height: 1.8;
+  color: #334155;
+  margin-bottom: 2.5rem;
+  font-size: 1.1rem;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 2rem;
+}
+
+.btn-wishlist, .btn-book {
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-wishlist {
+  background: white;
+  border: 2px solid #ef4444;
+  color: #ef4444;
+}
+
+.btn-wishlist:hover {
+  background: #fef2f2;
+}
+
+.btn-book {
+  background: #4f46e5;
+  border: none;
+  color: white;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.btn-book:hover {
+  background: #4338ca;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+/* --- NAVBAR BADGE CSS --- */
+.wishlist-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background-color: #ef4444;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .image-gallery {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .image-gallery img:first-child {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+  .action-buttons {
+    flex-direction: column;
+  }
+}
