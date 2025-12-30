@@ -4,13 +4,22 @@ import { Link } from "react-router-dom";
 import { Heart, MapPin, ArrowRight, Search } from "lucide-react";
 import { useWishlist } from "../../context/WishlistContext";
 import useInfiniteScroll from "../../customHook/useInfiniteScroll";
+
+import { useNavigate } from "react-router-dom";
+
+=======
 import "../../CSS/search-room.css";
 // Note: Ensure search-room.css has styles for the AllRooms card structure
+
 
 function SearchRoom() {
   const [rooms, setRooms] = useState([]);
   const [wishlistIds, setWishlistIds] = useState([]);
+
+  const navTo = useNavigate();
+
   const { fetchCount } = useWishlist();
+
 
   const [filters, setFilters] = useState({
     city: "",
@@ -148,6 +157,30 @@ function SearchRoom() {
         </div>
       </div>
 
+
+      {/* ROOM GRID */}
+      <div className="room-grid">
+        {rooms.map(r => (
+          <div key={r.id} className="room-card" onClick={()=> navTo(`/room-detail-page/${r.id}`)}>
+
+            <button
+              className={`wishlist-btn ${wishlistIds.includes(r.id) ? "active" : ""}`}
+              onClick={() => toggleWishlist(r.id)}
+            >
+              <Heart size={20} />
+            </button>
+
+            <img src={r.imageUrls?.[0] || "/placeholder.jpg"} />
+
+            <div className="room-body">
+              <div className="room-title">{r.title}</div>
+              <div className="room-location">{r.city} • {r.pincode}</div>
+              <div className="room-price">₹{r.price}</div>
+            </div>
+               
+          </div>
+        ))}
+
       {/* --- ROOM GRID (Matches AllRooms Design) --- */}
       <div className="rooms-grid">
         {rooms.length > 0
@@ -193,6 +226,7 @@ function SearchRoom() {
           : !loading && (
               <p className="no-rooms">No rooms found matching your search.</p>
             )}
+
       </div>
 
       {loading && <div className="loader">Loading more rooms...</div>}
