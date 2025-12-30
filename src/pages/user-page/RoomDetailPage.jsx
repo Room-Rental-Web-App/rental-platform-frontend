@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Api from "../../api/Api";
 import "../../css/room-detail.css";
+import Reviews from "../../components/Reviews";
 
 function RoomDetailPage() {
   const { roomId } = useParams();
@@ -51,7 +52,7 @@ function RoomDetailPage() {
           {room.amenities.map((a, i) => <li key={i}>{a}</li>)}
         </ul>
       </div>
-
+       <Reviews roomId={roomId} />
     </div>
   );
 }
