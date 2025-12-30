@@ -1,36 +1,31 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import ThemeToggle from "../components/ThemeToggle"
+import ThemeToggle from "../components/ThemeToggle";
+import { useWishlist } from "../context/WishlistContext"; // IMPORT THIS
 import {
   User,
   LogOut,
   LayoutDashboard,
   PlusCircle,
-  Settings,
   Search,
-  Home,
+  Heart, // ADDED HEART ICON
 } from "lucide-react";
 import "../css/Navbar.css";
 
 const Navbar = ({ isLoggedIn, onLogout }) => {
-  // LocalStorage se role nikal rahe hain
   const userRole = localStorage.getItem("role");
-
-
+  const { wishlistCount } = useWishlist(); // GET COUNT FROM CONTEXT
 
   return (
     <nav className="navbar">
       <div className="logo">MyBrand</div>
       <ul className="nav-links">
-        {/* Sabke liye common link */}
         <li>
           <Link to="/home">Home</Link>
         </li>
 
-        {/* --- ROLE BASED LINKS START --- */}
         {isLoggedIn && (
           <>
-            {/* 1. TENANT / USER LINKS */}
             {userRole === "ROLE_USER" && (
               <>
                 <li>
@@ -38,16 +33,20 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                     <Search size={18} /> Search Rooms
                   </Link>
                 </li>
-
-                  <li>
-                  <Link to="/wishlist">
-                    <Search size={18} /> wishlist
+                <li>
+                  <Link to="/wishlist" className="wishlist-nav-link">
+                    <div className="wishlist-icon-wrapper">
+                      <Heart size={18} />
+                      {wishlistCount > 0 && (
+                        <span className="wishlist-badge">{wishlistCount}</span>
+                      )}
+                    </div>
+                    <span>Wishlist</span>
                   </Link>
                 </li>
-              
               </>
             )}
-            {/* 2. ROOM OWNER LINKS */}
+
             {userRole === "ROLE_OWNER" && (
               <>
                 <li>
@@ -62,16 +61,16 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                 </li>
               </>
             )}
-            {/* 3. SUPER ADMIN LINKS */}
+
             {userRole === "ROLE_ADMIN" && (
               <li>
                 <Link to="/admin/all-users">
                   <LayoutDashboard size={18} /> Admin Dashboard
                 </Link>
               </li>
-            )}          </>
+            )}
+          </>
         )}
-        {/* --- ROLE BASED LINKS END --- */}
 
         <li>
           <Link to="/about">About</Link>
@@ -95,7 +94,6 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
           )}
         </li>
       </ul>
-
       <ThemeToggle />
     </nav>
   );

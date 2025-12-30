@@ -1,48 +1,69 @@
 import React, { useEffect, useState } from "react";
 import Api from "../../api/Api";
 import "../../css/wishlist.css";
+// IMPORT: Added the hook to talk to the Navbar
+import { useWishlist } from "../../context/WishlistContext";
 
 function Wishlist() {
-
-  const email = localStorage.getItem("email");   // logged-in user
+  const email = localStorage.getItem("email");
   const [items, setItems] = useState([]);
 
+  // HOOK: Get the fetchCount function from Context
+  const { fetchCount } = useWishlist();
+
   useEffect(() => {
-    Api.get(`/wishlist?email=${email}`)
-      .then(res => setItems(res.data))
-      .catch(err => console.error("Wishlist load failed", err));
-  }, []);
+    if (email) {
+      Api.get(`/wishlist?email=${email}`)
+        .then((res) => setItems(res.data))
+        .catch((err) => console.error("Wishlist load failed", err));
+    }
+  }, [email]);
 
   const removeFromWishlist = (roomId) => {
     Api.delete(`/wishlist/${roomId}?email=${email}`)
       .then(() => {
-        setItems(prev => prev.filter(i => i.room.id !== roomId));
+        // 1. Remove from the local list on this page
+        setItems((prev) => prev.filter((i) => i.room.id !== roomId));
+
+        // 2. IMPORTANT: Update the Navbar count automatically
+        fetchCount();
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error("Delete failed", err));
   };
 
   return (
     <div className="wishlist-container">
       <h2>My Wishlist</h2>
 
-      {items.length === 0 && <p>No saved rooms yet.</p>}
+      {items.length === 0 && <p className="empty-msg">No saved rooms yet.</p>}
 
-      {items.map(item => (
-        <div key={item.id} className="wishlist-card">
-          <img src={item.room.imageUrls?.[0]} alt={item.room.title} />
+      <div className="wishlist-grid">
+        {items.map((item) => (
+          <div key={item.id} className="wishlist-card">
+            {/* Added fallback image check */}
+            <img
+              src={
+                item.room.imageUrls?.[0] || "https://via.placeholder.com/300"
+              }
+              alt={item.room.title}
+            />
 
-          <div className="wishlist-info">
-            <h3>{item.room.title}</h3>
-            <p>{item.room.city}</p>
-            <p>{item.room.roomType}</p>
-            <h4>₹{item.room.price}</h4>
+            <div className="wishlist-info">
+              <h3>{item.room.title}</h3>
+              <p className="loc">{item.room.city}</p>
+              <p className="type">{item.room.roomType}</p>
+              <h4>₹{item.room.price}</h4>
 
-            <button onClick={() => removeFromWishlist(item.room.id)}>
-              Remove
-            </button>
+              <button
+                className="remove-btn"
+                onClick={() => removeFromWishlist(item.room.id)}
+              >
+                Remove
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
