@@ -22,6 +22,7 @@ import PendingRooms from "./pages/admin-page/PendingRooms"; // IMPORTED NEW PAGE
 
 import Wishlist from "./pages/user-page/Wishlist";
 import SearchRoom from "./pages/user-page/SearchRoom";
+import RoomDetailPage from "./pages/user-page/RoomDetailPage";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -60,6 +61,7 @@ const App = () => {
         <Route path="/about" element={<h1>About Page</h1>} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/search" element={<SearchRoom />} />
+        <Route path="/room-detail-page/:roomId" element={<RoomDetailPage />} />
 
         <Route
           path="/login"

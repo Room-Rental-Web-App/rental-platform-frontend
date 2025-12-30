@@ -4,11 +4,14 @@ import Cookies from "js-cookie";
 import { Heart } from "lucide-react";
 import "../../css/search-room.css";
 import useInfiniteScroll from "../../customHook/useInfiniteScroll";
+import { useNavigate } from "react-router-dom";
+
 
 function SearchRoom() {
 
   const [rooms, setRooms] = useState([]);
   const [wishlistIds, setWishlistIds] = useState([]);
+  const navTo = useNavigate();
 
   const [filters, setFilters] = useState({
     city: "",
@@ -116,7 +119,7 @@ function SearchRoom() {
       {/* ROOM GRID */}
       <div className="room-grid">
         {rooms.map(r => (
-          <div key={r.id} className="room-card">
+          <div key={r.id} className="room-card" onClick={()=> navTo(`/room-detail-page/${r.id}`)}>
 
             <button
               className={`wishlist-btn ${wishlistIds.includes(r.id) ? "active" : ""}`}
@@ -132,7 +135,7 @@ function SearchRoom() {
               <div className="room-location">{r.city} • {r.pincode}</div>
               <div className="room-price">₹{r.price}</div>
             </div>
-
+               
           </div>
         ))}
       </div>
