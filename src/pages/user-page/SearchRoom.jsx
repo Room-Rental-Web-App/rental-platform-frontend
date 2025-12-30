@@ -1,57 +1,36 @@
 import React, { useEffect, useState } from "react";
 import Api from "../../api/Api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Heart, MapPin, ArrowRight, Search } from "lucide-react";
 import { useWishlist } from "../../context/WishlistContext";
 import useInfiniteScroll from "../../customHook/useInfiniteScroll";
-
-import { useNavigate } from "react-router-dom";
-
-=======
-import "../../CSS/search-room.css";
-// Note: Ensure search-room.css has styles for the AllRooms card structure
-
+import "../../css/search-room.css";
 
 function SearchRoom() {
   const [rooms, setRooms] = useState([]);
   const [wishlistIds, setWishlistIds] = useState([]);
-
-  const navTo = useNavigate();
-
-  const { fetchCount } = useWishlist();
-
-
-  const [filters, setFilters] = useState({
-    city: "",
-    pincode: "",
-    roomType: "",
-    minPrice: "",
-    maxPrice: "",
-  });
-
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  // Using localStorage for email consistency as per your AllRooms logic
+  const navTo = useNavigate();
   const email = localStorage.getItem("email");
+  const { fetchCount } = useWishlist();
+
+  const [filters, setFilters] = useState({
+    city: null,
+    pincode: null,
+    roomType: null,
+    minPrice: null,
+    maxPrice: null,
+  });
 
   useEffect(() => {
     loadWishlist();
     resetAndLoad();
   }, []);
 
-  const loadMore = () => {
-    if (hasMore && !loading) {
-      loadRooms(page + 1, true);
-    }
-  };
-
-  useInfiniteScroll({
-    hasMore,
-    loading,
-    onLoadMore: loadMore,
-  });
+  useInfiniteScroll({ hasMore, loading, onLoadMore: () => loadRooms(page + 1, true) });
 
   const resetAndLoad = () => {
     setRooms([]);
@@ -65,22 +44,19 @@ function SearchRoom() {
     try {
       const res = await Api.get("/rooms/filter", {
         params: {
-          city: filters.city || null,
-          pincode: filters.pincode || null,
-          roomType: filters.roomType || null,
-          minPrice: filters.minPrice || null,
-          maxPrice: filters.maxPrice || null,
-          page: pageNo,
-          size: 10,
+          city: filters.city,
+          pincode: filters.pincode,
+          roomType: filters.roomType,
+          minPrice: filters.minPrice,
+          maxPrice: filters.maxPrice,
+           page: pageNo,
+            size: 10
         },
       });
 
-      const newRooms = res.data.content;
-      setRooms((prev) => (append ? [...prev, ...newRooms] : newRooms));
+      setRooms(prev => append ? [...prev, ...res.data.content] : res.data.content);
       setHasMore(!res.data.last);
       setPage(pageNo);
-    } catch (err) {
-      console.error("Error loading rooms:", err);
     } finally {
       setLoading(false);
     }
@@ -88,151 +64,65 @@ function SearchRoom() {
 
   const loadWishlist = async () => {
     if (!email) return;
-    try {
-      const res = await Api.get(`/wishlist?email=${email}`);
-      setWishlistIds(res.data.map((w) => w.room.id));
-    } catch (err) {
-      console.error("Wishlist load failed", err);
-    }
+    const res = await Api.get(`/wishlist?email=${email}`);
+    setWishlistIds(res.data.map(w => w.room.id));
   };
 
-  const handleFilterChange = (e) => {
-    setFilters({ ...filters, [e.target.name]: e.target.value });
-  };
+  const toggleWishlist = async (e, id) => {
+    e.stopPropagation();
+    if (!email) return alert("Login first");
 
-  const toggleWishlist = async (e, roomId) => {
-    e.preventDefault();
-    if (!email) return alert("Please login first!");
-
-    try {
-      if (wishlistIds.includes(roomId)) {
-        await Api.delete(`/wishlist/${roomId}?email=${email}`);
-        setWishlistIds((prev) => prev.filter((id) => id !== roomId));
-      } else {
-        await Api.post(`/wishlist/${roomId}?email=${email}`);
-        setWishlistIds((prev) => [...prev, roomId]);
-      }
-      fetchCount(); // Updates the Navbar Badge instantly
-    } catch (err) {
-      console.error("Wishlist update failed", err);
+    if (wishlistIds.includes(id)) {
+      await Api.delete(`/wishlist/${id}?email=${email}`);
+      setWishlistIds(prev => prev.filter(x => x !== id));
+    } else {
+      await Api.post(`/wishlist/${id}?email=${email}`);
+      setWishlistIds(prev => [...prev, id]);
     }
+    fetchCount();
   };
 
   return (
     <div className="search-room-page">
-      {/* --- FILTER BAR (MODERN) --- */}
       <div className="filter-bar">
-        <div className="filter-input-wrapper">
-          <input name="city" placeholder="City" onChange={handleFilterChange} />
-          <input
-            name="pincode"
-            placeholder="Pincode"
-            onChange={handleFilterChange}
-          />
-
-          <select name="roomType" onChange={handleFilterChange}>
-            <option value="">All Types</option>
-            <option value="Single Room">Single Room</option>
-            <option value="Double Room">Double Room</option>
-            <option value="PG">PG</option>
-            <option value="Flat">Flat</option>
-          </select>
-
-          <input
-            name="minPrice"
-            type="number"
-            placeholder="Min ₹"
-            onChange={handleFilterChange}
-          />
-          <input
-            name="maxPrice"
-            type="number"
-            placeholder="Max ₹"
-            onChange={handleFilterChange}
-          />
-
-          <button className="apply-btn" onClick={resetAndLoad}>
-            <Search size={18} /> Apply
-          </button>
-        </div>
+        <input name="city" placeholder="City" onChange={e => setFilters({ ...filters, city: e.target.value })} />
+        <input name="pincode" placeholder="Pincode" onChange={e => setFilters({ ...filters, pincode: e.target.value })} />
+        <select onChange={e => setFilters({ ...filters, roomType: e.target.value })}>
+          <option value="">All Types</option>
+          <option value="Single Room">Single Room</option>
+          <option value="Double Room">Double Room</option>
+          <option value="PG">PG</option>
+          <option value="Flat">Flat</option>
+        </select>
+        <input type="number" placeholder="Min ₹" onChange={e => setFilters({ ...filters, minPrice: e.target.value })} />
+        <input type="number" placeholder="Max ₹" onChange={e => setFilters({ ...filters, maxPrice: e.target.value })} />
+        <button onClick={resetAndLoad}><Search size={16} /> Apply</button>
       </div>
 
-
-      {/* ROOM GRID */}
-      <div className="room-grid">
-        {rooms.map(r => (
-          <div key={r.id} className="room-card" onClick={()=> navTo(`/room-detail-page/${r.id}`)}>
-
+      <div className="rooms-grid">
+        {rooms.map(room => (
+          <div key={room.id} className="room-card" onClick={() => navTo(`/room/${room.id}`)}>
+            <img src={room.imageUrls?.[0] || "/placeholder.jpg"} />
             <button
-              className={`wishlist-btn ${wishlistIds.includes(r.id) ? "active" : ""}`}
-              onClick={() => toggleWishlist(r.id)}
+              className={`wishlist-btn ${wishlistIds.includes(room.id) ? "active" : ""}`}
+              onClick={e => toggleWishlist(e, room.id)}
             >
-              <Heart size={20} />
+              <Heart size={18} fill={wishlistIds.includes(room.id) ? "#ef4444" : "none"} />
             </button>
 
-            <img src={r.imageUrls?.[0] || "/placeholder.jpg"} />
-
-            <div className="room-body">
-              <div className="room-title">{r.title}</div>
-              <div className="room-location">{r.city} • {r.pincode}</div>
-              <div className="room-price">₹{r.price}</div>
+            <div className="card-content">
+              <h3>{room.title}</h3>
+              <p><MapPin size={14} /> {room.city}</p>
+              <span className="price">₹{room.price}</span>
+              <span className="room-type">{room.roomType}</span>
+              <Link to={`/room/${room.id}`}>View Details <ArrowRight size={14} /></Link>
             </div>
-               
           </div>
         ))}
-
-      {/* --- ROOM GRID (Matches AllRooms Design) --- */}
-      <div className="rooms-grid">
-        {rooms.length > 0
-          ? rooms.map((room) => (
-              <div key={room.id} className="room-card">
-                <div className="card-image">
-                  <img
-                    src={room.imageUrls?.[0] || "/placeholder.jpg"}
-                    alt={room.title}
-                  />
-                  <button
-                    className={`wishlist-btn ${
-                      wishlistIds.includes(room.id) ? "active" : ""
-                    }`}
-                    onClick={(e) => toggleWishlist(e, room.id)}
-                  >
-                    <Heart
-                      size={20}
-                      fill={wishlistIds.includes(room.id) ? "#ef4444" : "none"}
-                    />
-                  </button>
-                </div>
-
-                <div className="card-content">
-                  <div className="card-header">
-                    <h3>{room.title}</h3>
-                    <span className="room-price">₹{room.price}</span>
-                  </div>
-
-                  <p className="room-loc">
-                    <MapPin size={14} /> {room.city}
-                  </p>
-
-                  <div className="card-footer">
-                    <span className="room-type">{room.roomType}</span>
-                    <Link to={`/room/${room.id}`} className="details-link">
-                      View Details <ArrowRight size={16} />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))
-          : !loading && (
-              <p className="no-rooms">No rooms found matching your search.</p>
-            )}
-
       </div>
 
-      {loading && <div className="loader">Loading more rooms...</div>}
-      {!hasMore && rooms.length > 0 && (
-        <div className="loader">No more rooms</div>
-      )}
+      {loading && <div className="loader">Loading…</div>}
+      {!hasMore && rooms.length > 0 && <div className="loader">No more rooms</div>}
     </div>
   );
 }

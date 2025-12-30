@@ -1,32 +1,28 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./non-outlets/Navbar";
 import Login from "./components/Login";
-import { WishlistProvider } from "./context/WishlistContext"; // IMPORT THIS
+import { WishlistProvider } from "./context/WishlistContext";
 
+// Owner
 import AddRoom from "./pages/room-owner-page/AddRoom";
 import MyListings from "./pages/room-owner-page/MyListings";
-import HomePage from "./pages/HomePage";
-import RoomDetails from "./pages/user-page/RoomDetails"; // IMPORT THIS
+import About from "./pages/About"
 
-// Admin Pages
+// User
+import HomePage from "./pages/HomePage";
+import SearchRoom from "./pages/user-page/SearchRoom";
+import Wishlist from "./pages/user-page/Wishlist";
+import RoomDetailPage from "./pages/user-page/RoomDetailPage";
+
+// Admin
 import AllUsers from "./pages/admin-page/AllUsers";
 import AllRooms from "./pages/admin-page/AllRooms";
 import AllOwner from "./pages/admin-page/AllOwners";
 import PendingOwners from "./pages/admin-page/PendingOwners";
 import PendingRooms from "./pages/admin-page/PendingRooms";
 
-import Wishlist from "./pages/user-page/Wishlist";
-import SearchRoom from "./pages/user-page/SearchRoom";
-import RoomDetailPage from "./pages/user-page/RoomDetailPage";
-
-const App = () => {
+function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [role, setRole] = useState(null);
 
@@ -40,9 +36,7 @@ const App = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("email");
+    localStorage.clear();
     setIsLoggedIn(false);
     setRole(null);
   };
@@ -53,225 +47,64 @@ const App = () => {
   };
 
   return (
-    <Router>
-      <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-
-      <Routes>
-        {/* 1. Public Routes */}
-        <Route path="/" element={<Navigate to="/home" />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/about" element={<h1>About Page</h1>} />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/search" element={<SearchRoom />} />
-        <Route path="/room-detail-page/:roomId" element={<RoomDetailPage />} />
-
-        <Route
-          path="/login"
-          element={
-            isLoggedIn ? (
-              <Navigate to="/home" />
-            ) : (
-              <Login onLoginSuccess={handleLoginSuccess} />
-            )
-          }
-        />
-
-        {/* 2. Owner Routes */}
-        <Route
-          path="/add-room"
-          element={
-            isLoggedIn && role === "ROLE_OWNER" ? (
-              <AddRoom />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        <Route
-          path="/my-listings"
-          element={
-            isLoggedIn && role === "ROLE_OWNER" ? (
-              <MyListings />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-
-        {/* 3. Admin Routes */}
-        <Route
-          path="/admin/all-users"
-          element={
-            isLoggedIn && role === "ROLE_ADMIN" ? (
-              <AllUsers />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        <Route
-          path="/admin/all-rooms"
-          element={
-            isLoggedIn && role === "ROLE_ADMIN" ? (
-              <AllRooms />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        <Route
-          path="/admin/all-owners"
-          element={
-            isLoggedIn && role === "ROLE_ADMIN" ? (
-              <AllOwner />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-
-        {/* Verification Route for Owners */}
-        <Route
-          path="/admin/pending-approvals"
-          element={
-            isLoggedIn && role === "ROLE_ADMIN" ? (
-              <PendingOwners />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-
-        {/* NEW: Verification Route for Room Listings */}
-        <Route
-          path="/admin/pending-rooms"
-          element={
-            isLoggedIn && role === "ROLE_ADMIN" ? (
-              <PendingRooms />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-
-        {/* 4. Wildcard Route */}
-        <Route
-          path="*"
-          element={<Navigate to={isLoggedIn ? "/home" : "/login"} />}
-        />
-      </Routes>
-    </Router>
     <WishlistProvider>
-      {" "}
-      {/* WRAP EVERYTHING HERE */}
       <Router>
         <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
 
         <Routes>
+          {/* Public */}
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<HomePage />} />
-          <Route path="/about" element={<h1>About Page</h1>} />
-
-          {/* Publicly viewable but protected actions */}
-          <Route path="/room/:id" element={<RoomDetails />} />
-
-          <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/search" element={<SearchRoom />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/room/:roomId" element={<RoomDetailPage />} />
 
           <Route
             path="/login"
             element={
-              isLoggedIn ? (
-                <Navigate to="/home" />
-              ) : (
-                <Login onLoginSuccess={handleLoginSuccess} />
-              )
+              isLoggedIn ? <Navigate to="/home" /> : <Login onLoginSuccess={handleLoginSuccess} />
             }
           />
 
-          {/* Owner Routes */}
+          {/* Owner */}
           <Route
             path="/add-room"
-            element={
-              isLoggedIn && role === "ROLE_OWNER" ? (
-                <AddRoom />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
+            element={isLoggedIn && role === "ROLE_OWNER" ? <AddRoom /> : <Navigate to="/login" />}
           />
           <Route
             path="/my-listings"
-            element={
-              isLoggedIn && role === "ROLE_OWNER" ? (
-                <MyListings />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
+            element={isLoggedIn && role === "ROLE_OWNER" ? <MyListings /> : <Navigate to="/login" />}
           />
 
-          {/* Admin Routes */}
+          {/* Admin */}
           <Route
             path="/admin/all-users"
-            element={
-              isLoggedIn && role === "ROLE_ADMIN" ? (
-                <AllUsers />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
+            element={isLoggedIn && role === "ROLE_ADMIN" ? <AllUsers /> : <Navigate to="/login" />}
           />
           <Route
             path="/admin/all-rooms"
-            element={
-              isLoggedIn && role === "ROLE_ADMIN" ? (
-                <AllRooms />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
+            element={isLoggedIn && role === "ROLE_ADMIN" ? <AllRooms /> : <Navigate to="/login" />}
           />
           <Route
             path="/admin/all-owners"
-            element={
-              isLoggedIn && role === "ROLE_ADMIN" ? (
-                <AllOwner />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
+            element={isLoggedIn && role === "ROLE_ADMIN" ? <AllOwner /> : <Navigate to="/login" />}
           />
           <Route
             path="/admin/pending-approvals"
-            element={
-              isLoggedIn && role === "ROLE_ADMIN" ? (
-                <PendingOwners />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
+            element={isLoggedIn && role === "ROLE_ADMIN" ? <PendingOwners /> : <Navigate to="/login" />}
           />
           <Route
             path="/admin/pending-rooms"
-            element={
-              isLoggedIn && role === "ROLE_ADMIN" ? (
-                <PendingRooms />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
+            element={isLoggedIn && role === "ROLE_ADMIN" ? <PendingRooms /> : <Navigate to="/login" />}
           />
 
-          <Route
-            path="*"
-            element={<Navigate to={isLoggedIn ? "/home" : "/login"} />}
-          />
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to={isLoggedIn ? "/home" : "/login"} />} />
         </Routes>
       </Router>
     </WishlistProvider>
-
   );
-};
+}
 
 export default App;
