@@ -18,7 +18,6 @@ function Reviews({ roomId }) {
 
   const loadReviews = async () => {
     const res = await Api.get(`/reviews/room/${roomId}`);
-    console.log(res);
     setReviews(res.data.reviews);
     setAvg(res.data.averageRating);
   };
