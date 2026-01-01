@@ -21,6 +21,7 @@ import AllRooms from "./pages/admin-page/AllRooms";
 import AllOwner from "./pages/admin-page/AllOwners";
 import PendingOwners from "./pages/admin-page/PendingOwners";
 import PendingRooms from "./pages/admin-page/PendingRooms";
+import PendingUsers from "./pages/admin-page/PendingUsers";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -89,6 +90,10 @@ function App() {
           <Route
             path="/admin/all-owners"
             element={isLoggedIn && role === "ROLE_ADMIN" ? <AllOwner /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/admin/pending-users"
+            element={isLoggedIn && role === "ROLE_ADMIN" ? <PendingUsers /> : <Navigate to="/login" />}
           />
           <Route
             path="/admin/pending-approvals"

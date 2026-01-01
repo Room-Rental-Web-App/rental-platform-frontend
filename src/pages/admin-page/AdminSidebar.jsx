@@ -40,6 +40,12 @@ const AdminSidebar = () => {
         >
           <Clock size={20} /> Pending Rooms
         </NavLink>
+        <NavLink
+          to="/admin/pending-users"
+          className={({ isActive }) => (isActive ? "active-link" : "")}
+        >
+          <Clock size={20} /> Pending Users
+        </NavLink>
 
         <NavLink
           to="/admin/all-rooms"
