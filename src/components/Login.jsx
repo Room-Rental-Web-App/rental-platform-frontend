@@ -3,18 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_ENDPOINTS } from "../api/apiConfig";
 import "../css/Login.css";
-import {
-  Lock,
-  Mail,
-  LogIn,
-  ShieldCheck,
-  ArrowRight,
-  UserCircle,
-  AlertCircle,
-  Home,
-  Phone,
-  Upload,
-} from "lucide-react";
+import { Lock, Mail, LogIn, ShieldCheck, ArrowRight, UserCircle, AlertCircle, Home, Phone, Upload, } from "lucide-react";
 import Cookies from "js-cookie";
 
 export default function Auth({ onLoginSuccess }) {
@@ -22,13 +11,7 @@ export default function Auth({ onLoginSuccess }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [aadharFile, setAadharFile] = useState(null); // Naya state file ke liye
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-    otp: "",
-    role: "ROLE_USER",
-    phone: "",
-  });
+  const [form, setForm] = useState({ email: "", password: "", otp: "", role: "ROLE_USER", phone: "", });
 
   const nav = useNavigate();
   const set = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -71,10 +54,10 @@ export default function Auth({ onLoginSuccess }) {
       formData.append("password", form.password);
       formData.append("role", form.role);
 
-      if (form.role === "ROLE_OWNER") {
-        formData.append("phone", form.phone);
-        if (aadharFile) formData.append("aadharCard", aadharFile);
-      }
+
+      formData.append("phone", form.phone);
+      if (aadharFile) formData.append("aadharCard", aadharFile);
+
 
       await axios.post(API_ENDPOINTS.REGISTER_REQUEST, formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -129,8 +112,8 @@ export default function Auth({ onLoginSuccess }) {
             mode === "login"
               ? login
               : mode === "register"
-              ? register
-              : verifyOtp
+                ? register
+                : verifyOtp
           }
         >
           <div className="form-header">
@@ -138,8 +121,8 @@ export default function Auth({ onLoginSuccess }) {
               {mode === "login"
                 ? "Login"
                 : mode === "register"
-                ? "Create Account"
-                : "Verify OTP"}
+                  ? "Create Account"
+                  : "Verify OTP"}
             </h2>
           </div>
 
@@ -185,33 +168,32 @@ export default function Auth({ onLoginSuccess }) {
                   </select>
                 </div>
 
-                {/* OWNER FIELDS - Only visible when ROLE_OWNER is selected */}
-                {form.role === "ROLE_OWNER" && (
-                  <div className="owner-fields-animate">
-                    <div className="input-group">
-                      <Phone size={18} className="field-icon" />
-                      <input
-                        name="phone"
-                        type="text"
-                        placeholder="Phone Number"
-                        onChange={set}
-                        required
-                      />
-                    </div>
-                    <div className="input-group file-input-wrapper">
-                      <Upload size={18} className="field-icon" />
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        required
-                      />
-                      <small className="file-label">
-                        Upload Aadhar/ID Proof
-                      </small>
-                    </div>
+
+                <div className="owner-fields-animate">
+                  <div className="input-group">
+                    <Phone size={18} className="field-icon" />
+                    <input
+                      name="phone"
+                      type="text"
+                      placeholder="Phone Number"
+                      onChange={set}
+                      required
+                    />
                   </div>
-                )}
+                  <div className="input-group file-input-wrapper">
+                    <Upload size={18} className="field-icon" />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      required
+                    />
+                    <small className="file-label">
+                      Upload Aadhar/ID Proof
+                    </small>
+                  </div>
+                </div>
+
               </>
             )}
 
