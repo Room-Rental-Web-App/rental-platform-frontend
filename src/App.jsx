@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./non-outlets/Navbar";
+import Footer from "./non-outlets/Footer";    
 import Login from "./components/Auth";
 import { WishlistProvider } from "./context/WishlistContext";
 
@@ -55,6 +56,8 @@ function App() {
         <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
 
         <Routes>
+          <Route path="/login" element={isLoggedIn ? <Navigate to="/home" /> : <Login onLoginSuccess={handleLoginSuccess} />} />
+
           {/* Public */}
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<HomePage />} />
@@ -63,52 +66,22 @@ function App() {
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/room/:roomId" element={<RoomDetailPage />} />
 
-          <Route
-            path="/login"
-            element={
-              isLoggedIn ? <Navigate to="/home" /> : <Login onLoginSuccess={handleLoginSuccess} />
-            }
-          />
-
           {/* Owner */}
-          <Route
-            path="/add-room"
-            element={isLoggedIn && role === "ROLE_OWNER" ? <AddRoom /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/my-listings"
-            element={isLoggedIn && role === "ROLE_OWNER" ? <MyListings /> : <Navigate to="/login" />}
-          />
+          <Route path="/add-room" element={<AddRoom />} />
+          <Route path="/my-listings" element={<MyListings />} />
 
           {/* Admin */}
-          <Route
-            path="/admin/all-users"
-            element={isLoggedIn && role === "ROLE_ADMIN" ? <AllUsers /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/admin/all-rooms"
-            element={isLoggedIn && role === "ROLE_ADMIN" ? <AllRooms /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/admin/all-owners"
-            element={isLoggedIn && role === "ROLE_ADMIN" ? <AllOwner /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/admin/pending-users"
-            element={isLoggedIn && role === "ROLE_ADMIN" ? <PendingUsers /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/admin/pending-approvals"
-            element={isLoggedIn && role === "ROLE_ADMIN" ? <PendingOwners /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/admin/pending-rooms"
-            element={isLoggedIn && role === "ROLE_ADMIN" ? <PendingRooms /> : <Navigate to="/login" />}
-          />
-
+          <Route path="/admin/all-users" element={<AllUsers />} />
+          <Route path="/admin/all-rooms" element={<AllRooms />} />
+          <Route path="/admin/all-owners" element={<AllOwner />} />
+          <Route path="/admin/pending-users" element={<PendingUsers />} />
+          <Route path="/admin/pending-approvals" element={<PendingOwners />} />
+          <Route path="/admin/pending-rooms" element={<PendingRooms />} />
           {/* Fallback */}
           <Route path="*" element={<Navigate to={isLoggedIn ? "/home" : "/login"} />} />
         </Routes>
+
+        <Footer />
       </Router>
     </WishlistProvider>
   );

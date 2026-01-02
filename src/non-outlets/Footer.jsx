@@ -1,5 +1,6 @@
 import React from 'react'
 import "../css/footer.css"
+import { Facebook, Home, Instagram, Linkedin, Mail, MapPin, Phone, Twitter } from 'lucide-react'
 
 function Footer() {
   return (
