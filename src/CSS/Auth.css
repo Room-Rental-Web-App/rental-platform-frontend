@@ -1,0 +1,237 @@
+/* Auth.css - Rooms Dekho Dark Theme */
+:root {
+  --primary: #FF8C00;
+  --primary-hover: #e67e00;
+  --bg-dark: #0F172A;
+  --surface: #1E293B;
+  --surface-light: #334155;
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --error: #FB7185;
+  --glass: rgba(30, 41, 59, 0.7);
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.auth-card-wrapper {
+  display: flex;
+  min-height: 600px;
+  width: 1000px;
+  max-width: 95%;
+  margin: 60px auto;
+  background: var(--surface);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--surface-light);
+}
+
+.auth-card-wrapper.reverse {
+  flex-direction: row-reverse;
+}
+
+/* Visual Side */
+.visual-side {
+  flex: 1;
+  position: relative;
+  background-image: url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1000');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.visual-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 140, 0, 0.9), rgba(15, 23, 42, 0.8));
+}
+
+.visual-content {
+  position: relative;
+  z-index: 1;
+  color: white;
+  text-align: center;
+}
+
+.visual-content h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+/* Form Side */
+.form-side {
+  flex: 1.2;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--surface);
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--primary);
+  font-weight: 900;
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.form-header h2 {
+  color: var(--text-main);
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+}
+
+/* Fields */
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.input-group {
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.field-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+
+.input-group input, 
+.input-group select {
+  width: 100%;
+  background: var(--bg-dark);
+  border: 1px solid var(--surface-light);
+  padding: 14px 16px 14px 48px;
+  border-radius: 14px;
+  color: var(--text-main);
+  font-size: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-group input:focus, 
+.input-group select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(255, 140, 0, 0.15);
+  background: var(--surface);
+}
+
+/* File Upload Section */
+.file-input-wrapper {
+  background: rgba(15, 23, 42, 0.5);
+  border: 2px dashed var(--surface-light);
+  padding: 15px;
+  border-radius: 14px;
+  text-align: center;
+}
+
+.file-input-wrapper input {
+  padding: 10px;
+}
+
+.file-label {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: 8px;
+  display: block;
+}
+
+/* Buttons */
+.login-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(255, 140, 0, 0.3);
+  transition: all 0.3s;
+}
+
+.login-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 15px 20px -5px rgba(255, 140, 0, 0.4);
+}
+
+.login-btn:active {
+  transform: translateY(0);
+}
+
+/* Google Button Styling (Override) */
+.google-login-container {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Navigation / Toggle */
+.toggle-container {
+  margin-top: 25px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.toggle-container span {
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.toggle-container span:hover {
+  text-decoration: underline;
+}
+
+/* Error Banner */
+.error-banner {
+  background: rgba(251, 113, 133, 0.1);
+  border: 1px solid var(--error);
+  color: var(--error);
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .auth-card-wrapper {
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    min-height: 100vh;
+  }
+  .visual-side {
+    height: 200px;
+    flex: none;
+  }
+  .form-side {
+    padding: 30px 20px;
+  }
+}

@@ -1,67 +1,27 @@
-
+/* Global Theme Definitions */
 :root {
-  /* --- Brand Colors --- */
-  --primary: #2563eb;
-  --primary-hover: #1e40af;
-  --secondary-gradient-start: #667eea;
-  --secondary-gradient-end: #764ba2;
-  --cta-gradient-start: #2563eb;
-  --cta-gradient-end: #1e40af;
-  --gold: #fbbf24;
+  /* Common Colors */
+  --primary-orange: #FF8C00;
+  --primary-orange-hover: #E67E00;
+  --error: #ef4444;
 
-  /* --- Backgrounds --- */
-  --bg-body-grad-start: #eff6ff;
-  --bg-body-grad-end: #ffffff;
-  --bg-surface: #ffffff;       /* Cards, Inputs, Modals */
-  --bg-surface-alt: #f9fafb;   /* Feature cards, Testimonial bg */
-  --bg-overlay: rgba(255, 255, 255, 0.1); /* For glassmorphism */
-  --bg-backdrop: rgba(0, 0, 0, 0.7);
-
-  /* --- Text Colors --- */
-  --text-main: #1f2937;        /* Headings, strong text */
-  --text-body: #4b5563;        /* Regular paragraphs */
-  --text-muted: #6b7280;       /* Subtitles, labels */
-  --text-light: #9ca3af;       /* Footer text */
-  --text-inverse: #ffffff;     /* Text on dark backgrounds */
-
-  /* --- Borders & Outlines --- */
-  --border-light: #e5e7eb;
-  --border-focus: #2563eb;
-  
-  /* --- Shadows --- */
-  --shadow-sm: 0 5px 15px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.1);
-  --shadow-blue: rgba(37, 99, 235, 0.3);
-
-  /* --- Layout --- */
-  --radius-sm: 8px;
-  --radius-md: 15px;
-  --radius-lg: 20px;
-  --radius-pill: 25px;
-  
-  --font-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* LIGHT MODE (Default) */
+  --bg-main: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --bg-input: #F1F5F9;
+  --border-color: #E2E8F0;
+  --text-main: #0F172A;
+  --text-muted: #64748B;
+  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
-[data-theme="dark"] {
-  /* --- Backgrounds --- */
-  --bg-body-grad-start: #111827;  
-  --bg-body-grad-end: #0f172a;    
-  --bg-surface: #1f2937;          
-  --bg-surface-alt: #374151;       
-  
-  /* --- Text Colors --- */
-  --text-main: #f9fafb;          /* White-ish */
-  --text-body: #d1d5db;          /* Light gray */
-  --text-muted: #9ca3af;         /* Muted gray */
-  --text-light: #6b7280; 
-
-  /* --- Borders --- */
-  --border-light: #374151;       /* Dark border */
-
-  /* --- Shadows --- */
-  /* Shadows are subtler in dark mode, usually just darker black */
-  --shadow-sm: 0 5px 15px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.5);
+[data-theme='dark'] {
+  /* DARK MODE */
+  --bg-main: #0F172A;      /* Deep Slate */
+  --bg-card: #1E293B;      /* Card Slate */
+  --bg-input: #0F172A;     /* Darker Input */
+  --border-color: #334155; /* Slate Stroke */
+  --text-main: #F8FAFC;    /* Ghost White */
+  --text-muted: #94A3B8;   /* Slate Gray */
+  --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
 }

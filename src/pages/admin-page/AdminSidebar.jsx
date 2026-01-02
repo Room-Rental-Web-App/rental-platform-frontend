@@ -12,6 +12,17 @@ import {
 import "../../CSS/AdminSidebar.css";
 
 const AdminSidebar = () => {
+
+  const handleLogout = () => {
+    if(!confirm("Are you sure you want to logout?")){
+      return;
+    }
+    localStorage.clear();
+    window.location.reload();
+    window.location.href = "/home";
+  };
+
+
   return (
     <div className="admin-sidebar">
       <div className="admin-header">
@@ -26,26 +37,10 @@ const AdminSidebar = () => {
           <LayoutDashboard size={20} /> All Users
         </NavLink>
 
-        <NavLink
-          to="/admin/pending-approvals"
-          className={({ isActive }) => (isActive ? "active-link" : "")}
-        >
-          <UserCheck size={20} /> Pending Owners
-        </NavLink>
+
 
         {/* NEW: Link for Room Verification */}
-        <NavLink
-          to="/admin/pending-rooms"
-          className={({ isActive }) => (isActive ? "active-link" : "")}
-        >
-          <Clock size={20} /> Pending Rooms
-        </NavLink>
-        <NavLink
-          to="/admin/pending-users"
-          className={({ isActive }) => (isActive ? "active-link" : "")}
-        >
-          <Clock size={20} /> Pending Users
-        </NavLink>
+
 
         <NavLink
           to="/admin/all-rooms"
@@ -59,6 +54,31 @@ const AdminSidebar = () => {
           className={({ isActive }) => (isActive ? "active-link" : "")}
         >
           <Users size={20} /> All Owners
+        </NavLink>
+
+        <NavLink
+          to="/admin/pending-approvals"
+          className={({ isActive }) => (isActive ? "active-link" : "")}
+        >
+          <UserCheck size={20} /> Pending Owners
+        </NavLink>
+        <NavLink
+          to="/admin/pending-rooms"
+          className={({ isActive }) => (isActive ? "active-link" : "")}
+        >
+          <Clock size={20} /> Pending Rooms
+        </NavLink>
+        <NavLink
+          to="/admin/pending-users"
+          className={({ isActive }) => (isActive ? "active-link" : "")}
+        >
+          <Clock size={20} /> Pending Users
+        </NavLink>
+        <NavLink
+          to="/home"
+          className={({ isActive }) => (isActive ? "active-link" : "")}
+        >
+          <FileText size={20} /> <div onClick={handleLogout}>Logout</div>
         </NavLink>
       </nav>
     </div>
