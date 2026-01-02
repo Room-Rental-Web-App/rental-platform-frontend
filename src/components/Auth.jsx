@@ -5,6 +5,8 @@ import { API_ENDPOINTS } from "../api/apiConfig";
 import "../css/Login.css";
 import { Lock, Mail, LogIn, ShieldCheck, ArrowRight, UserCircle, AlertCircle, Home, Phone, Upload, } from "lucide-react";
 import Cookies from "js-cookie";
+import { GoogleLogin } from "@react-oauth/google";
+import Api from "../api/Api";
 
 export default function Auth({ onLoginSuccess }) {
   const [mode, setMode] = useState("login");
@@ -12,9 +14,28 @@ export default function Auth({ onLoginSuccess }) {
   const [error, setError] = useState("");
   const [aadharFile, setAadharFile] = useState(null); // Naya state file ke liye
   const [form, setForm] = useState({ email: "", password: "", otp: "", role: "ROLE_USER", phone: "", });
+  const [googlePending, setGooglePending] = useState(false);
+  const [googleEmail, setGoogleEmail] = useState(null);
+
 
   const nav = useNavigate();
   const set = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleGoogleLogin = async (googleToken) => {
+    const r = await axios.post(API_ENDPOINTS.GOOGLE_LOGIN, { token: googleToken });
+
+    if (r.data.role == null) {
+      setGooglePending(true);
+      setGoogleEmail(r.data.email);
+      return;
+    }
+    localStorage.setItem("token", r.data.token);
+    localStorage.setItem("email", r.data.email);
+    localStorage.setItem("role", r.data.role);
+    onLoginSuccess();
+    nav("/home");
+  };
+
 
   // File change handler
   const handleFileChange = (e) => setAadharFile(e.target.files[0]);
@@ -31,17 +52,34 @@ export default function Auth({ onLoginSuccess }) {
       localStorage.setItem("email", r.data.email);
       localStorage.setItem("role", r.data.role);
 
-      Cookies.set("rentalRoom-token", r.data.token, {
-        expires: 7,
-        secure: true,
-        sameSite: "strict",
-      });
       onLoginSuccess();
       nav("/home");
     } catch (e) {
       setError("Invalid email or password");
     }
     setLoading(false);
+  };
+
+  const completeGoogleProfile = async (e) => {
+    e.preventDefault();
+
+    const fd = new FormData();
+    fd.append("email", googleEmail);
+    fd.append("role", form.role);
+    fd.append("aadharCard", aadharFile);
+
+    Api.post("/auth/google/complete-registration", fd, {
+      headers: { "Content-Type": "multipart/form-data" },
+    }).then((r) => {
+      console.log(r.data);
+      localStorage.setItem("token", r.data.token);
+      localStorage.setItem("email", r.data.email);
+      localStorage.setItem("role", r.data.role);
+      onLoginSuccess()
+      nav("/home");
+    }).catch(() => {
+      setError("Profile completion failed. Try again.");
+    });
   };
 
   const register = async (e) => {
@@ -53,6 +91,7 @@ export default function Auth({ onLoginSuccess }) {
       formData.append("email", form.email);
       formData.append("password", form.password);
       formData.append("role", form.role);
+      formData.append("phone", form.phone);
 
 
       formData.append("phone", form.phone);
@@ -228,7 +267,30 @@ export default function Auth({ onLoginSuccess }) {
               </p>
             )}
           </div>
+
         </form>
+
+        {googlePending && (
+          <form className="google-onboard-form" onSubmit={completeGoogleProfile}>
+            <h3>Complete Your Profile</h3>
+
+            <select name="role" onChange={set} required>
+              <option value="">Choose Role</option>
+              <option value="ROLE_USER">Tenant</option>
+              <option value="ROLE_OWNER">Owner</option>
+            </select>
+
+            <input name="phone" placeholder="Phone" onChange={set} required />
+            <input type="file" onChange={handleFileChange} required />
+
+            <button>Complete Registration</button>
+          </form>
+        )}
+        <GoogleLogin
+          onSuccess={(res) => handleGoogleLogin(res.credential)}
+          onError={() => alert("Google Login Failed")}
+        />
+
       </div>
     </div>
   );

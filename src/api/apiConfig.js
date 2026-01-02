@@ -6,6 +6,7 @@ export const API_ENDPOINTS = {
   REGISTER_REQUEST: `${BASE_URL}/auth/register-request`,
   LOGIN_REQUEST: `${BASE_URL}/auth/login-request`,
   VERIFY_OTP: `${BASE_URL}/auth/verify-otp`,
+  GOOGLE_LOGIN: `${BASE_URL}/auth/google-login`,
 
   // Room Endpoints
   ADD_ROOM: `${BASE_URL}/rooms/add`,
