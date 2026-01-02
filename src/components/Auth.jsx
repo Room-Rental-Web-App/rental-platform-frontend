@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_ENDPOINTS } from "../api/apiConfig";
-import "../css/Login.css";
+import "../css/Auth.css";
 import { Lock, Mail, LogIn, ShieldCheck, ArrowRight, UserCircle, AlertCircle, Home, Phone, Upload, } from "lucide-react";
-import Cookies from "js-cookie";
 import { GoogleLogin } from "@react-oauth/google";
 import Api from "../api/Api";
 
@@ -32,8 +31,8 @@ export default function Auth({ onLoginSuccess }) {
     localStorage.setItem("token", r.data.token);
     localStorage.setItem("email", r.data.email);
     localStorage.setItem("role", r.data.role);
+    { r.data.role === "ROLE_ADMIN" ? nav("/admin/all-users") : nav("/home") };
     onLoginSuccess();
-    nav("/home");
   };
 
 
@@ -52,8 +51,8 @@ export default function Auth({ onLoginSuccess }) {
       localStorage.setItem("email", r.data.email);
       localStorage.setItem("role", r.data.role);
 
+      { r.data.role === "ROLE_ADMIN" ? nav("/admin/all-users") : nav("/home") };
       onLoginSuccess();
-      nav("/home");
     } catch (e) {
       setError("Invalid email or password");
     }
@@ -92,8 +91,6 @@ export default function Auth({ onLoginSuccess }) {
       formData.append("password", form.password);
       formData.append("role", form.role);
       formData.append("phone", form.phone);
-
-
       formData.append("phone", form.phone);
       if (aadharFile) formData.append("aadharCard", aadharFile);
 
@@ -145,23 +142,19 @@ export default function Auth({ onLoginSuccess }) {
 
       {/* FORM SIDE */}
       <div className="form-side" key={mode}>
+
         <form
           className="login-form"
-          onSubmit={
-            mode === "login"
-              ? login
-              : mode === "register"
-                ? register
-                : verifyOtp
+          onSubmit={mode === "login" ? login : mode === "register" ? register : verifyOtp
           }
         >
           <div className="form-header">
+            <div className="brand-logo">
+              <Home size={24} className="logo-icon" />
+              <span>Rooms Dekho</span>
+            </div>
             <h2>
-              {mode === "login"
-                ? "Login"
-                : mode === "register"
-                  ? "Create Account"
-                  : "Verify OTP"}
+              {mode === "login" ? "Welcome Back" : mode === "register" ? "Create Account" : "Verify OTP"}
             </h2>
           </div>
 
@@ -176,23 +169,11 @@ export default function Auth({ onLoginSuccess }) {
               <>
                 <div className="input-group">
                   <Mail size={18} className="field-icon" />
-                  <input
-                    name="email"
-                    type="email"
-                    placeholder="Email Address"
-                    onChange={set}
-                    required
-                  />
+                  <input name="email" type="email" placeholder="Email Address" onChange={set} required />
                 </div>
                 <div className="input-group">
                   <Lock size={18} className="field-icon" />
-                  <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    onChange={set}
-                    required
-                  />
+                  <input type="password" name="password" placeholder="Password" onChange={set} required />
                 </div>
               </>
             )}
@@ -211,22 +192,11 @@ export default function Auth({ onLoginSuccess }) {
                 <div className="owner-fields-animate">
                   <div className="input-group">
                     <Phone size={18} className="field-icon" />
-                    <input
-                      name="phone"
-                      type="text"
-                      placeholder="Phone Number"
-                      onChange={set}
-                      required
-                    />
+                    <input name="phone" type="text" placeholder="Phone Number" onChange={set} required />
                   </div>
                   <div className="input-group file-input-wrapper">
                     <Upload size={18} className="field-icon" />
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      required
-                    />
+                    <input type="file" accept="image/*" onChange={handleFileChange} required />
                     <small className="file-label">
                       Upload Aadhar/ID Proof
                     </small>
@@ -239,13 +209,7 @@ export default function Auth({ onLoginSuccess }) {
             {mode === "otp" && (
               <div className="input-group">
                 <ShieldCheck size={18} className="field-icon" />
-                <input
-                  name="otp"
-                  placeholder="Enter 6-digit OTP"
-                  maxLength="6"
-                  onChange={set}
-                  required
-                />
+                <input name="otp" placeholder="Enter 6-digit OTP" maxLength="6" onChange={set} required />
               </div>
             )}
           </div>
@@ -290,7 +254,6 @@ export default function Auth({ onLoginSuccess }) {
           onSuccess={(res) => handleGoogleLogin(res.credential)}
           onError={() => alert("Google Login Failed")}
         />
-
       </div>
     </div>
   );
