@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./non-outlets/Navbar";
-import Login from "./components/Login";
+import Login from "./components/Auth";
 import { WishlistProvider } from "./context/WishlistContext";
 
 // Owner
@@ -40,6 +40,8 @@ function App() {
     localStorage.clear();
     setIsLoggedIn(false);
     setRole(null);
+    window.location.reload();
+    window.location.href = "/home";
   };
 
   const handleLoginSuccess = () => {
