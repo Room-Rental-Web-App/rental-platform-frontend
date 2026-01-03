@@ -9,12 +9,14 @@ import { WishlistProvider } from "./context/WishlistContext";
 import AddRoom from "./pages/room-owner-page/AddRoom";
 import MyListings from "./pages/room-owner-page/MyListings";
 import About from "./pages/About"
+import PremiumOwner from "./pages/room-owner-page/PremiumOwner";
 
 // User
 import HomePage from "./pages/HomePage";
 import SearchRoom from "./pages/user-page/SearchRoom";
 import Wishlist from "./pages/user-page/Wishlist";
 import RoomDetailPage from "./pages/user-page/RoomDetailPage";
+import PremiumUser from "./pages/user-page/PremiumUser";
 
 // Admin
 import AllUsers from "./pages/admin-page/AllUsers";
@@ -42,10 +44,12 @@ function App() {
 
             {/* User */}
             <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/premium-user" element={<PremiumUser />} />
 
             {/* Room-Owner */}
             <Route path="/add-room" element={<AddRoom />} />
             <Route path="/my-listings" element={<MyListings />} />
+            <Route path="/premium-owner" element={<PremiumOwner />} />
 
             {/* Admin */}
             <Route path="/admin/all-users" element={<AllUsers />} />

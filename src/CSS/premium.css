@@ -1,0 +1,60 @@
+.premium-page {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.premium-page h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.sub {
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.plans {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.plan {
+  border: 1px solid #ddd;
+  width: 300px;
+  padding: 25px;
+  border-radius: 14px;
+}
+
+.plan ul {
+  list-style: none;
+  padding: 0;
+}
+
+.plan li {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.plan span {
+  display: block;
+  margin: 20px 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.plan button {
+  padding: 12px;
+  border: none;
+  background: #000;
+  color: #fff;
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.plan.premium {
+  border: 2px solid #000;
+  transform: scale(1.05);
+}
