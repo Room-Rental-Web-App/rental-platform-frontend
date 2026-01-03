@@ -47,6 +47,8 @@ const AddRoom = () => {
     city: "",
     pincode: "",
     contactNumber: "",
+    availableFor: "",
+    area: "",
     latitude: 20.5937, // Default India Center
     longitude: 78.9629,
     amenities: [],
@@ -108,6 +110,7 @@ const AddRoom = () => {
     data.append("roomData", JSON.stringify(roomData));
     images.forEach((img) => data.append("images", img));
     if (video) data.append("video", video);
+    console.log("Submitting:", roomData, images, video);
 
     try {
       await axios.post(API_ENDPOINTS.ADD_ROOM, data, {
@@ -184,18 +187,35 @@ const AddRoom = () => {
                   <option>Studio</option>
                 </select>
               </div>
+              <div className="input-box">
+                <label>Available For</label>
+                <select
+                  value={formData.availableFor}
+                  onChange={(e) =>
+                    setFormData({ ...formData, availableFor: e.target.value })
+                  }
+                >
+                  <option> Tenant Preference</option>
+                  <option> Anyone </option>
+                  <option> Boys  Only</option>
+                  <option> Girls  Only</option>
+                  <option> Family </option>
+                  <option> Couple </option>
+                  <option> Students </option>
+                  <option> Working  Professionals</option>
+                </select>
+              </div>
+            </div>
+            <div className="input-box">
+              <label>Area In Squar ft.</label>
+              <input type="number" required value={formData.area} onChange={(e) => setFormData({ ...formData, area: e.target.value })} />
             </div>
             <div className="input-box">
               <label>Amenities</label>
               <div className="amenities-grid">
                 {allAmenities.map((item) => (
-                  <div
-                    key={item.id}
-                    className={`amenity-card ${
-                      formData.amenities.includes(item.id) ? "selected" : ""
-                    }`}
-                    onClick={() => handleAmenityChange(item.id)}
-                  >
+                  <div key={item.id} className={`amenity-card ${formData.amenities.includes(item.id) ? "selected" : ""}`}
+                    onClick={() => handleAmenityChange(item.id)} >
                     {item.icon} <span>{item.label}</span>
                   </div>
                 ))}
@@ -302,6 +322,7 @@ const AddRoom = () => {
                 <span>Upload Photos</span>
                 <input
                   type="file"
+                  placeholder="select image"
                   multiple
                   hidden
                   accept="image/*"
@@ -320,9 +341,7 @@ const AddRoom = () => {
               {previews.map((p, i) => (
                 <div key={i} className="preview-item">
                   <img src={p} alt="preview" className="thumb" />
-                  <X
-                    className="remove-icon"
-                    size={14}
+                  <X className="remove-icon" size={14}
                     onClick={() => {
                       setImages(images.filter((_, idx) => idx !== i));
                       setPreviews(previews.filter((_, idx) => idx !== i));
@@ -357,13 +376,7 @@ const AddRoom = () => {
           <div className="success-msg">
             <CheckCircle size={60} color="#10b981" />
             <h2>Listing Published!</h2>
-            <button
-              type="button"
-              onClick={() => window.location.reload()}
-              className="btn-next"
-            >
-              Add Another
-            </button>
+            <button type="button" onClick={() => window.location.reload()} className="btn-next">Add Another</button>
           </div>
         )}
       </form>
