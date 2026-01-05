@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
-import AdminSidebar from "./AdminSidebar";
 import { Home, Trash2, Loader2 } from "lucide-react";
-import "../../CSS/Admin.css";
+import "../../css/adminRoom.css";
 
 const AllRooms = () => {
   const [rooms, setRooms] = useState([]);
@@ -50,7 +49,6 @@ const AllRooms = () => {
 
   return (
     <div className="admin-layout">
-      <AdminSidebar />
       <div className="admin-main-content">
         <h2>
           <Home /> All Listings

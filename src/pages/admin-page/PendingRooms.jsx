@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
-import AdminSidebar from "./AdminSidebar";
+
 import { Check, X, Eye, IndianRupee, MapPin, Loader2 } from "lucide-react";
-import "../../CSS/Admin.css";
+
 import "../../CSS/PendingRooms.css";
 
 const PendingRooms = () => {
@@ -49,7 +49,6 @@ const PendingRooms = () => {
 
   return (
     <div className="admin-layout">
-      <AdminSidebar />
       <div className="admin-main-content">
         <div className="page-header">
           <h2>Pending Room Approvals</h2>

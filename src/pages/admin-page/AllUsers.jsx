@@ -3,7 +3,6 @@ import axios from "axios";
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
 import AdminSidebar from "./AdminSidebar";
 import { Trash2, User } from "lucide-react";
-import "../../CSS/Admin.css";
 const AllUsers = () => {
   const [users, setUsers] = useState([]);
 
@@ -36,7 +35,6 @@ const AllUsers = () => {
 
   return (
     <div className="admin-layout">
-      <AdminSidebar />
       <div className="admin-main-content">
         <h2>
           <User /> Registered Users
