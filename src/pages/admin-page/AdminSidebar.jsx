@@ -75,10 +75,10 @@ const AdminSidebar = () => {
           <Clock size={20} /> Pending Users
         </NavLink>
         <NavLink
-          to="/home"
           className={({ isActive }) => (isActive ? "active-link" : "")}
+          onClick={handleLogout}
         >
-          <FileText size={20} /> <div onClick={handleLogout}>Logout</div>
+          <FileText size={20} /> Logout
         </NavLink>
       </nav>
     </div>
