@@ -1,0 +1,132 @@
+/* src/css/PremiumPlans.css */
+.premium-container {
+  max-width: 1200px;
+  margin: 80px auto;
+  padding: 20px;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+}
+
+.text-gold {
+  color: #d4af37;
+  font-weight: bold;
+}
+
+.premium-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: #1a1a1a;
+}
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin: 40px 0;
+  font-weight: 600;
+}
+
+.toggle-switch {
+  width: 60px;
+  height: 30px;
+  background: #333;
+  border-radius: 20px;
+  position: relative;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.toggle-ball {
+  width: 24px;
+  height: 24px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  transition: 0.3s;
+}
+
+.ball-right { left: 33px; background: #d4af37; }
+.ball-left { left: 3px; }
+
+.save-badge {
+  background: #e6fffa;
+  color: #2c7a7b;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  margin-left: 5px;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 50px;
+}
+
+.plan-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 20px;
+  padding: 40px 30px;
+  position: relative;
+  transition: 0.4s;
+}
+
+.plan-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.scale-up {
+  border: 2px solid #d4af37;
+  transform: scale(1.05);
+}
+
+.recommended-tag {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #d4af37;
+  color: #fff;
+  padding: 5px 20px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.price-tag { margin: 20px 0; }
+.amount { font-size: 3rem; font-weight: 800; }
+.currency { font-size: 1.5rem; vertical-align: top; }
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 30px 0;
+  text-align: left;
+}
+
+.feature-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  color: #555;
+}
+
+.btn-select {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  border: none;
+  background: #1a1a1a;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.gold-card .btn-select { background: #d4af37; }
+.btn-select:hover { opacity: 0.9; }

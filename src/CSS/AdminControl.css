@@ -1,0 +1,87 @@
+/* src/css/AdminControl.css */
+.admin-premium-page {
+  padding: 40px;
+  background: #f4f7f6;
+  min-height: 100vh;
+  margin-top: 60px;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.admin-tabs button {
+  padding: 10px 20px;
+  border: none;
+  background: #e2e8f0;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.admin-tabs button.active-tab {
+  background: #2563eb;
+  color: white;
+}
+
+.admin-content-card {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.manager-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th, .admin-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.admin-input {
+  padding: 8px;
+  border: 1px solid #cbd5e0;
+  border-radius: 5px;
+  width: 100px;
+}
+
+.admin-textarea {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.btn-icon {
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.btn-icon.save { color: #059669; background: #d1fae5; }
+.btn-icon.delete { color: #dc2626; background: #fee2e2; }
+
+.btn-save-all {
+  background: #10b981;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
