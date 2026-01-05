@@ -2,7 +2,7 @@ import React from 'react'
 
 function AdminDashboard() {
   return (
-    <div>AdminDashboard</div>
+    <h2 style={{color:"black"}}>AdminDashboard</h2>
   )
 }
 

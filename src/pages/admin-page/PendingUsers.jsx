@@ -54,8 +54,6 @@ const updateStatus = async (id, action) => {
     return (
         <div className="admin-layout">
             {" "}
-            {/* IMPORTANT: Layout Wrapper */}
-            <AdminSidebar /> {/* IMPORTANT: Adding the Sidebar here */}
             <div className="admin-main-content">
                 {" "}
                 {/* IMPORTANT: Main Content Wrapper */}

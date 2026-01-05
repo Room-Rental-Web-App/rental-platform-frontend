@@ -1,16 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import {
-  Shield,
-  Gauge,
-  Users,
-  Building2,
-  UserCog,
-  UserPlus,
-  ClipboardCheck,
-  UserX,
-  LogOut,
-} from "lucide-react";
+import { Shield, Gauge, Users, Building2, UserCog, UserPlus, ClipboardCheck, UserX, LogOut, BarChart3, } from "lucide-react";
 import "../../CSS/AdminSidebar.css";
 
 const AdminSidebar = () => {
@@ -55,6 +45,10 @@ const AdminSidebar = () => {
 
         <NavLink to="/admin/pending-users" className={({ isActive }) => isActive ? "active-link" : ""}>
           <UserX size={20} /> Pending Users
+        </NavLink>
+
+        <NavLink to="/admin/reports" className={({ isActive }) => isActive ? "active-link" : ""}>
+          <BarChart3 size={20} /> Reports
         </NavLink>
 
         <NavLink onClick={handleLogout}>

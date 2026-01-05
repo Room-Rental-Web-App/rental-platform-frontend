@@ -25,6 +25,7 @@ import AllOwner from "./pages/admin-page/AllOwners";
 import PendingOwners from "./pages/admin-page/PendingOwners";
 import PendingRooms from "./pages/admin-page/PendingRooms";
 import PendingUsers from "./pages/admin-page/PendingUsers";
+import Reports from "./pages/admin-page/Reports";
 
 import Layout from "./layout/Layouts"
 import AdminDashboard from "./pages/admin-page/AdminDashboard";
@@ -53,6 +54,7 @@ function App() {
             <Route path="/premium-owner" element={<PremiumOwner />} />
 
             {/* Admin */}
+
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/all-users" element={<AllUsers />} />
             <Route path="/admin/all-rooms" element={<AllRooms />} />
@@ -60,6 +62,7 @@ function App() {
             <Route path="/admin/pending-users" element={<PendingUsers />} />
             <Route path="/admin/pending-approvals" element={<PendingOwners />} />
             <Route path="/admin/pending-rooms" element={<PendingRooms />} />
+            <Route path="/admin/reports" element={<Reports />} />
             {/* Fallback */}
           </Route>
           <Route path="*" element={<Navigate to="/home" />} />

@@ -3,7 +3,6 @@ import axios from "axios";
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
 import AdminSidebar from "./AdminSidebar"; // Corrected Sidebar Import
 import { Check, X, ExternalLink, Loader2, Clock } from "lucide-react";
-import "../../CSS/Admin.css"; // Using same CSS as AllUsers for consistency
 import "../../CSS/PendingOwners.css";
 
 const PendingOwners = () => {
@@ -59,7 +58,6 @@ const PendingOwners = () => {
     <div className="admin-layout">
       {" "}
       {/* IMPORTANT: Layout Wrapper */}
-      <AdminSidebar /> {/* IMPORTANT: Adding the Sidebar here */}
       <div className="admin-main-content">
         {" "}
         {/* IMPORTANT: Main Content Wrapper */}

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
-import AdminSidebar from "./AdminSidebar";
 import { UserCheck, Mail, Phone, ExternalLink, Trash2 } from "lucide-react";
-import "../../CSS/Admin.css";
 const AllOwner = () => {
   const [owners, setOwners] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,7 +44,6 @@ const AllOwner = () => {
 
   return (
     <div className="admin-layout">
-      <AdminSidebar />
       <div className="admin-main-content">
         <header className="admin-page-header">
           <h2>
