@@ -27,6 +27,7 @@ import PendingRooms from "./pages/admin-page/PendingRooms";
 import PendingUsers from "./pages/admin-page/PendingUsers";
 
 import Layout from "./layout/Layouts"
+import AdminDashboard from "./pages/admin-page/AdminDashboard";
 function App() {
   return (
     <WishlistProvider>
@@ -52,6 +53,7 @@ function App() {
             <Route path="/premium-owner" element={<PremiumOwner />} />
 
             {/* Admin */}
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/all-users" element={<AllUsers />} />
             <Route path="/admin/all-rooms" element={<AllRooms />} />
             <Route path="/admin/all-owners" element={<AllOwner />} />

@@ -1,27 +1,25 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import {
-  Users,
-  Home,
-  UserCheck,
   Shield,
-  LayoutDashboard,
-  Clock,
-  FileText, // Added for Room verification context
+  Gauge,
+  Users,
+  Building2,
+  UserCog,
+  UserPlus,
+  ClipboardCheck,
+  UserX,
+  LogOut,
 } from "lucide-react";
 import "../../CSS/AdminSidebar.css";
 
 const AdminSidebar = () => {
 
   const handleLogout = () => {
-    if(!confirm("Are you sure you want to logout?")){
-      return;
-    }
+    if (!confirm("Are you sure you want to logout?")) return;
     localStorage.clear();
-    window.location.reload();
     window.location.href = "/home";
   };
-
 
   return (
     <div className="admin-sidebar">
@@ -29,56 +27,38 @@ const AdminSidebar = () => {
         <Shield size={24} color="#4f46e5" />
         <h3>Admin Panel</h3>
       </div>
+
       <nav>
-        <NavLink
-          to="/admin/all-users"
-          className={({ isActive }) => (isActive ? "active-link" : "")}
-        >
-          <LayoutDashboard size={20} /> All Users
+        <NavLink to="/admin/dashboard" className={({ isActive }) => isActive ? "active-link" : ""}>
+          <Gauge size={20} /> My Dashboard
         </NavLink>
 
-
-
-        {/* NEW: Link for Room Verification */}
-
-
-        <NavLink
-          to="/admin/all-rooms"
-          className={({ isActive }) => (isActive ? "active-link" : "")}
-        >
-          <Home size={20} /> All Rooms
+        <NavLink to="/admin/all-users" className={({ isActive }) => isActive ? "active-link" : ""}>
+          <Users size={20} /> All Users
         </NavLink>
 
-        <NavLink
-          to="/admin/all-owners"
-          className={({ isActive }) => (isActive ? "active-link" : "")}
-        >
-          <Users size={20} /> All Owners
+        <NavLink to="/admin/all-rooms" className={({ isActive }) => isActive ? "active-link" : ""}>
+          <Building2 size={20} /> All Rooms
         </NavLink>
 
-        <NavLink
-          to="/admin/pending-approvals"
-          className={({ isActive }) => (isActive ? "active-link" : "")}
-        >
-          <UserCheck size={20} /> Pending Owners
+        <NavLink to="/admin/all-owners" className={({ isActive }) => isActive ? "active-link" : ""}>
+          <UserCog size={20} /> All Owners
         </NavLink>
-        <NavLink
-          to="/admin/pending-rooms"
-          className={({ isActive }) => (isActive ? "active-link" : "")}
-        >
-          <Clock size={20} /> Pending Rooms
+
+        <NavLink to="/admin/pending-approvals" className={({ isActive }) => isActive ? "active-link" : ""}>
+          <UserPlus size={20} /> Pending Owners
         </NavLink>
-        <NavLink
-          to="/admin/pending-users"
-          className={({ isActive }) => (isActive ? "active-link" : "")}
-        >
-          <Clock size={20} /> Pending Users
+
+        <NavLink to="/admin/pending-rooms" className={({ isActive }) => isActive ? "active-link" : ""}>
+          <ClipboardCheck size={20} /> Pending Rooms
         </NavLink>
-        <NavLink
-          className={({ isActive }) => (isActive ? "active-link" : "")}
-          onClick={handleLogout}
-        >
-          <FileText size={20} /> Logout
+
+        <NavLink to="/admin/pending-users" className={({ isActive }) => isActive ? "active-link" : ""}>
+          <UserX size={20} /> Pending Users
+        </NavLink>
+
+        <NavLink onClick={handleLogout}>
+          <LogOut size={20} /> Logout
         </NavLink>
       </nav>
     </div>
