@@ -1,60 +1,130 @@
-.premium-page {
-  text-align: center;
+.premium-container {
+  max-width: 1200px;
+  margin: auto;
   padding: 60px 20px;
+  text-align: center;
+  background: #692a2a;
 }
 
-.premium-page h1 {
+.main-title {
   font-size: 42px;
-  margin-bottom: 10px;
+  margin-top: 40px;
 }
 
-.sub {
+.sub-text {
   color: #666;
-  margin-bottom: 40px;
+  margin-bottom: 25px;
 }
 
-.plans {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  flex-wrap: wrap;
+.blocked-box {
+  background: #312a16;
+  color: #856404;
+  padding: 14px;
+  border-radius: 12px;
+  margin: 25px auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
 }
 
-.plan {
-  border: 1px solid #ddd;
-  width: 300px;
-  padding: 25px;
+.premium-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 25px;
+  margin-top: 40px;
+}
+
+.premium-card {
+  background: rgb(118, 50, 50);
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.06);
+  transition: .3s;
+}
+
+.premium-card:hover {
+  transform: translateY(-8px);
+}
+
+.premium-card svg {
+  color: #ff9800;
+  width: 40px;
+  height: 40px;
+}
+
+.highlight {
+  border: 2px solid #ff9800;
+  box-shadow: 0 0 25px rgba(255, 152, 0, 0.3);
+}
+
+.compare-table {
+  margin-bottom: 50px;
+}
+
+.compare-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgb(134, 79, 79);
   border-radius: 14px;
+  overflow: hidden;
 }
 
-.plan ul {
-  list-style: none;
-  padding: 0;
-}
-
-.plan li {
-  padding: 10px 0;
+.compare-table th,
+.compare-table td {
+  padding: 15px;
   border-bottom: 1px solid #eee;
 }
 
-.plan span {
-  display: block;
-  margin: 20px 0;
-  font-size: 20px;
+.compare-table th {
+  background: #4f1a1a;
+}
+
+.premium-col {
+  background: #6f5f2a;
   font-weight: bold;
 }
 
-.plan button {
-  padding: 12px;
+.pricing-box {
+  margin-top: 70px;
+  padding: 40px;
+  background: linear-gradient(135deg, #111, #333);
+  color: rgb(117, 48, 48);
+  border-radius: 20px;
+}
+
+.pricing-box .price {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.upgrade-btn {
+  padding: 16px 50px;
   border: none;
-  background: #000;
-  color: #fff;
-  width: 100%;
-  border-radius: 8px;
+  background: #ff9800;
+  border-radius: 30px;
+  font-weight: bold;
   cursor: pointer;
 }
 
-.plan.premium {
-  border: 2px solid #000;
-  transform: scale(1.05);
+.guarantee {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #bbb;
+}
+
+
+.owner-premium .owner-block {
+  background: #000000;
+  color: #7a0000;
+}
+
+.owner-premium .highlight {
+  border: 2px solid orange;
+  box-shadow: 0 0 25px rgba(255, 140, 0, 0.4);
+}
+
+.owner-price {
+  background: linear-gradient(135deg, #ff9800, #ff5722);
+  color: black;
 }

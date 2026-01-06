@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Api from "../../api/Api";
 import { Link, useNavigate } from "react-router-dom";
-import { Heart, MapPin, ArrowRight, Search } from "lucide-react";
+import { Heart, MapPin, ArrowRight, Search, LocateFixed } from "lucide-react";
 import { useWishlist } from "../../context/WishlistContext";
 import useInfiniteScroll from "../../customHook/useInfiniteScroll";
 import "../../css/search-room.css";
@@ -12,6 +12,7 @@ function SearchRoom() {
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
 
   const navTo = useNavigate();
   const email = localStorage.getItem("email");
@@ -23,14 +24,32 @@ function SearchRoom() {
     roomType: null,
     minPrice: null,
     maxPrice: null,
+    radiusKm: 2
   });
 
+  // Load wishlist and request user location FIRST
   useEffect(() => {
     loadWishlist();
-    resetAndLoad();
+    requestUserLocation();
   }, []);
 
-  useInfiniteScroll({ hasMore, loading, onLoadMore: () => loadRooms(page + 1, true) });
+  // Only load rooms AFTER we have location
+  useEffect(() => {
+    if (userLocation) resetAndLoad();
+  }, [userLocation]);
+
+  useInfiniteScroll({
+    hasMore,
+    loading,
+    onLoadMore: () => loadRooms(page + 1, true)
+  });
+
+  const requestUserLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      pos => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      () => setUserLocation({ lat: null, lng: null }) // allow non-geo search
+    );
+  };
 
   const resetAndLoad = () => {
     setRooms([]);
@@ -49,9 +68,12 @@ function SearchRoom() {
           roomType: filters.roomType,
           minPrice: filters.minPrice,
           maxPrice: filters.maxPrice,
-           page: pageNo,
-            size: 10
-        },
+          userLat: userLocation?.lat,
+          userLng: userLocation?.lng,
+          radiusKm: filters.radiusKm,
+          page: pageNo,
+          size: 10
+        }
       });
 
       setRooms(prev => append ? [...prev, ...res.data.content] : res.data.content);
@@ -84,38 +106,46 @@ function SearchRoom() {
 
   return (
     <div className="search-room-page">
+
       <div className="filter-bar">
-        <input name="city" placeholder="City" onChange={e => setFilters({ ...filters, city: e.target.value })} />
-        <input name="pincode" placeholder="Pincode" onChange={e => setFilters({ ...filters, pincode: e.target.value })} />
-        <select onChange={e => setFilters({ ...filters, roomType: e.target.value })}>
+        <input placeholder="City" onChange={e => setFilters({ ...filters, city: e.target.value || null })} />
+        <input placeholder="Pincode" onChange={e => setFilters({ ...filters, pincode: e.target.value || null })} />
+        <select onChange={e => setFilters({ ...filters, roomType: e.target.value || null })}>
           <option value="">All Types</option>
           <option value="Single Room">Single Room</option>
           <option value="Double Room">Double Room</option>
           <option value="PG">PG</option>
           <option value="Flat">Flat</option>
         </select>
-        <input type="number" placeholder="Min ₹" onChange={e => setFilters({ ...filters, minPrice: e.target.value })} />
-        <input type="number" placeholder="Max ₹" onChange={e => setFilters({ ...filters, maxPrice: e.target.value })} />
-        <button onClick={resetAndLoad}><Search size={16} /> Apply</button>
+        <input type="number" placeholder="Min ₹" onChange={e => setFilters({ ...filters, minPrice: e.target.value || null })} />
+        <input type="number" placeholder="Max ₹" onChange={e => setFilters({ ...filters, maxPrice: e.target.value || null })} />
+        <input type="number" placeholder="Radius km" defaultValue={2}
+               onChange={e => setFilters({ ...filters, radiusKm: e.target.value })} />
+
+        <button onClick={requestUserLocation}>
+          <LocateFixed size={16}/> Use My Location
+        </button>
+
+        <button onClick={resetAndLoad}>
+          <Search size={16}/> Apply
+        </button>
       </div>
 
       <div className="rooms-grid">
         {rooms.map(room => (
           <div key={room.id} className="room-card" onClick={() => navTo(`/room/${room.id}`)}>
             <img src={room.imageUrls?.[0] || "/placeholder.jpg"} />
-            <button
-              className={`wishlist-btn ${wishlistIds.includes(room.id) ? "active" : ""}`}
-              onClick={e => toggleWishlist(e, room.id)}
-            >
+            <button className={`wishlist-btn ${wishlistIds.includes(room.id) ? "active" : ""}`}
+                    onClick={e => toggleWishlist(e, room.id)}>
               <Heart size={18} fill={wishlistIds.includes(room.id) ? "#ef4444" : "none"} />
             </button>
 
             <div className="card-content">
               <h3>{room.title}</h3>
-              <p><MapPin size={14} /> {room.city}</p>
+              <p><MapPin size={14}/> {room.city}</p>
               <span className="price">₹{room.price}</span>
               <span className="room-type">{room.roomType}</span>
-              <Link to={`/room/${room.id}`}>View Details <ArrowRight size={14} /></Link>
+              <Link to={`/room/${room.id}`}>View Details <ArrowRight size={14}/></Link>
             </div>
           </div>
         ))}
