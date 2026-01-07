@@ -5,6 +5,7 @@ const Api = axios.create({
 
 });
 
+
 // Add token from localStorage to every request
 Api.interceptors.request.use((config) => {
     const token = Cookies.get("rentalRoom-token");
