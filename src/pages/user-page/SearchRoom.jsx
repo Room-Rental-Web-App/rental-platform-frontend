@@ -5,6 +5,8 @@ import { Heart, MapPin, ArrowRight, Search, Locate } from "lucide-react";
 import { useWishlist } from "../../context/WishlistContext";
 import useInfiniteScroll from "../../customHook/useInfiniteScroll";
 import "../../css/search-room.css";
+import usePremiumStatus from "../../customHook/usePremiumStatus";
+import { premiumGuard } from "../../customHook/premiumGuard";
 
 function SearchRoom() {
   const [rooms, setRooms] = useState([]);
@@ -13,6 +15,7 @@ function SearchRoom() {
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
+  const { isPremiumUser } = usePremiumStatus();
 
 
   const navTo = useNavigate();
@@ -46,7 +49,7 @@ function SearchRoom() {
     );
 
   }
-console.log(userLocation);
+  console.log(userLocation);
 
   useInfiniteScroll({ hasMore, loading, onLoadMore: () => loadRooms(page + 1, true) });
 
@@ -85,6 +88,12 @@ console.log(userLocation);
     }
   };
 
+  const handleUseLocation = () => {
+    if (!premiumGuard(navTo)) return;
+    loadUserLocation();
+  };
+
+
   const loadWishlist = async () => {
     if (!email) return;
     const res = await Api.get(`/wishlist?email=${email}`);
@@ -120,7 +129,9 @@ console.log(userLocation);
         <input type="number" placeholder="Min ₹" onChange={e => setFilters({ ...filters, minPrice: e.target.value })} />
         <input type="number" placeholder="Max ₹" onChange={e => setFilters({ ...filters, maxPrice: e.target.value })} />
         <input type="number" placeholder="Radius (km)" value={filters.radiusKm} onChange={e => setFilters({ ...filters, radiusKm: e.target.value })} />
-        <button onClick={loadUserLocation}><Locate size={16} /> Use My Location</button>
+
+        {isPremiumUser && <button onClick={loadUserLocation}><Locate size={16} /> Use My Location</button>}
+        <button blocked={true} onClick={handleUseLocation}><Locate size={16} /> Use My Location</button>
         <button onClick={resetAndLoad}><Search size={16} /> Apply</button>
       </div>
 

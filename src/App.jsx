@@ -29,6 +29,7 @@ import Reports from "./pages/admin-page/Reports";
 
 import Layout from "./layout/Layouts"
 import AdminDashboard from "./pages/admin-page/AdminDashboard";
+import PremiumPage from "./pages/PremiumPage";
 function App() {
   return (
     <WishlistProvider>
@@ -46,12 +47,12 @@ function App() {
 
             {/* User */}
             <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/premium-user" element={<PremiumUser />} />
 
             {/* Room-Owner */}
             <Route path="/add-room" element={<AddRoom />} />
             <Route path="/my-listings" element={<MyListings />} />
-            <Route path="/premium-owner" element={<PremiumOwner />} />
+
+            <Route path="/premium" element={<PremiumPage />} />
 
             {/* Admin */}
 
@@ -60,7 +61,7 @@ function App() {
             <Route path="/admin/all-rooms" element={<AllRooms />} />
             <Route path="/admin/all-owners" element={<AllOwner />} />
             <Route path="/admin/pending-users" element={<PendingUsers />} />
-            <Route path="/admin/pending-approvals" element={<PendingOwners />} />
+            <Route path="/admin/pending-approvals" element={<PremiumPage />} />
             <Route path="/admin/pending-rooms" element={<PendingRooms />} />
             <Route path="/admin/reports" element={<Reports />} />
             {/* Fallback */}

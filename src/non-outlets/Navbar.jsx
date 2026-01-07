@@ -46,7 +46,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                 </li>
 
                 <li>
-                  <Link to="/premium-user">
+                  <Link to="/premium">
                     <LayoutDashboard size={18} /> Premium
                   </Link>
                 </li>
@@ -66,7 +66,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/premium-owner">
+                  <Link to="/premium">
                     <LayoutDashboard size={18} /> Premium
                   </Link>
                 </li>
