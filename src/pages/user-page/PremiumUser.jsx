@@ -1,6 +1,7 @@
 import React from "react";
 import "../../css/premium.css";
 import { ShieldCheck, Clock, MapPin, Star, Lock, Zap } from "lucide-react";
+import RazorPayConfig from "../../components/RazorPayConfig";
 
 export default function PremiumUser() {
   return (
@@ -98,9 +99,10 @@ export default function PremiumUser() {
 
       <div className="pricing-box">
         <h2>Premium User Plan</h2>
+
         <p className="price">₹99 / Month</p>
         <p className="strike">Free users miss 80% of real rooms</p>
-        <button className="upgrade-btn">Unlock Premium Access</button>
+        <RazorPayConfig amountToPay={99} value={"Make Preminum"} />
         <p className="guarantee">7-day money-back guarantee</p>
       </div>
 

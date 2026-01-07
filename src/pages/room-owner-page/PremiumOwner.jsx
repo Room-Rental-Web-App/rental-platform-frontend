@@ -1,6 +1,7 @@
 import React from "react";
 import "../../css/premium.css";
 import { TrendingUp, Shield, Crown, Home, Lock, Zap } from "lucide-react";
+import RazorPayConfig from "../../components/RazorPayConfig";
 
 export default function OwnerPremium() {
   return (
@@ -97,13 +98,49 @@ export default function OwnerPremium() {
 
       </div>
 
-      <div className="pricing-box owner-price">
-        <h2>Featured Owner Plan</h2>
-        <p className="price">₹199 / 7 Days</p>
-        <p className="strike">Free rooms stay buried</p>
-        <button className="upgrade-btn owner">Boost My Listing Now</button>
-        <p className="guarantee">Get booked or get your money back.</p>
+      <div className="pricing-dual owner-price">
+
+        {/* Weekly Trial */}
+        <div className="pricing-box trial">
+          <h2>Trial Boost</h2>
+          <p className="price">₹199 <span>/ 7 Days</span></p>
+          <ul>
+            <li>Appear above free listings</li>
+            <li>Basic featured badge</li>
+            <li>Unlimited room listings</li>
+            <li>Limited exposure</li>
+          </ul>
+          <RazorPayConfig amountToPay={199} value={"Make Premium"} />
+
+          <p className="guarantee">Best for first-time owners</p>
+        </div>
+
+        {/* Monthly Primary Plan */}
+        <div className="pricing-box premium main">
+          <div className="popular-badge">Most Popular</div>
+          <h2>Featured Owner</h2>
+          <p className="price">₹599 <span>/ Month</span></p>
+          <ul>
+            <li>🔥 Top position in search</li>
+            <li>📍 Homepage featured banner</li>
+            <li>📞 Direct contact priority</li>
+            <li>📸 Highlighted “Featured” badge</li>
+            <li>📊 Lead analytics dashboard</li>
+            <li>🛡 Spam / fake lead protection</li>
+            <li>Unlimited room listings</li>
+          </ul>
+          <div >
+            <RazorPayConfig amountToPay={599} value={"Make Premium"} />
+          </div>
+          <p className="guarantee">
+            Minimum 3 real leads in 7 days or we extend your plan FREE
+          </p>
+        </div>
+
       </div>
+
+
+
 
     </div>
   );

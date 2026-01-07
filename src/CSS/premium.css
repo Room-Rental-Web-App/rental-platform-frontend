@@ -128,3 +128,115 @@
   background: linear-gradient(135deg, #ff9800, #ff5722);
   color: black;
 }
+
+/* Dual pricing container */
+.pricing-dual {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+  margin-top: 50px;
+}
+
+/* Common pricing box */
+.pricing-box {
+  background: linear-gradient(145deg,#0f172a,#020617);
+  color: #fff;
+  border-radius: 18px;
+  padding: 28px 26px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: all .35s ease;
+}
+
+.pricing-box:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 30px 90px rgba(99,102,241,.4);
+}
+
+/* Price */
+.pricing-box .price {
+  font-size: 34px;
+  font-weight: 800;
+  color: #facc15;
+  margin: 15px 0;
+}
+
+.pricing-box .price span {
+  font-size: 15px;
+  opacity: .8;
+  margin-left: 4px;
+}
+
+/* Feature list */
+.pricing-box ul {
+  margin: 18px 0;
+  padding-left: 0;
+}
+
+.pricing-box ul li {
+  list-style: none;
+  padding: 10px 0;
+  border-bottom: 1px dashed rgba(255,255,255,.08);
+  opacity: .9;
+}
+
+/* Buttons */
+.upgrade-btn {
+  width: 100%;
+  border: none;
+  padding: 14px;
+  margin-top: 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(90deg,#6366f1,#9333ea);
+  color: #fff;
+  transition: .3s ease;
+}
+
+.upgrade-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 12px 35px rgba(99,102,241,.7);
+}
+
+/* Trial */
+.pricing-box.trial {
+  background: linear-gradient(145deg,#020617,#020617);
+  border: 1px dashed rgba(255,255,255,.12);
+}
+
+.pricing-box.trial .price {
+  color: #94a3b8;
+}
+
+.pricing-box.trial .upgrade-btn {
+  background: transparent;
+  border: 1px solid #6366f1;
+}
+
+/* Main Premium */
+.pricing-box.main {
+  background: linear-gradient(145deg,#020617,#1e293b);
+  border: 2px solid #6366f1;
+}
+
+.popular-badge {
+  position: absolute;
+  top: -14px;
+  right: 18px;
+  background: #6366f1;
+  padding: 5px 14px;
+  font-size: 12px;
+  border-radius: 20px;
+  color: #fff;
+  font-weight: 700;
+}
+
+/* Guarantee text */
+.guarantee {
+  margin-top: 14px;
+  font-size: 13px;
+  opacity: .75;
+  text-align: center;
+}
