@@ -1,0 +1,59 @@
+.my-plans-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  color: red;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.plan-card {
+  padding: 18px;
+  border-radius: 14px;
+  border: 2px solid #ddd;
+  background: #fff;
+  position: relative;
+}
+
+.plan-card.active {
+  border-color: #00b894;
+  box-shadow: 0 0 15px rgba(0,184,148,.2);
+}
+
+.plan-card.expired {
+  border-color: #d63031;
+  opacity: .75;
+}
+
+.plan-card h3 {
+  margin-bottom: 10px;
+}
+
+.status {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.plan-card.active .status {
+  background: #00b894;
+  color: #fff;
+}
+
+.plan-card.expired .status {
+  background: #d63031;
+  color: #fff;
+}
+
+.no-plan {
+  text-align: center;
+  opacity: .7;
+}
