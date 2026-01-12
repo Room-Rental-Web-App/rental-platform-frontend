@@ -61,7 +61,7 @@ function App() {
             <Route path="/admin/all-rooms" element={<AllRooms />} />
             <Route path="/admin/all-owners" element={<AllOwner />} />
             <Route path="/admin/pending-users" element={<PendingUsers />} />
-            <Route path="/admin/pending-approvals" element={<PremiumPage />} />
+            <Route path="/admin/pending-approvals" element={<PendingOwners />} />
             <Route path="/admin/pending-rooms" element={<PendingRooms />} />
             <Route path="/admin/reports" element={<Reports />} />
             {/* Fallback */}
