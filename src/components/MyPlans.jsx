@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Api from "../api/Api";
-import "../../css/my-plans.css";
+import "../css/my-plans.css";
 
 function MyPlans() {
   const [plans, setPlans] = useState([]);
