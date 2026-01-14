@@ -1,242 +1,259 @@
-.premium-container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 60px 20px;
-  text-align: center;
-  background: #692a2a;
+/* premium.css */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+
+:root {
+  --charcoal: #1C1C1C;      /* Base Dark Color */
+  --plum: #4D2B8C;          /* Luxury Purple */
+  --champagne: #E5BA41;     /* Premium Gold */
+  --soft-grey: #F5F2F2;     /* Text Color */
+  --glass: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.15);
 }
 
+/* Poora Background Control */
+.premium-page-wrapper {
+  background: radial-gradient(circle at top right, var(--plum), var(--charcoal));
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Main Container - Jo content ko center aur limited width mein rakhega */
+.premium-container {
+  max-width: 1100px; /* Left-Right margin ke liye width limit ki */
+  margin: 0 auto;    /* Content ko center align karne ke liye */
+  padding: 80px 24px;
+  text-align: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--soft-grey);
+}
+
+/* Luxury Titles */
 .main-title {
-  font-size: 42px;
-  margin-top: 40px;
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 800;
+  margin-top: 20px;
+  color: var(--champagne);
+  letter-spacing: -1.5px;
 }
 
 .sub-text {
-  color: #666;
-  margin-bottom: 25px;
+  color: #b0b0b0;
+  margin: 10px auto 40px;
+  font-size: 1.1rem;
+  max-width: 700px;
 }
 
+/* Blocked Box */
 .blocked-box {
-  background: #312a16;
-  color: #856404;
-  padding: 14px;
-  border-radius: 12px;
+  background: rgba(229, 186, 65, 0.1);
+  color: var(--champagne);
+  padding: 14px 25px;
+  border-radius: 50px;
   margin: 25px auto;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   font-weight: 600;
+  border: 1px solid var(--champagne);
+  backdrop-filter: blur(5px);
 }
 
+/* Features Grid - Contained Layout */
 .premium-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 25px;
-  margin-top: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin: 50px 0;
 }
 
 .premium-card {
-  background: rgb(118, 50, 50);
-  padding: 28px;
-  border-radius: 16px;
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.06);
-  transition: .3s;
+  background: var(--glass);
+  backdrop-filter: blur(15px);
+  padding: 35px;
+  border-radius: 24px;
+  border: 1px solid var(--glass-border);
+  transition: transform 0.4s ease;
 }
 
 .premium-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-10px);
+  border-color: var(--champagne);
 }
 
-.premium-card svg {
-  color: #ff9800;
-  width: 40px;
-  height: 40px;
-}
-
-.highlight {
-  border: 2px solid #ff9800;
-  box-shadow: 0 0 25px rgba(255, 152, 0, 0.3);
-}
-
+/* Comparison Table - Center Contained */
 .compare-table {
-  margin-bottom: 50px;
+  margin: 80px auto;
+  max-width: 900px; /* Table ko zyada wide nahi rakha focus ke liye */
+  background: var(--glass);
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
 }
 
 .compare-table table {
   width: 100%;
   border-collapse: collapse;
-  background: rgb(134, 79, 79);
-  border-radius: 14px;
-  overflow: hidden;
-}
-
-.compare-table th,
-.compare-table td {
-  padding: 15px;
-  border-bottom: 1px solid #eee;
 }
 
 .compare-table th {
-  background: #4f1a1a;
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--champagne);
+  padding: 20px;
+  text-align: left;
+}
+
+.compare-table td {
+  padding: 18px;
+  border-bottom: 1px solid var(--glass-border);
+  text-align: left;
 }
 
 .premium-col {
-  background: #6f5f2a;
+  background: rgba(229, 186, 65, 0.08);
+  color: var(--champagne);
   font-weight: bold;
 }
 
-.pricing-box {
-  margin-top: 70px;
-  padding: 40px;
-  background: linear-gradient(135deg, #111, #333);
-  color: rgb(117, 48, 48);
-  border-radius: 20px;
-}
-
-.pricing-box .price {
-  font-size: 40px;
-  font-weight: bold;
-}
-
-.upgrade-btn {
-  padding: 16px 50px;
-  border: none;
-  background: #ff9800;
-  border-radius: 30px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.guarantee {
-  margin-top: 10px;
-  font-size: 13px;
-  color: #bbb;
-}
-
-
-.owner-premium .owner-block {
-  background: #000000;
-  color: #7a0000;
-}
-
-.owner-premium .highlight {
-  border: 2px solid orange;
-  box-shadow: 0 0 25px rgba(255, 140, 0, 0.4);
-}
-
-.owner-price {
-  background: linear-gradient(135deg, #ff9800, #ff5722);
-  color: black;
-}
-
-/* Dual pricing container */
+/* Pricing Grid - Balanced Spacing */
 .pricing-dual {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 28px;
-  margin-top: 50px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 35px;
+  margin-top: 60px;
+  justify-content: center; /* Kam cards hone par center dikhega */
 }
 
-/* Common pricing box */
 .pricing-box {
-  background: linear-gradient(145deg,#0f172a,#020617);
-  color: #fff;
-  border-radius: 18px;
-  padding: 28px 26px;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border-radius: 30px;
+  padding: 45px 30px;
   position: relative;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-  border: 1px solid rgba(255,255,255,0.06);
-  transition: all .35s ease;
+  border: 1px solid var(--glass-border);
+  transition: .4s ease;
+  width: 100%;
+  max-width: 380px; /* Card size limit */
 }
 
-.pricing-box:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 30px 90px rgba(99,102,241,.4);
+.pricing-box.main {
+  border: 2px solid var(--champagne);
 }
 
-/* Price */
 .pricing-box .price {
-  font-size: 34px;
+  font-size: 42px;
   font-weight: 800;
-  color: #facc15;
-  margin: 15px 0;
+  color: var(--soft-grey);
 }
 
 .pricing-box .price span {
-  font-size: 15px;
-  opacity: .8;
-  margin-left: 4px;
+  color: var(--champagne);
+  font-size: 16px;
 }
 
-/* Feature list */
-.pricing-box ul {
-  margin: 18px 0;
-  padding-left: 0;
-}
-
+/* Pricing List */
 .pricing-box ul li {
   list-style: none;
-  padding: 10px 0;
-  border-bottom: 1px dashed rgba(255,255,255,.08);
-  opacity: .9;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
 }
 
-/* Buttons */
-.upgrade-btn {
+.pricing-box ul li::before {
+  content: "✦";
+  color: var(--champagne);
+}
+
+/* Luxury Buttons - Matched to Champagne Gold */
+.upgrade-btn, .pricing-box button {
   width: 100%;
   border: none;
-  padding: 14px;
-  margin-top: 18px;
-  border-radius: 10px;
-  font-weight: 700;
+  padding: 16px;
+  border-radius: 12px;
+  font-weight: 800;
   cursor: pointer;
-  background: linear-gradient(90deg,#6366f1,#9333ea);
-  color: #fff;
-  transition: .3s ease;
-}
-
-.upgrade-btn:hover {
-  transform: scale(1.04);
-  box-shadow: 0 12px 35px rgba(99,102,241,.7);
-}
-
-/* Trial */
-.pricing-box.trial {
-  background: linear-gradient(145deg,#020617,#020617);
-  border: 1px dashed rgba(255,255,255,.12);
-}
-
-.pricing-box.trial .price {
-  color: #94a3b8;
-}
-
-.pricing-box.trial .upgrade-btn {
-  background: transparent;
-  border: 1px solid #6366f1;
-}
-
-/* Main Premium */
-.pricing-box.main {
-  background: linear-gradient(145deg,#020617,#1e293b);
-  border: 2px solid #6366f1;
+  background: var(--champagne) !important;
+  color: var(--charcoal) !important;
+  transition: .3s;
+  text-transform: uppercase;
 }
 
 .popular-badge {
   position: absolute;
-  top: -14px;
-  right: 18px;
-  background: #6366f1;
-  padding: 5px 14px;
+  top: -15px;
+  right: 25px;
+  background: var(--champagne);
+  color: var(--charcoal);
+  padding: 6px 18px;
+  border-radius: 50px;
+  font-weight: 800;
   font-size: 12px;
-  border-radius: 20px;
-  color: #fff;
-  font-weight: 700;
 }
 
-/* Guarantee text */
-.guarantee {
-  margin-top: 14px;
-  font-size: 13px;
-  opacity: .75;
-  text-align: center;
+/* --- Mobile & Tablet Responsiveness --- */
+
+/* 1. Tablets (Screens smaller than 1024px) */
+@media (max-width: 1024px) {
+  .premium-container {
+    padding: 60px 20px;
+  }
+  
+  .main-title {
+    font-size: 38px;
+  }
+  
+  .pricing-dual {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+}
+
+/* 2. Mobile Phones (Screens smaller than 768px) */
+@media (max-width: 768px) {
+  .premium-container {
+    padding: 40px 15px;
+  }
+
+  .main-title {
+    font-size: 30px; /* Choti screen par text adjust kiya */
+    letter-spacing: -1px;
+  }
+
+  .sub-text {
+    font-size: 1rem;
+    margin-bottom: 30px;
+  }
+
+  /* Table ko scrollable banana taaki screen se bahar na jaye */
+  .compare-table {
+    overflow-x: auto;
+    margin: 40px 0;
+  }
+
+  .compare-table table {
+    min-width: 600px; /* Table content ko dabne se bachane ke liye */
+  }
+
+  /* Pricing cards ko stack karna (ek ke niche ek) */
+  .pricing-dual {
+    grid-template-columns: 1fr;
+    padding: 0 10px;
+  }
+
+  .pricing-box {
+    max-width: 100%; /* Card poori width lega mobile par */
+    padding: 30px 20px;
+  }
+
+  .price {
+    font-size: 36px;
+  }
+  
+  .blocked-box {
+    font-size: 14px;
+    padding: 10px 15px;
+  }
 }
