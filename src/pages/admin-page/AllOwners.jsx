@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
 import { UserCheck, Mail, Phone, ExternalLink, Trash2 } from "lucide-react";
+import "../../css/adminOwners.css";
 const AllOwner = () => {
   const [owners, setOwners] = useState([]);
   const [loading, setLoading] = useState(true);

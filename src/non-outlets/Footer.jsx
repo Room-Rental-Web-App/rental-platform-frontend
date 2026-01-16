@@ -55,15 +55,15 @@ function Footer() {
         <div className="footer-section">
           <h3 className="footer-title">Contact Us</h3>
           <div className="footer-links">
-            <a className="footer-link" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <a className="footer-link" >
               <Phone size={16} />
               +91 98765 43210
             </a>
-            <a className="footer-link" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <a className="footer-link" >
               <Mail size={16} />
               info@roomsdekho.com
             </a>
-            <a className="footer-link" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <a className="footer-link" >
               <MapPin size={16} />
               Mumbai, Maharashtra
             </a>

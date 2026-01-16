@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Shield, Gauge, Users, Building2, UserCog, UserPlus, ClipboardCheck, UserX, LogOut, BarChart3, } from "lucide-react";
+import ThemeToggle from "../../components/ThemeToggle"
 import "../../CSS/AdminSidebar.css";
 
 const AdminSidebar = () => {
@@ -50,7 +51,7 @@ const AdminSidebar = () => {
         <NavLink to="/admin/reports" className={({ isActive }) => isActive ? "active-link" : ""}>
           <BarChart3 size={20} /> Reports
         </NavLink>
-
+        <ThemeToggle />
         <NavLink onClick={handleLogout}>
           <LogOut size={20} /> Logout
         </NavLink>

@@ -93,12 +93,7 @@ const PendingOwners = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="view-id-link"
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "5px",
-                          color: "#4f46e5",
-                        }}
+                      
                       >
                         <ExternalLink size={16} /> View Aadhaar
                       </a>
@@ -107,27 +102,14 @@ const PendingOwners = () => {
                       <button
                         className="btn-approve"
                         onClick={() => updateStatus(user.id, "approve")}
-                        style={{
-                          marginRight: "10px",
-                          color: "green",
-                          border: "1px solid green",
-                          padding: "5px 10px",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                        }}
+                    
                       >
                         <Check size={16} />
                       </button>
                       <button
                         className="btn-reject"
                         onClick={() => updateStatus(user.id, "reject")}
-                        style={{
-                          color: "red",
-                          border: "1px solid red",
-                          padding: "5px 10px",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                        }}
+                  
                       >
                         <X size={16} />
                       </button>
@@ -139,7 +121,7 @@ const PendingOwners = () => {
                   <td
                     colSpan="4"
                     className="no-data"
-                    style={{ textAlign: "center", padding: "20px" }}
+                   
                   >
                     No pending requests found.
                   </td>

@@ -1,208 +1,112 @@
-/* Admin Sidebar Container */
+/* Sidebar Container */
 .admin-sidebar {
-  position: sticky;
-  left: 0;
-  top: 0;
-  height: 100vh;
   width: 260px;
-  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1000;
-  overflow-y: auto;
+  min-height: 100vh;
+
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-primary);
+
+  padding: 20px 14px;
+
+  display: flex;
+  flex-direction: column;
+
+  box-shadow: var(--shadow-sm);
 }
 
-.admin-sidebar.collapsed {
-  width: 70px;
-}
-
-/* Admin Header */
+/* Header Section */
 .admin-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 24px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-}
+  gap: 10px;
 
-.admin-sidebar.collapsed .admin-header {
-  justify-content: center;
-  padding: 24px 10px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .admin-header h3 {
+  color: var(--text-primary);
   font-size: 18px;
   font-weight: 600;
-  color: #fff;
-  margin: 0;
-  white-space: nowrap;
-  transition: opacity 0.3s ease;
 }
 
-.admin-sidebar.collapsed .admin-header h3 {
-  opacity: 0;
-  width: 0;
-  overflow: hidden;
+/* Navigation Links */
+.admin-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-/* Toggle Button */
-.sidebar-toggle {
-  position: absolute;
-  top: 20px;
-  right: -15px;
-  width: 30px;
-  height: 30px;
-  background: #4f46e5;
-  border: 2px solid #1e293b;
-  border-radius: 50%;
+/* Base Link Style */
+.admin-sidebar nav a {
   display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 1001;
-}
+  gap: 10px;
 
-.sidebar-toggle:hover {
-  background: #6366f1;
-  transform: scale(1.1);
-}
+  padding: 10px 12px;
+  border-radius: 8px;
 
-.sidebar-toggle svg {
-  transition: transform 0.3s ease;
-}
-
-.admin-sidebar.collapsed .sidebar-toggle svg {
-  transform: rotate(180deg);
-}
-
-/* Navigation */
-nav {
-  padding: 20px 0;
-}
-
-nav a {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 14px 20px;
-  margin: 4px 12px;
-  color: #cbd5e1;
-  text-decoration: none;
-  border-radius: 10px;
+  color: var(--text-secondary);
   font-size: 15px;
   font-weight: 500;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+
+  text-decoration: none;
+
+  transition: all 0.2s ease;
 }
 
-.admin-sidebar.collapsed nav a {
-  justify-content: center;
-  padding: 14px;
-  margin: 4px 8px;
+/* Hover Effect */
+.admin-sidebar nav a:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--primary);
 }
 
-nav a::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 3px;
-  background: #4f46e5;
-  transform: scaleY(0);
-  transition: transform 0.3s ease;
+/* Active Link */
+.active-link {
+  background-color: var(--primary);
+  color: var(--text-inverse) !important;
 }
 
-nav a:hover {
-  background: rgba(79, 70, 229, 0.1);
-  color: #fff;
+/* Logout Link Special Case */
+.admin-sidebar nav a:last-child {
+  margin-top: auto;
+  color: var(--error);
 }
 
-nav a:hover::before {
-  transform: scaleY(1);
+/* Logout Hover */
+.admin-sidebar nav a:last-child:hover {
+  background-color: var(--error);
+  color: var(--text-inverse);
 }
 
-nav a.active-link {
-  background: linear-gradient(90deg, rgba(79, 70, 229, 0.2), rgba(79, 70, 229, 0.05));
-  color: #fff;
-  font-weight: 600;
+/* Responsive Behavior */
+@media (max-width: 992px) {
+  .admin-sidebar {
+    width: 220px;
+  }
 }
 
-nav a.active-link::before {
-  transform: scaleY(1);
-}
-
-nav a svg {
-  min-width: 20px;
-  flex-shrink: 0;
-}
-
-.admin-sidebar.collapsed nav a span {
-  opacity: 0;
-  width: 0;
-  overflow: hidden;
-  transition: opacity 0.2s ease;
-}
-
-nav a span {
-  white-space: nowrap;
-  transition: opacity 0.3s ease;
-}
-
-/* Main Content Area */
-.admin-content {
-  margin-left: 260px;
-  padding: 30px;
-  min-height: 100vh;
-  background: #f8fafc;
-  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.admin-sidebar.collapsed ~ .admin-content {
-  margin-left: 70px;
-}
-
-/* Scrollbar Styling */
-.admin-sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.admin-sidebar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.admin-sidebar::-webkit-scrollbar-thumb {
-  background: rgba(79, 70, 229, 0.5);
-  border-radius: 10px;
-}
-
-.admin-sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(79, 70, 229, 0.7);
-}
-
-/* Responsive Design */
 @media (max-width: 768px) {
   .admin-sidebar {
-    width: 70px;
+    width: 100%;
+    min-height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-primary);
   }
-  
-  .admin-sidebar.collapsed {
-    width: 260px;
+
+  .admin-sidebar nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
   }
-  
-  .admin-content {
-    margin-left: 70px;
+
+  .admin-sidebar nav a {
+    justify-content: center;
   }
-  
-  .admin-sidebar.collapsed ~ .admin-content {
-    margin-left: 260px;
-  }
-  
-  .sidebar-toggle {
-    right: auto;
-    left: -15px;
+
+  .admin-sidebar nav a:last-child {
+    margin-top: 0;
   }
 }
