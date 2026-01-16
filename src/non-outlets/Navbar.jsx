@@ -45,7 +45,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
         {renderLink("/home", null, "Home")}
         {renderLink("/about", null, "About")}
 
-        {!isLoggedIn && renderLink("/search", null, "Search Rooms")}
+        { renderLink("/search", null, "Search Rooms")}
 
         {isLoggedIn && roleLinks[userRole]}
 

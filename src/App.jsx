@@ -30,6 +30,7 @@ import Reports from "./pages/admin-page/Reports";
 import Layout from "./layout/Layouts"
 import AdminDashboard from "./pages/admin-page/AdminDashboard";
 import PremiumPage from "./pages/PremiumPage";
+import Auth from "./components/Auth";
 function App() {
   return (
     <WishlistProvider>
@@ -40,6 +41,7 @@ function App() {
 
           <Route element={<Layout />}>
             {/* Public */}
+            <Route path="/login" element={<Auth />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/search" element={<SearchRoom />} />
             <Route path="/room/:roomId" element={<RoomDetailPage />} />
@@ -66,6 +68,7 @@ function App() {
             <Route path="/admin/reports" element={<Reports />} />
             {/* Fallback */}
           </Route>
+
           <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
       </Router>
