@@ -1,7 +1,11 @@
 import axios from "axios";
-import Cookies from "js-cookie";
+
+const isLocal = window.location.hostname === "localhost";
+
 const Api = axios.create({
-    baseURL: "https://rental-platform-backend-esyq.onrender.com/api"
+    baseURL: isLocal
+        ? "http://localhost:8080/api"
+        : "https://rental-platform-backend-esyq.onrender.com/api"
 });
 
 
