@@ -1,59 +1,93 @@
+/* Container */
 .my-plans-container {
-  max-width: 1000px;
-  margin: 40px auto;
+  margin-top: 30px;
   padding: 20px;
-  color: red;
+
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+
+  box-shadow: var(--shadow-sm);
 }
 
+.my-plans-container h2 {
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+/* Empty State */
+.no-plan {
+  color: var(--text-secondary);
+  font-size: 15px;
+  margin-top: 10px;
+}
+
+/* Grid Layout */
 .plans-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 20px;
+  margin-top: 20px;
 }
 
+/* Plan Card */
 .plan-card {
-  padding: 18px;
-  border-radius: 14px;
-  border: 2px solid #ddd;
-  background: #fff;
-  position: relative;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+
+  padding: 16px;
+
+  transition: all 0.3s ease;
 }
 
-.plan-card.active {
-  border-color: #00b894;
-  box-shadow: 0 0 15px rgba(0,184,148,.2);
+.plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
 }
 
-.plan-card.expired {
-  border-color: #d63031;
-  opacity: .75;
-}
-
+/* Title */
 .plan-card h3 {
+  color: var(--primary);
   margin-bottom: 10px;
+  font-size: 18px;
 }
 
-.status {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: bold;
+/* Plan Details */
+.plan-card p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin: 6px 0;
+}
+
+/* Status Text */
+.plan-card .status {
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+/* Active Plan Styling */
+.plan-card.active {
+  border-color: var(--success);
+  background-color: var(--bg-tertiary);
 }
 
 .plan-card.active .status {
-  background: #00b894;
-  color: #fff;
+  color: var(--success);
+}
+
+/* Expired Plan Styling */
+.plan-card.expired {
+  border-color: var(--error);
 }
 
 .plan-card.expired .status {
-  background: #d63031;
-  color: #fff;
+  color: var(--error);
 }
 
-.no-plan {
-  text-align: center;
-  opacity: .7;
+/* Responsive */
+@media (max-width: 768px) {
+  .plans-grid {
+    grid-template-columns: 1fr;
+  }
 }

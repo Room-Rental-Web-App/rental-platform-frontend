@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../css/themeToggle.css';
 
 const ThemeToggle = () => {
   // 1. Initialize state with 'light' or check localStorage

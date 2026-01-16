@@ -1,0 +1,107 @@
+/* Page Header */
+.admin-page-header {
+  margin-bottom: 20px;
+}
+
+.admin-page-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-primary);
+}
+
+.admin-page-header p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+/* Loader */
+.loader {
+  padding: 30px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+/* Table Container */
+.table-container {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+}
+
+/* User Info Cell */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Avatar */
+.avatar {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: var(--text-inverse);
+
+  font-weight: 600;
+}
+
+/* Contact Info */
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Action Buttons Container */
+.action-btns {
+  display: flex;
+  gap: 10px;
+}
+
+/* View Button */
+.view-btn {
+  background-color: var(--primary);
+  color: var(--text-inverse);
+
+  border: none;
+  border-radius: 8px;
+
+  padding: 6px 10px;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-btn:hover {
+  background-color: var(--primary-hover);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Reuse .del-btn from AdminCommon.css */
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-page-header h2 {
+    font-size: 18px;
+  }
+
+  .contact-info {
+    font-size: 12px;
+  }
+}

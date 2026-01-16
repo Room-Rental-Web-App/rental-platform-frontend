@@ -3,6 +3,7 @@ import axios from "axios";
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
 import AdminSidebar from "./AdminSidebar";
 import { Trash2, User } from "lucide-react";
+import "../../css/adminCommon.css";
 const AllUsers = () => {
   const [users, setUsers] = useState([]);
 
@@ -15,6 +16,7 @@ const AllUsers = () => {
       const res = await axios.get(API_ENDPOINTS.ADMIN_ALL_USERS, {
         headers: getAuthHeaders(),
       });
+      console.log(res.data);
       setUsers(res.data);
     } catch (err) {
       console.error("Error fetching users", err);

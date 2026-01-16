@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Api from "../api/Api";
 import usePremiumStatus from "../customHook/usePremiumStatus";
+import "../css/RazorPayConfig.css";
 
 function RazorPayConfig({ amountToPay, value }) {
   const email = localStorage.getItem("email");

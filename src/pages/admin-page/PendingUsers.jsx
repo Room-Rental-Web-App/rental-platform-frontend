@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Api from '../../api/Api'
-import AdminSidebar from './AdminSidebar'
 import { Clock, ExternalLink, Check, X, Loader2 } from 'lucide-react'
 import { API_ENDPOINTS, getAuthHeaders } from '../../api/apiConfig';
 import axios from 'axios';
+import '../../css/pendingUsers.css'
 function PendingUsers() {
     const [pendingList, setPendingList] = useState([]);
     const [loading, setLoading] = useState(true);
