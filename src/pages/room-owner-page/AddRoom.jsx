@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import axios from "axios";
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
 import {
@@ -27,6 +27,9 @@ import "../../CSS/AddRoom.css";
 // Leaflet Icon Fix (Standard icons don't load sometimes in React)
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import Api from "../../api/Api";
+import usePremiumStatus from "../../customHook/usePremiumStatus";
+import { useNavigate } from "react-router-dom";
 
 let DefaultIcon = L.icon({
   iconUrl: markerIcon,
@@ -37,6 +40,7 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 const AddRoom = () => {
+  const navTo = useNavigate();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     title: "",
@@ -63,6 +67,21 @@ const AddRoom = () => {
     { id: "parking", label: "Parking", icon: <Car size={16} /> },
     { id: "kitchen", label: "Kitchen", icon: <Utensils size={16} /> },
   ];
+   
+  const email = localStorage.getItem("email");
+  const { isPremiumUser, loading  } = usePremiumStatus();
+
+  useEffect(() => {
+    if (loading) return; 
+    Api.get(`/rooms/roomCount/${email}`).then((res) => {
+      console.log("Fetched rooms:", res.data);
+      console.log("Is Premium:", isPremiumUser);
+      if (res.data >= 2 && !isPremiumUser) {
+        alert("You have reached the limit of adding 2 rooms as a free user. Please upgrade to premium to add more rooms.");
+        navTo("/premium");
+      }
+    });
+  }, [loading, isPremiumUser]);
 
   // Helper for Map Clicks
   const LocationPicker = () => {
