@@ -1,18 +1,8 @@
 import Login from "./Auth";
 import "../css/hero.css";
-import { useEffect, useState } from "react";
 
 function HeroSection() {
 
-  const [token, setToken] = useState(localStorage.getItem("token"));
-
-  const handleLoginSuccess = () => {
-     setToken(localStorage.getItem("token"));
-     window.location.reload();
-  };
-
-  useEffect(() => {
-  }, [token]);       
 
   return (
     <section className="hero">
@@ -29,7 +19,7 @@ function HeroSection() {
             </p>
           </div>
 
-          {!token && <Login onLoginSuccess={handleLoginSuccess} />}
+        
         </div>
       </div>
     </section>

@@ -130,8 +130,10 @@ function SearchRoom() {
         <input type="number" placeholder="Max ₹" onChange={e => setFilters({ ...filters, maxPrice: e.target.value })} />
         <input type="number" placeholder="Radius (km)" value={filters.radiusKm} onChange={e => setFilters({ ...filters, radiusKm: e.target.value })} />
 
-        {isPremiumUser && <button onClick={loadUserLocation}><Locate size={16} /> Use My Location</button>}
-        <button blocked={true} onClick={handleUseLocation}><Locate size={16} /> Use My Location</button>
+        <button onClick={handleUseLocation}>
+          <Locate size={16} /> Use My Location
+        </button>
+
         <button onClick={resetAndLoad}><Search size={16} /> Apply</button>
       </div>
 

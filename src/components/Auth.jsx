@@ -31,7 +31,10 @@ export default function Auth({ onLoginSuccess }) {
     localStorage.setItem("token", r.data.token);
     localStorage.setItem("email", r.data.email);
     localStorage.setItem("role", r.data.role);
+
+    
     { r.data.role === "ROLE_ADMIN" ? nav("/admin/all-users") : nav("/home") };
+    window.location.reload();
     onLoginSuccess();
   };
 
@@ -50,7 +53,7 @@ export default function Auth({ onLoginSuccess }) {
       localStorage.setItem("token", r.data.token);
       localStorage.setItem("email", r.data.email);
       localStorage.setItem("role", r.data.role);
-
+      window.location.reload();
       { r.data.role === "ROLE_ADMIN" ? nav("/admin/all-users") : nav("/home") };
       onLoginSuccess();
     } catch (e) {
@@ -75,6 +78,7 @@ export default function Auth({ onLoginSuccess }) {
       localStorage.setItem("email", r.data.email);
       localStorage.setItem("role", r.data.role);
       onLoginSuccess()
+
       nav("/home");
     }).catch(() => {
       setError("Profile completion failed. Try again.");
