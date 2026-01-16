@@ -20,7 +20,7 @@ export default function usePremiumStatus() {
         Api.get("/subscription/check", { params: { email, role } })
             .then(res => {
                 console.log("Premium status:", res.data);
-                setIsPremiumUser(false);
+                setIsPremiumUser(res.data.isPremium);
             })
             .catch(() => setIsPremiumUser(false))
             .finally(() => setLoading(false));
