@@ -4,11 +4,16 @@ import Navbar from "./non-outlets/Navbar";
 import Footer from "./non-outlets/Footer";
 import Login from "./components/Auth";
 import { WishlistProvider } from "./context/WishlistContext";
+// Legal Pages
+import TermsAndService from "./pages/TermsAndService"; 
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import RefundPolicy from "./pages/RefundPolicy";
+import ContactUs from "./pages/ContactUs";
 
 // Owner
 import AddRoom from "./pages/room-owner-page/AddRoom";
 import MyListings from "./pages/room-owner-page/MyListings";
-import About from "./pages/About"
+import About from "./pages/AboutUs"
 import PremiumOwner from "./pages/room-owner-page/PremiumOwner";
 
 // User
@@ -35,10 +40,7 @@ function App() {
   return (
     <WishlistProvider>
       <Router>
-
-
         <Routes>
-
           <Route element={<Layout />}>
             {/* Public */}
             <Route path="/login" element={<Auth />} />
@@ -46,7 +48,11 @@ function App() {
             <Route path="/search" element={<SearchRoom />} />
             <Route path="/room/:roomId" element={<RoomDetailPage />} />
             <Route path="/about" element={<About />} />
-
+            {/* Footer & Support Pages */}
+            <Route path="/terms" element={<TermsAndService />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/refund" element={<RefundPolicy />} />
+            <Route path="/contact" element={<ContactUs />} />
             {/* User */}
             <Route path="/wishlist" element={<Wishlist />} />
 
@@ -63,7 +69,10 @@ function App() {
             <Route path="/admin/all-rooms" element={<AllRooms />} />
             <Route path="/admin/all-owners" element={<AllOwner />} />
             <Route path="/admin/pending-users" element={<PendingUsers />} />
-            <Route path="/admin/pending-approvals" element={<PendingOwners />} />
+            <Route
+              path="/admin/pending-approvals"
+              element={<PendingOwners />}
+            />
             <Route path="/admin/pending-rooms" element={<PendingRooms />} />
             <Route path="/admin/reports" element={<Reports />} />
             {/* Fallback */}

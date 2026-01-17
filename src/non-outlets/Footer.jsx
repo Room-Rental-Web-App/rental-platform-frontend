@@ -1,6 +1,16 @@
-import React from 'react'
-import "../css/footer.css"
-import { Facebook, Home, Instagram, Linkedin, Mail, MapPin, Phone, Twitter } from 'lucide-react'
+import React from "react";
+import { Link } from "react-router-dom"; // React Router Link import kiya
+import "../css/footer.css";
+import {
+  Facebook,
+  Home,
+  Instagram,
+  Linkedin,
+  Mail,
+  MapPin,
+  Phone,
+  Twitter,
+} from "lucide-react";
 
 function Footer() {
   return (
@@ -8,75 +18,97 @@ function Footer() {
       <div className="footer-content">
         <div className="footer-section">
           <div className="logo">
-            <Home size={32} />
-            <span>RoomsDekho</span>
+            <Home size={32} color="var(--primary)" />
+            <span>
+              Rooms<span className="orange-text">Dekho</span>
+            </span>
           </div>
           <p className="footer-text">
-            Your trusted partner in finding the perfect rental home across India. We make renting simple, safe, and hassle-free.
+            Your trusted partner in finding the perfect rental home across
+            India. We make renting simple, safe, and brokerage-free.
           </p>
           <div className="social-icons">
-            <div className="social-icon">
+            <a href="https://facebook.com" className="social-icon">
               <Facebook size={20} />
-            </div>
-            <div className="social-icon">
+            </a>
+            <a href="https://twitter.com" className="social-icon">
               <Twitter size={20} />
-            </div>
-            <div className="social-icon">
+            </a>
+            <a href="https://instagram.com" className="social-icon">
               <Instagram size={20} />
-            </div>
-            <div className="social-icon">
+            </a>
+            <a href="https://linkedin.com" className="social-icon">
               <Linkedin size={20} />
-            </div>
+            </a>
           </div>
         </div>
 
         <div className="footer-section">
           <h3 className="footer-title">Quick Links</h3>
           <div className="footer-links">
-            <a className="footer-link">About Us</a>
-            <a className="footer-link">Properties</a>
-            <a className="footer-link">Blog</a>
-            <a className="footer-link">Career</a>
-            <a className="footer-link">Contact</a>
+            <Link to="/about" className="footer-link">
+              About Us
+            </Link>
+            <Link to="/search" className="footer-link">
+              Properties
+            </Link>
+            <Link to="/blog" className="footer-link">
+              Blog
+            </Link>
+            <Link to="/career" className="footer-link">
+              Career
+            </Link>
+            <Link to="/contact" className="footer-link">
+              Contact
+            </Link>
           </div>
         </div>
 
         <div className="footer-section">
           <h3 className="footer-title">Support</h3>
           <div className="footer-links">
-            <a className="footer-link">Help Center</a>
-            <a className="footer-link">FAQs</a>
-            <a className="footer-link">Terms of Service</a>
-            <a className="footer-link">Privacy Policy</a>
-            <a className="footer-link">Refund Policy</a>
+            <Link to="/help" className="footer-link">
+              Help Center
+            </Link>
+            <Link to="/faq" className="footer-link">
+              FAQs
+            </Link>
+            <Link to="/terms" className="footer-link">
+              Terms and Service
+            </Link>
+            <Link to="/privacy" className="footer-link">
+              Privacy Policy
+            </Link>
+            <Link to="/refund" className="footer-link">
+              Refund Policy
+            </Link>
           </div>
         </div>
 
         <div className="footer-section">
           <h3 className="footer-title">Contact Us</h3>
           <div className="footer-links">
-            <a className="footer-link" >
-              <Phone size={16} />
-              +91 98765 43210
-            </a>
-            <a className="footer-link" >
-              <Mail size={16} />
-              info@roomsdekho.com
-            </a>
-            <a className="footer-link" >
-              <MapPin size={16} />
-              Mumbai, Maharashtra
-            </a>
+            <span className="contact-item">
+              <Phone size={16} /> +91 98765 43210
+            </span>
+            <span className="contact-item">
+              <Mail size={16} /> info@roomsdekho.com
+            </span>
+            <span className="contact-item">
+              <MapPin size={16} /> Mumbai, Maharashtra
+            </span>
           </div>
         </div>
       </div>
 
       <div className="footer-bottom">
-        <p>&copy; 2024 RoomsDekho. All rights reserved. | Designed with ❤️ for renters across India</p>
+        <p>
+          &copy; 2026 RoomsDekho. All rights reserved. | Designed with ❤️ for
+          India
+        </p>
       </div>
     </footer>
-
-  )
+  );
 }
 
-export default Footer
+export default Footer;
