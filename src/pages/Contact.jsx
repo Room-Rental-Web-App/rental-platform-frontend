@@ -130,6 +130,33 @@ function ContactForm() {
       <p className="privacy-note" >
         🔒 All messages are confidential and secure
       </p>
+
+
+
+
+      {/* NEW SUPPORT INFO SECTION */}
+      <div className="support-info-box" data-aos="fade-up">
+        <h3>Need Immediate Help?</h3>
+
+        <div className="support-options">
+
+          <a href="tel:+919876543210" className="support-card">
+            📞 Call Support
+            <span>+91 98765 43210</span>
+          </a>
+
+          <a
+            href="https://wa.me/919876543210"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="support-card whatsapp"
+          >
+            💬 WhatsApp Support
+            <span>Chat with us</span>
+          </a>
+
+        </div>
+        </div>
     </div>
   );
 }
