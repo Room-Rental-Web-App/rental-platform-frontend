@@ -37,7 +37,7 @@ function Footer() {
             <a className="footer-link">Properties</a>
             <a className="footer-link">Blog</a>
             <a className="footer-link">Career</a>
-            <a className="footer-link">Contact</a>
+            <a className="footer-link" href="/contact">Contact</a>
           </div>
         </div>
 

@@ -31,6 +31,7 @@ import Layout from "./layout/Layouts"
 import AdminDashboard from "./pages/admin-page/AdminDashboard";
 import PremiumPage from "./pages/PremiumPage";
 import Auth from "./components/Auth";
+import Contact from "./pages/Contact";
 function App() {
   return (
     <WishlistProvider>
@@ -46,6 +47,7 @@ function App() {
             <Route path="/search" element={<SearchRoom />} />
             <Route path="/room/:roomId" element={<RoomDetailPage />} />
             <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
 
             {/* User */}
             <Route path="/wishlist" element={<Wishlist />} />

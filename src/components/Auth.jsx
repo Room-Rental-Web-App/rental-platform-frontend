@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { API_ENDPOINTS } from "../api/apiConfig";
 import "../css/Auth.css";
 import { Lock, Mail, LogIn, ShieldCheck, ArrowRight, UserCircle, AlertCircle, Home, Phone, Upload, } from "lucide-react";
-import { GoogleLogin } from "@react-oauth/google";
+// import { GoogleLogin } from "@react-oauth/google";
 import Api from "../api/Api";
 
-export default function Auth({ onLoginSuccess }) {
+export default function Auth() {
   const [mode, setMode] = useState("login");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -19,6 +19,17 @@ export default function Auth({ onLoginSuccess }) {
 
   const nav = useNavigate();
   const set = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  // File change handler
+  const handleFileChange = (e) => setAadharFile(e.target.files[0]);
+  const handleSuccessfulLogin = (data) => {
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("email", data.email);
+    localStorage.setItem("role", data.role);
+
+    data.role === "ROLE_ADMIN" ? nav("/admin/all-users") : nav("/home");
+
+    window.location.reload();
+  };
 
   const handleGoogleLogin = async (googleToken) => {
     const r = await axios.post(API_ENDPOINTS.GOOGLE_LOGIN, { token: googleToken });
@@ -28,20 +39,8 @@ export default function Auth({ onLoginSuccess }) {
       setGoogleEmail(r.data.email);
       return;
     }
-    localStorage.setItem("token", r.data.token);
-    localStorage.setItem("email", r.data.email);
-    localStorage.setItem("role", r.data.role);
-
-    
-    { r.data.role === "ROLE_ADMIN" ? nav("/admin/all-users") : nav("/home") };
-    window.location.reload();
-    onLoginSuccess();
+    handleSuccessfulLogin(r.data);
   };
-
-
-  // File change handler
-  const handleFileChange = (e) => setAadharFile(e.target.files[0]);
-
   const login = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -50,12 +49,7 @@ export default function Auth({ onLoginSuccess }) {
         email: form.email,
         password: form.password,
       });
-      localStorage.setItem("token", r.data.token);
-      localStorage.setItem("email", r.data.email);
-      localStorage.setItem("role", r.data.role);
-      window.location.reload();
-      { r.data.role === "ROLE_ADMIN" ? nav("/admin/all-users") : nav("/home") };
-      onLoginSuccess();
+       handleSuccessfulLogin(r.data);
     } catch (e) {
       setError("Invalid email or password");
     }
@@ -254,10 +248,10 @@ export default function Auth({ onLoginSuccess }) {
             <button>Complete Registration</button>
           </form>
         )}
-        <GoogleLogin
+        {/* <GoogleLogin
           onSuccess={(res) => handleGoogleLogin(res.credential)}
-          onError={() => alert("Google Login Failed")}
-        />
+          onError={() => alert("Google Login Failed")} */}
+        {/* /> */}
       </div>
     </div>
   );
