@@ -132,8 +132,6 @@ function ContactForm() {
       </p>
 
 
-
-
       {/* NEW SUPPORT INFO SECTION */}
       <div className="support-info-box" data-aos="fade-up">
         <h3>Need Immediate Help?</h3>
