@@ -8,7 +8,7 @@ import { WishlistProvider } from "./context/WishlistContext";
 import TermsAndService from "./pages/TermsAndService"; 
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import RefundPolicy from "./pages/RefundPolicy";
-import ContactUs from "./pages/ContactUs";
+// import ContactUs from "./pages/ContactUs";
 
 // Owner
 import AddRoom from "./pages/room-owner-page/AddRoom";
@@ -36,6 +36,7 @@ import Layout from "./layout/Layouts"
 import AdminDashboard from "./pages/admin-page/AdminDashboard";
 import PremiumPage from "./pages/PremiumPage";
 import Auth from "./components/Auth";
+import Contact from "./pages/Contact";
 function App() {
   return (
     <WishlistProvider>
@@ -48,11 +49,13 @@ function App() {
             <Route path="/search" element={<SearchRoom />} />
             <Route path="/room/:roomId" element={<RoomDetailPage />} />
             <Route path="/about" element={<About />} />
+
             {/* Footer & Support Pages */}
             <Route path="/terms" element={<TermsAndService />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/refund" element={<RefundPolicy />} />
-            <Route path="/contact" element={<ContactUs />} />
+            <Route path="/contact" element={<Contact/>} />
+
             {/* User */}
             <Route path="/wishlist" element={<Wishlist />} />
 
