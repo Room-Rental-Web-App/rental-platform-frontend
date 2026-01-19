@@ -39,6 +39,8 @@ import AdminDashboard from "./pages/admin-page/AdminDashboard";
 import PremiumPage from "./pages/commen-pages/PremiumPage";
 import Auth from "./components/Auth";
 import OtpVerify from "./components/OtpVerify";
+import ForgotPassword from "./components/ForgotPassword";
+import ResetPassword from "./components/ResetPassword";
 
 function App() {
   return (
@@ -49,6 +51,10 @@ function App() {
             {/* Public */}
             <Route path="/login" element={<Auth />} />
             <Route path="/verify-otp" element={<OtpVerify />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+
+
 
             <Route path="/home" element={<HomePage />} />
             <Route path="/search" element={<SearchRoom />} />

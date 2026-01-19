@@ -131,9 +131,23 @@ export default function Auth() {
 
           <div className="toggle-container">
             {mode === "login" ? (
-              <p>
-                New here? <span onClick={() => setMode("register")}>Create Account</span>
-              </p>
+              <>
+                <p>
+                  New here? <span onClick={() => setMode("register")}>Create Account</span>
+                </p>
+                <p>
+                  <span onClick={() => nav("/forgot-password")}>
+                    Forgot Password?
+                  </span>
+                </p>
+                <p>
+                  <span onClick={() => nav("/reset-password")}>
+                    Reset Password?
+                  </span>
+                </p>
+
+              </>
+
             ) : (
               <p>
                 Already have an account? <span onClick={() => setMode("login")}>Login</span>
