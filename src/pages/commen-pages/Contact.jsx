@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import emailjs from "emailjs-com";
 import { MessageSquare, Send, AlertCircle } from "lucide-react";
-import "../css/contact.css";
+import "../../css/contact.css";
 
 function ContactForm() {
   const [formData, setFormData] = useState({
