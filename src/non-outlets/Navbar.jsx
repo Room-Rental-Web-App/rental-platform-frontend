@@ -2,13 +2,15 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 import { useWishlist } from "../context/WishlistContext";
-import { User, LogOut, Settings, ChevronDown } from "lucide-react";
+import {FolderLock, User, LogOut, Settings, ChevronDown } from "lucide-react";
+
 import "../css/Navbar.css";
 import logoImg from "../assets/logo.jpg";
 
 const Navbar = ({ isLoggedIn, onLogout }) => {
   const userRole = localStorage.getItem("role");
   const { wishlistCount } = useWishlist();
+
 
   const [openMenu, setOpenMenu] = useState(false);
   const menuRef = useRef();
@@ -105,6 +107,14 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                 >
                   <LogOut size={16} />
                   Logout
+                </button>
+
+                <button
+                  className="reset-password-btn"
+                  onClick={() => {n}}
+                >
+                  <FolderLock size={16} />
+                  Reset Password
                 </button>
               </div>
             )}

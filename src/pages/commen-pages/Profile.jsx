@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Logout ke baad redirect ke liye
 import "../../css/Profile.css";
+
 import {
   User,
   Mail,
@@ -13,33 +14,25 @@ import {
   LogOut,
 } from "lucide-react";
 
+
 const Profile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState({
     name: "",
     email: "",
     phone: "",
-    role: "",
   });
 
   const [editMode, setEditMode] = useState(false);
-  const [showPasswordSection, setShowPasswordSection] = useState(false);
-  const [showResetSection, setShowResetSection] = useState(false);
-
-  const [passwordData, setPasswordData] = useState({
-    oldPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
-
-  const [resetEmail, setResetEmail] = useState("");
 
   useEffect(() => {
     const storedUser = {
       name: localStorage.getItem("name") || "Guest User",
       email: localStorage.getItem("email") || "notadded@roomsdekho.com",
       phone: localStorage.getItem("phone") || "Not Added",
+
       role: localStorage.getItem("role") || "User",
+
     };
     setUser(storedUser);
   }, []);
@@ -54,6 +47,7 @@ const Profile = () => {
     setEditMode(false);
     alert("Profile updated successfully!");
   };
+
 
   const handlePasswordSubmit = () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
@@ -71,6 +65,7 @@ const Profile = () => {
       navigate("/login");
     }
   };
+
 
   return (
     <div className="profile-wrapper">
@@ -108,6 +103,7 @@ const Profile = () => {
             </button>
           </div>
         </div>
+
 
         {/* Right Side: Details & Actions */}
         <div className="profile-details-area">
@@ -187,6 +183,13 @@ const Profile = () => {
                 }}
               >
                 <Lock size={16} /> Change Password
+
+        <div className="profile-actions">
+          {editMode ? (
+            <>
+              <button className="save-btn" onClick={handleSave}>
+                Save
+
               </button>
               <button
                 className="sec-action-btn"
@@ -197,6 +200,7 @@ const Profile = () => {
               >
                 <RefreshCw size={16} /> Reset Password
               </button>
+
             </div>
 
             {showPasswordSection && (
@@ -260,6 +264,14 @@ const Profile = () => {
               </div>
             )}
           </div>
+
+            </>
+          ) : (
+            <button className="edit-btn" onClick={() => setEditMode(true)}>
+              Edit Profile
+            </button>
+          )}
+
         </div>
       </div>
     </div>
