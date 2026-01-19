@@ -1,6 +1,6 @@
 import React from "react";
 import { Scale, ShieldAlert, CheckCircle, Info, UserCheck } from "lucide-react";
-import "../css/LegalPages.css";
+import "../../css/LegalPages.css";
 
 const TermsAndService = () => {
   return (

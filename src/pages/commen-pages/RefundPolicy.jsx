@@ -5,7 +5,7 @@ import {
   ShieldCheck,
   RefreshCcw,
 } from "lucide-react";
-import "../css/LegalPages.css";
+import "../../css/LegalPages.css";
 
 const RefundPolicy = () => {
   return (

@@ -1,27 +1,29 @@
-import React, { useEffect, useState } from "react";
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./non-outlets/Navbar";
 import Footer from "./non-outlets/Footer";
 import Login from "./components/Auth";
 import { WishlistProvider } from "./context/WishlistContext";
 // Legal Pages
-import TermsAndService from "./pages/TermsAndService"; 
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import RefundPolicy from "./pages/RefundPolicy";
+import TermsAndService from "./pages/commen-pages/TermsAndService"; 
+import PrivacyPolicy from "./pages/commen-pages/PrivacyPolicy";
+import RefundPolicy from "./pages/commen-pages/RefundPolicy";
+import About from "./pages/commen-pages/AboutUs"
+import Contact from "./pages/commen-pages/Contact";
+import HomePage from "./pages/commen-pages/HomePage";
+import Profile from "./pages/commen-pages/Profile";
 // import ContactUs from "./pages/ContactUs";
 
 // Owner
 import AddRoom from "./pages/room-owner-page/AddRoom";
 import MyListings from "./pages/room-owner-page/MyListings";
-import About from "./pages/AboutUs"
-import PremiumOwner from "./pages/room-owner-page/PremiumOwner";
+
 
 // User
-import HomePage from "./pages/HomePage";
 import SearchRoom from "./pages/user-page/SearchRoom";
 import Wishlist from "./pages/user-page/Wishlist";
 import RoomDetailPage from "./pages/user-page/RoomDetailPage";
-import PremiumUser from "./pages/user-page/PremiumUser";
+
 
 // Admin
 import AllUsers from "./pages/admin-page/AllUsers";
@@ -34,9 +36,10 @@ import Reports from "./pages/admin-page/Reports";
 
 import Layout from "./layout/Layouts"
 import AdminDashboard from "./pages/admin-page/AdminDashboard";
-import PremiumPage from "./pages/PremiumPage";
+import PremiumPage from "./pages/commen-pages/PremiumPage";
 import Auth from "./components/Auth";
-import Contact from "./pages/Contact";
+import OtpVerify from "./components/OtpVerify";
+
 function App() {
   return (
     <WishlistProvider>
@@ -45,10 +48,13 @@ function App() {
           <Route element={<Layout />}>
             {/* Public */}
             <Route path="/login" element={<Auth />} />
+            <Route path="/verify-otp" element={<OtpVerify />} />
+
             <Route path="/home" element={<HomePage />} />
             <Route path="/search" element={<SearchRoom />} />
             <Route path="/room/:roomId" element={<RoomDetailPage />} />
             <Route path="/about" element={<About />} />
+            <Route path="/profile" element={<Profile />} />
 
             {/* Footer & Support Pages */}
             <Route path="/terms" element={<TermsAndService />} />
