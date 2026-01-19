@@ -207,3 +207,27 @@
     transform: translateY(0);
   }
 }
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.navbar-logo {
+  /* Height navbar ke hisab se set karo */
+  height: 40px; 
+  width: auto;
+  mix-blend-mode: multiply;
+  
+  /* Image ki quality maintain rakhta hai */
+  object-fit: contain; 
+  
+  /* Hover effect (Optional) */
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.navbar-logo:hover {
+  transform: scale(1.05); /* Halka sa zoom on hover */
+}

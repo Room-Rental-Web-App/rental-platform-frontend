@@ -4,6 +4,7 @@ import ThemeToggle from "../components/ThemeToggle";
 import { useWishlist } from "../context/WishlistContext";
 import { User, LogOut, Settings, ChevronDown } from "lucide-react";
 import "../css/Navbar.css";
+import logoImg from "../assets/logo.jpg";
 
 const Navbar = ({ isLoggedIn, onLogout }) => {
   const userRole = localStorage.getItem("role");
@@ -57,7 +58,11 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
 
   return (
     <nav className="navbar">
-      <div className="logo">MyBrand</div>
+      <div className="logo-container">
+        <Link to="/home">
+          <img src={logoImg} alt="RoomsDekho Logo" className="navbar-logo" />
+        </Link>
+      </div>
 
       <ul className="nav-links">
         {renderLink("/home", null, "Home")}
