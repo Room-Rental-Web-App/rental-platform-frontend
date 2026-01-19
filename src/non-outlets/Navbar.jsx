@@ -1,18 +1,33 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 import { useWishlist } from "../context/WishlistContext";
-import { User, LogOut, LayoutDashboard, PlusCircle, Search, Heart } from "lucide-react";
+import { User, LogOut, Settings, ChevronDown } from "lucide-react";
 import "../css/Navbar.css";
 
 const Navbar = ({ isLoggedIn, onLogout }) => {
   const userRole = localStorage.getItem("role");
   const { wishlistCount } = useWishlist();
 
+  const [openMenu, setOpenMenu] = useState(false);
+  const menuRef = useRef();
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpenMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const renderLink = (to, icon, text, extra = null) => (
     <li>
       <Link to={to}>
-      {extra}
+        {extra}
         {icon} <span>{text}</span>
       </Link>
     </li>
@@ -20,7 +35,10 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
 
   const roleLinks = {
     ROLE_USER: [
-      renderLink( "/wishlist", null, "Wishlist",
+      renderLink(
+        "/wishlist",
+        null,
+        "Wishlist",
         wishlistCount > 0 && <span className="wishlist-badge">{wishlistCount}</span>
       ),
       renderLink("/premium", null, "Premium"),
@@ -45,26 +63,58 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
         {renderLink("/home", null, "Home")}
         {renderLink("/about", null, "About")}
 
-        {!isLoggedIn || userRole === "ROLE_USER" ? renderLink("/search", null, "Search Rooms") : null}
+        {!isLoggedIn || userRole === "ROLE_USER"
+          ? renderLink("/search", null, "Search Rooms")
+          : null}
 
         {isLoggedIn && roleLinks[userRole]}
 
-        <li>
-          {isLoggedIn ? (
-            <button onClick={onLogout} className="login-link">
-              <LogOut size={20} />
-              <span>Logout</span>
+        {/* SETTINGS DROPDOWN */}
+        {isLoggedIn && (
+          <li className="settings-menu" ref={menuRef}>
+            <button
+              className="settings-btn"
+              onClick={() => setOpenMenu(!openMenu)}
+            >
+              <Settings size={20} />
+              <ChevronDown size={16} />
             </button>
-          ) : (
+
+            {openMenu && (
+              <div className="dropdown-menu">
+                <Link to="/profile" onClick={() => setOpenMenu(false)}>
+                  <User size={16} />
+                  Profile
+                </Link>
+
+                <div className="theme-toggle-wrapper">
+                  <ThemeToggle />
+                </div>
+
+                <button
+                  className="logout-btn"
+                  onClick={() => {
+                    onLogout();
+                    setOpenMenu(false);
+                  }}
+                >
+                  <LogOut size={16} />
+                  Logout
+                </button>
+              </div>
+            )}
+          </li>
+        )}
+
+        {!isLoggedIn && (
+          <li>
             <Link to="/login" className="login-link">
               <User size={20} />
               <span>Login</span>
             </Link>
-          )}
-        </li>
+          </li>
+        )}
       </ul>
-
-      <ThemeToggle />
     </nav>
   );
 };
