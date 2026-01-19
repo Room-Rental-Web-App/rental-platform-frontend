@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Logout ke baad redirect ke liye
+import { useNavigate } from "react-router-dom";
 import "../../css/Profile.css";
 
 import {
@@ -14,25 +14,35 @@ import {
   LogOut,
 } from "lucide-react";
 
-
 const Profile = () => {
   const navigate = useNavigate();
+
+  // Basic User State
   const [user, setUser] = useState({
     name: "",
     email: "",
     phone: "",
+    role: "",
   });
 
+  // UI States (Inhe add karna zaroori tha)
   const [editMode, setEditMode] = useState(false);
+  const [showPasswordSection, setShowPasswordSection] = useState(false);
+  const [showResetSection, setShowResetSection] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+
+  const [passwordData, setPasswordData] = useState({
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
 
   useEffect(() => {
     const storedUser = {
       name: localStorage.getItem("name") || "Guest User",
       email: localStorage.getItem("email") || "notadded@roomsdekho.com",
       phone: localStorage.getItem("phone") || "Not Added",
-
       role: localStorage.getItem("role") || "User",
-
     };
     setUser(storedUser);
   }, []);
@@ -48,7 +58,6 @@ const Profile = () => {
     alert("Profile updated successfully!");
   };
 
-
   const handlePasswordSubmit = () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       alert("Passwords do not match!");
@@ -58,14 +67,12 @@ const Profile = () => {
     setShowPasswordSection(false);
   };
 
-  // Logout Functionality
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to logout?")) {
       localStorage.clear();
       navigate("/login");
     }
   };
-
 
   return (
     <div className="profile-wrapper">
@@ -75,7 +82,7 @@ const Profile = () => {
       </div>
 
       <div className="profile-grid">
-        {/* Left Side: Identity Card */}
+        {/* Left Side: Sidebar Card */}
         <div className="profile-sidebar-card">
           <div className="avatar-container">
             <div className="avatar-ui">{user.name.charAt(0).toUpperCase()}</div>
@@ -95,8 +102,6 @@ const Profile = () => {
               <span>3 Bookings</span>
             </div>
           </div>
-
-          {/* Logout Section in Sidebar */}
           <div className="sidebar-footer">
             <button className="logout-btn" onClick={handleLogout}>
               <LogOut size={18} /> Logout
@@ -104,8 +109,7 @@ const Profile = () => {
           </div>
         </div>
 
-
-        {/* Right Side: Details & Actions */}
+        {/* Right Side: Details Area */}
         <div className="profile-details-area">
           <div className="details-card">
             <div className="card-top">
@@ -172,6 +176,7 @@ const Profile = () => {
             </div>
           </div>
 
+          {/* Security Section */}
           <div className="details-card security-card">
             <h3>Security & Account</h3>
             <div className="action-row">
@@ -183,13 +188,6 @@ const Profile = () => {
                 }}
               >
                 <Lock size={16} /> Change Password
-
-        <div className="profile-actions">
-          {editMode ? (
-            <>
-              <button className="save-btn" onClick={handleSave}>
-                Save
-
               </button>
               <button
                 className="sec-action-btn"
@@ -200,7 +198,6 @@ const Profile = () => {
               >
                 <RefreshCw size={16} /> Reset Password
               </button>
-
             </div>
 
             {showPasswordSection && (
@@ -208,7 +205,6 @@ const Profile = () => {
                 <input
                   type="password"
                   placeholder="Old Password"
-                  name="oldPassword"
                   onChange={(e) =>
                     setPasswordData({
                       ...passwordData,
@@ -219,7 +215,6 @@ const Profile = () => {
                 <input
                   type="password"
                   placeholder="New Password"
-                  name="newPassword"
                   onChange={(e) =>
                     setPasswordData({
                       ...passwordData,
@@ -230,7 +225,6 @@ const Profile = () => {
                 <input
                   type="password"
                   placeholder="Confirm Password"
-                  name="confirmPassword"
                   onChange={(e) =>
                     setPasswordData({
                       ...passwordData,
@@ -264,14 +258,6 @@ const Profile = () => {
               </div>
             )}
           </div>
-
-            </>
-          ) : (
-            <button className="edit-btn" onClick={() => setEditMode(true)}>
-              Edit Profile
-            </button>
-          )}
-
         </div>
       </div>
     </div>
