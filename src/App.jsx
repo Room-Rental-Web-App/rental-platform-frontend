@@ -41,6 +41,7 @@ import Auth from "./components/Auth";
 import OtpVerify from "./components/OtpVerify";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
+import RevenueReport from "./pages/admin-page/RevenueReport";
 
 function App() {
   return (
@@ -91,6 +92,7 @@ function App() {
             <Route path="/admin/pending-rooms" element={<PendingRooms />} />
             <Route path="/admin/reports" element={<Reports />} />
             {/* Fallback */}
+            <Route path="/admin/revenue-report" element={<RevenueReport />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/home" />} />

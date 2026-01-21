@@ -47,6 +47,11 @@ const AdminSidebar = () => {
         <NavLink to="/admin/pending-users" className={({ isActive }) => isActive ? "active-link" : ""}>
           <UserX size={20} /> Pending Users
         </NavLink>
+        
+        <NavLink to="/admin/revenue-report" className={({ isActive }) => isActive ? "active-link" : ""}>
+          <BarChart3 size={20} /> Revenue Report
+        </NavLink>
+
 
         <NavLink to="/admin/reports" className={({ isActive }) => isActive ? "active-link" : ""}>
           <BarChart3 size={20} /> Reports

@@ -1,0 +1,53 @@
+.revenue-page {
+  padding: 20px;
+}
+
+.revenue-page h2 {
+  margin-bottom: 20px;
+}
+
+.revenue-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.rev-card {
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  background: #f3f4f6;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.rev-card h3 {
+  margin: 10px 0;
+}
+
+.rev-card p {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.rev-card.revenue {
+  background: #e0f2fe;
+}
+
+.rev-card.profit {
+  background: #dcfce7;
+}
+
+.rev-card.loss {
+  background: #fee2e2;
+}
+
+.rev-card.info {
+  background: #f3f4f6;
+}
+
+.summary-box {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8fafc;
+  border-radius: 10px;
+}
