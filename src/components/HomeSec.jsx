@@ -1,237 +1,168 @@
-import React, { useState } from 'react'
-import { Search, Home, MapPin, Star, ArrowRight, Bed, Bath, Square, Navigation } from 'lucide-react';
-import { cities, propertyTypes, featuredProperties, features, testimonials, cities_popular, stats, howItWorks } from "../data/roomsDekhoData.js"
+import React, { useState, useEffect } from "react";
+import {
+  Search,
+  Home,
+  MapPin,
+  Star,
+  Bed,
+  Bath,
+  Square,
+  Building2,
+  Heart,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import Api from "../../api/Api.jsx"; // Aapka Axios/Fetch instance
+import "../../css/home.css";
+
 function HomeSec() {
-    const [selectedFilter, setSelectedFilter] = useState('all');
-    const [searchQuery, setSearchQuery] = useState('');
-    const [selectedCity, setSelectedCity] = useState('');
-    const [propertyType, setPropertyType] = useState('');
+  const navigate = useNavigate();
+  const [properties, setProperties] = useState([]); // Real data state
+  const [loading, setLoading] = useState(true);
 
-    const handleSearch = (e) => {
-        e.preventDefault();
-        // Logical search implementation
-        console.log("Searching...", { selectedCity, propertyType, searchQuery });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [propertyType, setPropertyType] = useState("");
+
+  // Backend se Properties fetch karna
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        // Aapka endpoint jo saare rooms return karta hai
+        const response = await Api.get("/properties/all");
+        setProperties(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Backend fetch error:", error);
+        setLoading(false);
+      }
     };
+    fetchProperties();
+  }, []);
 
-    return (
-        <>
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // Backend search endpoint par bhejenge
+    navigate(`/search?city=${searchQuery}&type=${propertyType}`);
+  };
 
-            <div className="search-wrapper">
-                <form className="search-card" onSubmit={handleSearch}>
-                    <div className="search-grid">
-                        {/* City Picker */}
-                        <div className="search-group">
-                            <label className="search-label">
-                                <MapPin size={16} /> City
-                            </label>
-                            <select
-                                className="search-select"
-                                value={selectedCity}
-                                onChange={(e) => setSelectedCity(e.target.value)}
-                            >
-                                <option value="">Select City</option>
-                                {cities.map(city => (
-                                    <option key={city} value={city}>{city}</option>
-                                ))}
-                            </select>
-                        </div>
+  return (
+    <div className="roomsdekho-home-container">
+      {/* HERO SECTION - Exact Image Design */}
+      <section className="hero-section">
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <h1 className="hero-title">Unlock Your Perfect Space.</h1>
+          <p className="hero-subtitle">
+            Find your ideal room, PG, or flat with zero brokerage.
+          </p>
 
-                        {/* Property Type */}
-                        <div className="search-group">
-                            <label className="search-label">
-                                <Home size={16} /> Type
-                            </label>
-                            <select
-                                className="search-select"
-                                value={propertyType}
-                                onChange={(e) => setPropertyType(e.target.value)}
-                            >
-                                <option value="">All Types</option>
-                                {propertyTypes.map(type => (
-                                    <option key={type} value={type}>{type}</option>
-                                ))}
-                            </select>
-                        </div>
-
-                        {/* Location Input */}
-                        <div className="search-group">
-                            <label className="search-label">
-                                <Navigation size={16} /> Location
-                            </label>
-                            <input
-                                type="text"
-                                className="search-input"
-                                placeholder="Area or Landmark"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
-                        </div>
-
-                        <button type="submit" className="hero-search-btn">
-                            <Search size={20} />
-                            <span>Find Rooms</span>
-                        </button>
-                    </div>
-                </form>
+          <form className="search-bar-container" onSubmit={handleSearch}>
+            <div className="search-input-group">
+              <MapPin size={20} className="input-icon" />
+              <input
+                type="text"
+                placeholder="Location (Hitech City, Gachibowli...)"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-input"
+              />
             </div>
+            <div className="search-input-group">
+              <Building2 size={20} className="input-icon" />
+              <select
+                className="search-select-input"
+                value={propertyType}
+                onChange={(e) => setPropertyType(e.target.value)}
+              >
+                <option value="">Room Type</option>
+                <option value="PG">Shared PG</option>
+                <option value="FLAT">Full Flat</option>
+                <option value="ROOM">Single Room</option>
+              </select>
+            </div>
+            <button type="submit" className="search-button">
+              <Search size={20} /> <span>Search</span>
+            </button>
+          </form>
+        </div>
+      </section>
 
-            {/* Stats Section */}
-            <section className="stats-section">
-                {stats.map((stat, index) => (
-                    <div key={index} className="stat-card">
-                        <div className="stat-number">{stat.number}</div>
-                        <div className="stat-label">{stat.label}</div>
-                    </div>
-                ))}
-            </section>
+      {/* FEATURED PROPERTIES - Dynamic Backend Data */}
+      <section className="featured-section-wrapper">
+        <div className="section-header">
+          <h2 className="section-title">Featured Properties</h2>
+          <p className="section-subtitle">
+            Real-time listings from our verified owners
+          </p>
+        </div>
 
-            {/* Features Section */}
-            <section className="features-section">
-                <h2 className="section-title">Why Choose RoomsDekho?</h2>
-                <p className="section-subtitle">
-                    We provide end-to-end solutions for all your rental needs with a commitment to transparency and customer satisfaction
-                </p>
-                <div className="features-grid">
-                    {features.map((feature, index) => (
-                        <div key={index} className="feature-card">
-                            <feature.icon className="feature-icon" />
-                            <h3 className="feature-title">{feature.title}</h3>
-                            <p className="feature-desc">{feature.desc}</p>
-                        </div>
-                    ))}
+        {loading ? (
+          <div className="loader">Loading properties...</div>
+        ) : (
+          <div className="featured-properties-grid">
+            {properties.slice(0, 6).map((property) => (
+              <div
+                key={property.id}
+                className="property-card"
+                onClick={() => navigate(`/room/${property.id}`)}
+              >
+                <div className="property-image-container">
+                  {/* Backend se image URL aa raha hoga */}
+                  <img
+                    src={property.imageUrl || "placeholder.jpg"}
+                    alt={property.title}
+                    className="property-image"
+                  />
+                  <span className="verified-badge">Verified</span>
+                  <button
+                    className="wishlist-btn"
+                    onClick={(e) => {
+                      e.stopPropagation(); /* Wishlist logic */
+                    }}
+                  >
+                    <Heart size={18} />
+                  </button>
                 </div>
-            </section>
-
-            {/* How It Works Section */}
-            <section className="how-it-works-section">
-                <h2 className="how-it-works-title">How It Works</h2>
-                <div className="steps-grid">
-                    {howItWorks.map((step, index) => (
-                        <div key={index} className="step-card">
-                            <div className="step-number">{step.step}</div>
-                            <h3 className="step-title">{step.title}</h3>
-                            <p className="step-desc">{step.desc}</p>
-                        </div>
-                    ))}
+                <div className="property-details">
+                  <p className="property-price-main">
+                    ₹{property.price}
+                    <span className="price-label">/month</span>
+                  </p>
+                  <h3 className="property-title-text">{property.title}</h3>
+                  <p className="property-location-text">
+                    <MapPin size={14} /> {property.address}
+                  </p>
+                  <div className="property-amenities-row">
+                    <span>
+                      <Bed size={14} /> {property.beds} Beds
+                    </span>
+                    <span>
+                      <Bath size={14} /> {property.baths} Bath
+                    </span>
+                    <span>
+                      <Square size={14} /> {property.sqft} sqft
+                    </span>
+                  </div>
                 </div>
-            </section>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
 
-            {/* Featured Properties Section */}
-            <section className="properties-section">
-                <h2 className="section-title">Featured Properties</h2>
-                <p className="section-subtitle">
-                    Handpicked premium properties that match your lifestyle and budget
-                </p>
-
-                <div className="filter-bar">
-                    <button
-                        className={`filter-btn ${selectedFilter === 'all' ? 'filter-btn-active' : ''}`}
-                        onClick={() => setSelectedFilter('all')}
-                    >
-                        All Properties
-                    </button>
-                    {propertyTypes.map(type => (
-                        <button
-                            key={type}
-                            className={`filter-btn ${selectedFilter === type ? 'filter-btn-active' : ''}`}
-                            onClick={() => setSelectedFilter(type)}
-                        >
-                            {type}
-                        </button>
-                    ))}
-                </div>
-
-                <div className="properties-grid">
-                    {featuredProperties
-                        .filter(prop => selectedFilter === 'all' || prop.type === selectedFilter)
-                        .map(property => (
-                            <div key={property.id} className="property-card">
-                                <img src={property.image} alt={property.title} className="property-image" />
-                                <div className="property-content">
-                                    <h3 className="property-title">{property.title}</h3>
-                                    <div className="property-location">
-                                        <MapPin size={16} />
-                                        <span>{property.location}</span>
-                                    </div>
-                                    <div className="property-details">
-                                        <div className="property-detail">
-                                            <Bed size={16} />
-                                            <span>{property.beds} Beds</span>
-                                        </div>
-                                        <div className="property-detail">
-                                            <Bath size={16} />
-                                            <span>{property.baths} Baths</span>
-                                        </div>
-                                        <div className="property-detail">
-                                            <Square size={16} />
-                                            <span>{property.sqft} sqft</span>
-                                        </div>
-                                    </div>
-                                    <div className="property-footer">
-                                        <div>
-                                            <div className="property-price">{property.price}</div>
-                                            <div className="property-price-label">per month</div>
-                                        </div>
-                                        <div className="property-rating">
-                                            <Star size={18} fill="#fbbf24" />
-                                            <span>{property.rating}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                </div>
-            </section>
-
-            {/* Popular Cities Section */}
-            <section className="cities-section">
-                <h2 className="section-title">Popular Cities</h2>
-                <p className="section-subtitle">
-                    Explore rental properties in India's most vibrant cities
-                </p>
-                <div className="cities-grid">
-                    {cities_popular.map((city, index) => (
-                        <div key={index} className="city-card">
-                            <img src={city.image} alt={city.name} className="city-image" />
-                            <div className="city-overlay">
-                                <div className="city-name">{city.name}</div>
-                                <div className="city-properties">{city.properties} Properties</div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </section>
-
-            {/* Testimonials Section */}
-            <section className="testimonials-section">
-                <h2 className="section-title">What Our Customers Say</h2>
-                <p className="section-subtitle">
-                    Don't just take our word for it - hear from thousands of happy renters
-                </p>
-                <div className="testimonials-grid">
-                    {testimonials.map((testimonial, index) => (
-                        <div key={index} className="testimonial-card">
-                            <div className="testimonial-header">
-                                <img src={testimonial.image} alt={testimonial.name} className="testimonial-image" />
-                                <div className="testimonial-info">
-                                    <div className="testimonial-name">{testimonial.name}</div>
-                                    <div className="testimonial-role">{testimonial.role} • {testimonial.city}</div>
-                                </div>
-                            </div>
-                            <p className="testimonial-text">"{testimonial.text}"</p>
-                            <div className="testimonial-rating">
-                                {[...Array(testimonial.rating)].map((_, i) => (
-                                    <Star key={i} size={16} fill="#fbbf24" color="#fbbf24" />
-                                ))}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </section>
-
-
-        </>
-    )
+      {/* OWNER CTA */}
+      <section className="owner-cta-section">
+        <div className="owner-cta-content">
+          <h2>Got a Property to List? Post it for FREE!</h2>
+        </div>
+        <button
+          className="owner-cta-button"
+          onClick={() => navigate("/add-property")}
+        >
+          Add Your Property
+        </button>
+      </section>
+    </div>
+  );
 }
 
-export default HomeSec
+export default HomeSec;
