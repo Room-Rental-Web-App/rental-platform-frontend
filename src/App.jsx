@@ -5,7 +5,7 @@ import Footer from "./non-outlets/Footer";
 import Login from "./components/Auth";
 import { WishlistProvider } from "./context/WishlistContext";
 // Legal Pages
-import TermsAndService from "./pages/commen-pages/TermsAndService"; 
+import TermsAndService from "./pages/commen-pages/TermsAndService";
 import PrivacyPolicy from "./pages/commen-pages/PrivacyPolicy";
 import RefundPolicy from "./pages/commen-pages/RefundPolicy";
 import About from "./pages/commen-pages/AboutUs"
@@ -42,6 +42,7 @@ import OtpVerify from "./components/OtpVerify";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import RevenueReport from "./pages/admin-page/RevenueReport";
+import OwnerUsersPage from "./pages/room-owner-page/OwnerUsersPage";
 
 function App() {
   return (
@@ -67,7 +68,7 @@ function App() {
             <Route path="/terms" element={<TermsAndService />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/refund" element={<RefundPolicy />} />
-            <Route path="/contact" element={<Contact/>} />
+            <Route path="/contact" element={<Contact />} />
 
             {/* User */}
             <Route path="/wishlist" element={<Wishlist />} />
@@ -75,6 +76,8 @@ function App() {
             {/* Room-Owner */}
             <Route path="/add-room" element={<AddRoom />} />
             <Route path="/my-listings" element={<MyListings />} />
+            <Route path="/owner/users" element={<OwnerUsersPage/>}/>
+
 
             <Route path="/premium" element={<PremiumPage />} />
 
@@ -85,10 +88,7 @@ function App() {
             <Route path="/admin/all-rooms" element={<AllRooms />} />
             <Route path="/admin/all-owners" element={<AllOwner />} />
             <Route path="/admin/pending-users" element={<PendingUsers />} />
-            <Route
-              path="/admin/pending-approvals"
-              element={<PendingOwners />}
-            />
+            <Route path="/admin/pending-approvals" element={<PendingOwners />} />
             <Route path="/admin/pending-rooms" element={<PendingRooms />} />
             <Route path="/admin/reports" element={<Reports />} />
             {/* Fallback */}

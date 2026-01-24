@@ -3,12 +3,14 @@ import { useParams } from "react-router-dom";
 import Api from "../../api/Api";
 import "../../css/room-detail.css";
 import Reviews from "../../components/Reviews";
+import CreateReport from "../../components/CreateReport";
 
 function RoomDetailPage() {
   const { roomId } = useParams();
   const [room, setRoom] = useState(null);
   const [roomOwner, setRoomOwner] = useState(null);
   const [loading, setLoading] = useState(true);
+  const userId = localStorage.getItem("userId") || null;
 
   useEffect(() => {
     Api.get(`/rooms/roomDetails/${roomId}`)
@@ -83,6 +85,13 @@ function RoomDetailPage() {
       )}
 
       <Reviews roomId={roomId} />
+      <CreateReport reporterId={userId} reportType="ROOM" targetId={room.id} />
+      <CreateReport reporterId={userId}
+        reportType="ROOM_OWNER"
+        targetId={roomOwner.id}
+      />
+
+
     </div>
   );
 }
