@@ -1,0 +1,92 @@
+
+
+.cancel-btn {
+  margin-top: 8px;
+  background: #6c757d;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background: #545b62;
+}
+
+.error-text {
+  color: #d9534f;
+  margin: 8px 0;
+}
+.owner-users-page {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+.owner-users-page h2 {
+  margin-bottom: 20px;
+}
+
+.user-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.user-card p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.report-btn {
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.report-btn:hover {
+  background: #b52a37;
+}
+    
+
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.filter-btn {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.filter-btn:hover {
+  background: #0056b3;
+}
+
+.clear-btn {
+  background: #6c757d;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.clear-btn:hover {
+  background: #545b62;
+}

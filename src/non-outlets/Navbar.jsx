@@ -39,9 +39,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
   const roleLinks = {
     ROLE_USER: [
       renderLink(
-        "/wishlist",
-        null,
-        "Wishlist",
+        "/wishlist", null, "Wishlist",
         wishlistCount > 0 && <span className="wishlist-badge">{wishlistCount}</span>
       ),
       renderLink("/premium", null, "Premium"),
@@ -51,6 +49,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
       renderLink("/add-room", null, "Add Room"),
       renderLink("/my-listings", null, "My Rooms"),
       renderLink("/premium", null, "Premium"),
+      renderLink("/owner/users", null, "Owner Users"),
     ],
 
     ROLE_ADMIN: [

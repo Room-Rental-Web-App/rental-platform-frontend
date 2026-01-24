@@ -29,6 +29,7 @@ export default function Auth() {
     localStorage.setItem("token", data.token);
     localStorage.setItem("email", data.email);
     localStorage.setItem("role", data.role);
+    localStorage.setItem("userId", data.id);
 
     data.role === "ROLE_ADMIN" ? nav("/admin/all-users") : nav("/home");
 
@@ -46,7 +47,8 @@ export default function Auth() {
       });
 
       handleSuccessfulLogin(r.data);
-    } catch {
+    } catch (error) {
+      console.error(error);
       setError("Invalid email or password");
     }
 
