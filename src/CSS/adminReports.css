@@ -1,0 +1,18 @@
+.admin-reports {
+  padding: 20px;
+}
+
+.admin-reports table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-reports th,
+.admin-reports td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.admin-reports th {
+  background: #f5f5f5;
+}
