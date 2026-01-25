@@ -9,6 +9,7 @@ import {
   Home,
   AlertCircle
 } from "lucide-react";
+import RevenueReport from "./RevenueReport"
 
 import "../../css/adminDashboard.css";
 
@@ -117,6 +118,7 @@ const AdminDashboard = () => {
       <div className="dashboard-note">
         All numbers are fetched live from your backend system.
       </div>
+      <RevenueReport />
     </div>
   );
 };
