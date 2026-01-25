@@ -5,10 +5,15 @@ import usePremiumStatus from "../../customHook/usePremiumStatus";
 import useRoomSearch from "../../customHook/useRoomSearch";
 import RoomFilterBar from "../../components/RoomFilterBar";
 import "../../css/search-room.css";
+import MapPicker from "../../components/MapPicker";
+import { useState } from "react";
 
 export default function SearchRoom() {
   const navTo = useNavigate();
   const { isPremiumUser } = usePremiumStatus();
+  const [openMap, setOpenMap] = useState(false);
+  const [mapCenter, setMapCenter] = useState(null);
+
 
   const {
     rooms,
@@ -20,7 +25,8 @@ export default function SearchRoom() {
     loading,
     page,
     setLocation,
-  } = useRoomSearch();
+  } = useRoomSearch({ mode: "PUBLIC" });
+
 
   useInfiniteScroll({
     hasMore,
@@ -33,13 +39,21 @@ export default function SearchRoom() {
     setDraftFilters(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleUseLocation = () => {
-    if (!isPremiumUser) return;
-    navigator.geolocation.getCurrentPosition(
-      pos => setLocation(pos.coords.latitude, pos.coords.longitude),
-      () => alert("Enable location access")
-    );
-  };
+ const handleUseLocation = () => {
+  if (!isPremiumUser) return;
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      setMapCenter({
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+      });
+      setOpenMap(true); // 👈 open map, not search
+    },
+    () => alert("Enable location access")
+  );
+};
+
 
   return (
     <div className="search-room-page">
@@ -50,6 +64,17 @@ export default function SearchRoom() {
         onUseLocation={handleUseLocation}
         isPremiumUser={isPremiumUser}
       />
+      {openMap && mapCenter && (
+  <MapPicker
+    center={mapCenter}
+    onClose={() => setOpenMap(false)}
+    onConfirm={(lat, lng) => {
+      setLocation(lat, lng); // ✅ FINAL location
+      setOpenMap(false);
+    }}
+  />
+)}
+
 
       <div className="rooms-grid">
         {rooms.map(room => (

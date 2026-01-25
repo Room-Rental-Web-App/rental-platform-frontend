@@ -1,12 +1,8 @@
 import { Search, Locate } from "lucide-react";
+import MapPicker from "./MapPicker";
 
-export default function RoomFilterBar({
-  filters,
-  onChange,
-  onApply,
-  onUseLocation,
-  isPremiumUser,
-}) {
+
+export default function RoomFilterBar({ filters, onChange, onApply, onUseLocation, isPremiumUser, }) {
   return (
     <div className="filter-bar">
       <input
@@ -54,6 +50,7 @@ export default function RoomFilterBar({
       <input
         type="number"
         name="radiusKm"
+        placeholder="Radius (km)"
         value={filters.radiusKm}
         onChange={onChange}
       />

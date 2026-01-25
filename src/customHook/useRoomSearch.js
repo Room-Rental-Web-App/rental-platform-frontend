@@ -1,50 +1,47 @@
 import { useEffect, useState } from "react";
 import Api from "../api/Api";
 
-export default function useRoomSearch() {
+export default function useRoomSearch({ mode = "PUBLIC" } = {}) {
     const [rooms, setRooms] = useState([]);
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
     const [userLocation, setUserLocation] = useState(null);
 
-    // what user is typing
     const [draftFilters, setDraftFilters] = useState({
         city: "",
         pincode: "",
         roomType: "",
         minPrice: "",
         maxPrice: "",
-        radiusKm: 2,
+        radiusKm: null,
     });
 
-    // what API actually uses
-    const [appliedFilters, setAppliedFilters] = useState({
-        city: "",
-        pincode: "",
-        roomType: "",
-        minPrice: "",
-        maxPrice: "",
-        radiusKm: 2,
-    });
+    const [appliedFilters, setAppliedFilters] = useState(draftFilters);
+
+    const endpoint = "/rooms/filter";
 
     const loadRooms = async (pageNo, append) => {
+
+
         if (loading) return;
 
         setLoading(true);
         try {
-            const res = await Api.get("/rooms/filter", {
+            const res = await Api.get(endpoint, {
                 params: {
                     city: appliedFilters.city || null,
                     pincode: appliedFilters.pincode || null,
                     roomType: appliedFilters.roomType || null,
                     minPrice: appliedFilters.minPrice || null,
                     maxPrice: appliedFilters.maxPrice || null,
-                    radiusKm: appliedFilters.radiusKm || null,
+
+                    radiusKm: mode === "PUBLIC" ? appliedFilters.radiusKm : null,
+                    userLat: mode === "PUBLIC" ? userLocation?.lat : null,
+                    userLng: mode === "PUBLIC" ? userLocation?.lng : null,
+
                     page: pageNo,
                     size: 15,
-                    userLat: userLocation?.lat,
-                    userLng: userLocation?.lng,
                 },
             });
 
@@ -58,7 +55,6 @@ export default function useRoomSearch() {
         }
     };
 
-    // 🔑 Apply button logic (NO race condition)
     const applyFilters = () => {
         setRooms([]);
         setPage(0);
@@ -66,14 +62,9 @@ export default function useRoomSearch() {
         setAppliedFilters({ ...draftFilters });
     };
 
-    // 🔥 react to appliedFilters change
     useEffect(() => {
         loadRooms(0, false);
     }, [appliedFilters, userLocation]);
-
-    const setLocation = (lat, lng) => {
-        setUserLocation({ lat, lng });
-    };
 
     return {
         rooms,
@@ -84,6 +75,6 @@ export default function useRoomSearch() {
         hasMore,
         loading,
         page,
-        setLocation,
+        setLocation: (lat, lng) => setUserLocation({ lat, lng })
     };
 }
