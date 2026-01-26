@@ -30,6 +30,9 @@ export default function Auth() {
     localStorage.setItem("email", data.email);
     localStorage.setItem("role", data.role);
     localStorage.setItem("userId", data.id);
+    localStorage.setItem("fullName", data.fullName);
+    localStorage.setItem("phone", data.phone);
+    console.log("Logged in user data:", data);
 
     data.role === "ROLE_ADMIN" ? nav("/admin/all-users") : nav("/home");
 

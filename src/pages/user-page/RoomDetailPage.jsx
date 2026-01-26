@@ -11,6 +11,7 @@ function RoomDetailPage() {
   const [roomOwner, setRoomOwner] = useState(null);
   const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem("userId") || null;
+  const [reportType, setReportType] = useState("ROOM_OWNER");
 
   useEffect(() => {
     Api.get(`/rooms/roomDetails/${roomId}`)
@@ -85,12 +86,17 @@ function RoomDetailPage() {
       )}
 
       <Reviews roomId={roomId} />
-      <CreateReport reporterId={userId} reportType="ROOM" targetId={room.id} />
-      <CreateReport reporterId={userId}
-        reportType="ROOM_OWNER"
-        targetId={roomOwner.id}
-      />
+      <select value={reportType} onChange={(e) => setReportType(e.target.value)}>
+        <option value="ROOM">Report Room</option>
+        <option value="ROOM_OWNER">Report Room Owner</option>
+      </select>
 
+      {reportType === "ROOM" && (
+        <CreateReport reporterId={userId} reportType="ROOM" targetId={room.id} />
+      )}
+      {reportType === "ROOM_OWNER" && (
+        <CreateReport reporterId={userId} reportType="ROOM_OWNER" targetId={roomOwner.id} />
+      )}
 
     </div>
   );
