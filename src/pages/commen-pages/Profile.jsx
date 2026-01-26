@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/Profile.css";
-
+import Api from "../../api/Api";
 import {
   User,
   Mail,
@@ -19,10 +19,11 @@ const Profile = () => {
 
   // Basic User State
   const [user, setUser] = useState({
-    name: "",
+    fullName: "",
     email: "",
     phone: "",
     role: "",
+    userId: "",
   });
 
   // UI States (Inhe add karna zaroori tha)
@@ -39,21 +40,35 @@ const Profile = () => {
 
   useEffect(() => {
     const storedUser = {
-      name: localStorage.getItem("name") || "Guest User",
+      fullName: localStorage.getItem("fullName") || "Guest User",
       email: localStorage.getItem("email") || "notadded@roomsdekho.com",
       phone: localStorage.getItem("phone") || "Not Added",
       role: localStorage.getItem("role") || "User",
+      userId: localStorage.getItem("userId") || "No User ID",
     };
     setUser(storedUser);
   }, []);
 
   const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    const{ name, value } = e.target;
+    setUser({ ...user, [name]: value });
   };
 
   const handleSave = () => {
-    localStorage.setItem("name", user.name);
-    localStorage.setItem("phone", user.phone);
+    Api.patch("/users/profile", {
+      id: localStorage.getItem("userId"),
+      fullName: user.fullName,
+      phone: user.phone
+    })
+      .then((response) => {
+
+        console.log("Profile updated:", response.data);
+        localStorage.setItem("fullName", user.fullName);
+        localStorage.setItem("phone", user.phone);
+      })
+      .catch((error) => {
+        console.error("Error updating profile:", error);
+      });
     setEditMode(false);
     alert("Profile updated successfully!");
   };
@@ -85,11 +100,11 @@ const Profile = () => {
         {/* Left Side: Sidebar Card */}
         <div className="profile-sidebar-card">
           <div className="avatar-container">
-            <div className="avatar-ui">{user.name.charAt(0).toUpperCase()}</div>
-            <span className="role-tag">{user.role}</span>
+            <div className="avatar-ui">{user.fullName.charAt(0).toUpperCase()}</div>
+            <span className="role-tag"> {user.role} - id:  {user.userId}</span>
           </div>
           <div className="sidebar-info">
-            <h3>{user.name}</h3>
+            <h3>{user.fullName}</h3>
             <p>{user.email}</p>
           </div>
           <div className="profile-stats">
@@ -136,12 +151,12 @@ const Profile = () => {
                 {editMode ? (
                   <input
                     type="text"
-                    name="name"
-                    value={user.name}
+                    name="fullName"
+                    value={user.fullName}
                     onChange={handleChange}
                   />
                 ) : (
-                  <p>{user.name}</p>
+                  <p>{user.fullName}</p>
                 )}
               </div>
 

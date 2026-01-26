@@ -11,15 +11,25 @@ export default function CreateReport({ reporterId, reportType: initialReportType
     const [loading, setLoading] = useState(false);
 
     const isLocked = initialReportType && initialTargetId;
+    const countWords = (text) => {
+        return text.trim().split(/\s+/).filter(Boolean).length;
+    };
 
     const submitReport = async () => {
-        if (!targetId || !reason) {
+        if (!targetId || !reason.trim()) {
             alert("All fields are required");
             return;
         }
 
-        if (reason.length < 10) {
-            alert("Reason must be at least 10 characters");
+        const charCount = reason.trim().length;
+
+        if (charCount < 20) {
+            alert("Reason must contain at least 20 characters");
+            return;
+        }
+
+        if (charCount > 500) {
+            alert("Reason must not exceed 500 characters");
             return;
         }
 
@@ -29,7 +39,7 @@ export default function CreateReport({ reporterId, reportType: initialReportType
             await Api.post(`/reports?reporterId=${reporterId}`, {
                 reportType,
                 targetId: Number(targetId),
-                reason
+                reason: reason.trim()
             });
 
             alert("Report submitted successfully");
@@ -42,6 +52,8 @@ export default function CreateReport({ reporterId, reportType: initialReportType
             setLoading(false);
         }
     };
+
+
 
     return (
         <div className="report-container">
@@ -76,8 +88,17 @@ export default function CreateReport({ reporterId, reportType: initialReportType
 
             {/* Reason */}
             <label>Reason</label>
-            <textarea placeholder="Explain clearly (min 10 characters)" value={reason} onChange={(e) => setReason(e.target.value)}
+            <textarea
+                placeholder="Explain clearly (20–500 characters)"
+                value={reason}
+                maxLength={500}
+                onChange={(e) => setReason(e.target.value)}
             />
+
+            <p className="word-count">
+                {reason.length} / 500 characters
+            </p>
+
 
             <button onClick={submitReport} disabled={loading}>
                 {loading ? "Submitting..." : "Submit Report"}
