@@ -29,41 +29,38 @@ const AdminDashboard = () => {
     fetchDashboardStats();
   }, []);
 
-  const fetchDashboardStats = async () => {
-    try {
-      const headers = { headers: getAuthHeaders() };
+ const fetchDashboardStats = async () => {
+  setLoading(true);
+  try {
+    const headers = { headers: getAuthHeaders() };
 
-      const [
-        usersRes,
-        ownersRes,
-        roomsRes,
-        pendingOwnersRes,
-        pendingRoomsRes,
-        pendingUsersRes,
-      ] = await Promise.all([
-        axios.get(API_ENDPOINTS.ADMIN_ALL_USERS, headers),
-        axios.get(API_ENDPOINTS.ADMIN_ALL_OWNERS, headers),
-        axios.get(API_ENDPOINTS.ADMIN_ALL_ROOMS, headers),
-        axios.get(API_ENDPOINTS.ADMIN_PENDING_OWNERS, headers),
-        axios.get(API_ENDPOINTS.ADMIN_PENDING_ROOMS, headers),
-        axios.get("/admin/pending-users", headers),
-      ]);
+    const responses = await Promise.allSettled([
+      axios.get(API_ENDPOINTS.ADMIN_ALL_USERS, headers),
+      axios.get(API_ENDPOINTS.ADMIN_ALL_OWNERS, headers),
+      axios.get(API_ENDPOINTS.ADMIN_ALL_ROOMS, headers),
+      axios.get(API_ENDPOINTS.ADMIN_PENDING_OWNERS, headers),
+      axios.get(API_ENDPOINTS.ADMIN_PENDING_ROOMS, headers),
+      axios.get(API_ENDPOINTS.ADMIN_PENDING_USERS, headers),
+    ]);
 
-      setStats({
-        users: usersRes.data.length,
-        owners: ownersRes.data.length,
-        rooms: roomsRes.data.length,
-        pendingOwners: pendingOwnersRes.data.length,
-        pendingRooms: pendingRoomsRes.data.length,
-        pendingUsers: pendingUsersRes.data.length,
-      });
+    const getCount = (res) =>
+      res.status === "fulfilled" ? res.value.data.length : 0;
 
-      setLoading(false);
-    } catch (error) {
-      console.error("Dashboard data error:", error);
-      setLoading(false);
-    }
-  };
+    setStats({
+      users: getCount(responses[0]),
+      owners: getCount(responses[1]),
+      rooms: getCount(responses[2]),
+      pendingOwners: getCount(responses[3]),
+      pendingRooms: getCount(responses[4]),
+      pendingUsers: getCount(responses[5]),
+    });
+  } catch (e) {
+    console.error(e);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   if (loading) {
     return (

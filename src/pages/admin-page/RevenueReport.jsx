@@ -1,90 +1,117 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
-
-import {
-  IndianRupee,
-  TrendingUp,
-  TrendingDown,
-  BarChart3,
-  Loader2,
-} from "lucide-react";
-
+import Api from "../../api/Api";
 import "../../css/revenueReport.css";
 
-const RevenueReport = () => {
-  const [data, setData] = useState({
-    totalRevenue: 0,
-    totalProfit: 0,
-    totalLoss: 0,
-    totalRooms: 0,
-    totalBookings: 0,
+function RevenueReport() {
+  const [filters, setFilters] = useState({
+    role: null,
+    days: null,
+    from: null,
+    to: null
   });
 
-  const [loading, setLoading] = useState(true);
-
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    fetchRevenueData();
+    fetchRevenue();
   }, []);
 
-  const fetchRevenueData = async () => {
+  const fetchRevenue = async () => {
+    setLoading(true);
     try {
-      const headers = { headers: getAuthHeaders() };
-
-      // You will need this endpoint in backend:
-      const res = await axios.get(API_ENDPOINTS.ADMIN_REVENUE_REPORT, headers);
-
+      const res = await Api.get("/subscription/revenue", {
+        params: {
+          role: filters.role || null,
+          days: filters.days || null,
+          from: filters.from || null,
+          to: filters.to || null
+        }
+      });
+      console.log(res.data)
       setData(res.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Revenue data error:", error);
+    } catch (e) {
+      console.error(e);
+      alert("Failed to load revenue");
+    } finally {
       setLoading(false);
     }
   };
 
-  if (loading) {
-    return (
-      <div className="admin-loader">
-        <Loader2 className="animate-spin" /> Loading Financial Data...
-      </div>
-    );
-  }
+  const totalRevenue = data.reduce(
+    (sum, d) => sum + d.totalAmount,
+    0
+  );
 
   return (
-    <div className="revenue-page">
-      <h2>
-        <BarChart3 /> Profit & Revenue Report
-      </h2>
+    <div className="revenue-container">
+      <h2>Revenue Report</h2>
 
-      <div className="revenue-grid">
-        <div className="rev-card revenue">
-          <IndianRupee size={26} />
-          <h3>Total Revenue</h3>
-          <p>₹ {data.totalRevenue}</p>
-        </div>
+      <div className="filters">
+        <select
+          value={filters.role}
+          onChange={e =>
+            setFilters({ ...filters, role: e.target.value })
+          }
+        >
+          <option value="">All Roles</option>
+          <option value="ROLE_OWNER">Owner</option>
+          <option value="ROLE_USER">User</option>
+        </select>
 
-        <div className="rev-card profit">
-          <TrendingUp size={26} />
-          <h3>Total Profit</h3>
-          <p>₹ {data.totalProfit}</p>
-        </div>
+        <select
+          value={filters.days}
+          onChange={e =>
+            setFilters({ ...filters, days: e.target.value })
+          }
+        >
+          <option value="">All Plans</option>
+          <option value="7">7 Days</option>
+          <option value="30">30 Days</option>
+          <option value="180">180 Days</option>
+          <option value="365">365 Days</option>
+        </select>
 
-        <div className="rev-card loss">
-          <TrendingDown size={26} />
-          <h3>Total Loss</h3>
-          <p>₹ {data.totalLoss}</p>
-        </div>
-     </div>
+        <input
+          type="datetime-local"
+          onChange={e =>
+            setFilters({ ...filters, from: e.target.value })
+          }
+        />
 
-      <div className="summary-box">
-        <h3>Summary</h3>
-        <p>
-          Platform has generated <b>₹{data.totalRevenue}</b> in revenue with
-          overall profit of <b>₹{data.totalProfit}</b>.
-        </p>
+        <input
+          type="datetime-local"
+          onChange={e =>
+            setFilters({ ...filters, to: e.target.value })
+          }
+        />
+
+        <button onClick={fetchRevenue}>Apply</button>
       </div>
+
+      {loading && <p>Loading...</p>}
+
+      <h3>Total Revenue: ₹{totalRevenue}</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Subscriptions</th>
+            <th>Revenue (₹)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((r, i) => (
+            <tr key={i}>
+              <td>{r.date}</td>
+              <td>{r.count}</td>
+              <td>{r.totalAmount}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-};
+}
 
 export default RevenueReport;
