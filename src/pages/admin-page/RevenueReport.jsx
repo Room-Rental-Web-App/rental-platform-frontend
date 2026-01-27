@@ -2,16 +2,26 @@ import React, { useEffect, useState } from "react";
 import Api from "../../api/Api";
 import "../../css/revenueReport.css";
 
+const getPriceFromPlan = (planCode) => {
+  if (!planCode) return 0;
+  if (planCode.includes("7D")) return 199;
+  if (planCode.includes("30D")) return 499;
+  if (planCode.includes("180D")) return 2499;
+  if (planCode.includes("365D")) return 4499;
+  return 0;
+};
+
 function RevenueReport() {
   const [filters, setFilters] = useState({
-    role: null,
-    days: null,
-    from: null,
-    to: null
+    role: "",
+    days: "",
+    from: "",
+    to: ""
   });
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     fetchRevenue();
   }, []);
@@ -27,7 +37,6 @@ function RevenueReport() {
           to: filters.to || null
         }
       });
-      console.log(res.data)
       setData(res.data);
     } catch (e) {
       console.error(e);
@@ -38,20 +47,18 @@ function RevenueReport() {
   };
 
   const totalRevenue = data.reduce(
-    (sum, d) => sum + d.totalAmount,
+    (sum, s) => sum + getPriceFromPlan(s.planCode),
     0
   );
 
   return (
     <div className="revenue-container">
-      <h2>Revenue Report</h2>
+      <h2>Subscription Revenue</h2>
 
       <div className="filters">
         <select
           value={filters.role}
-          onChange={e =>
-            setFilters({ ...filters, role: e.target.value })
-          }
+          onChange={e => setFilters({ ...filters, role: e.target.value })}
         >
           <option value="">All Roles</option>
           <option value="ROLE_OWNER">Owner</option>
@@ -60,9 +67,7 @@ function RevenueReport() {
 
         <select
           value={filters.days}
-          onChange={e =>
-            setFilters({ ...filters, days: e.target.value })
-          }
+          onChange={e => setFilters({ ...filters, days: e.target.value })}
         >
           <option value="">All Plans</option>
           <option value="7">7 Days</option>
@@ -73,16 +78,12 @@ function RevenueReport() {
 
         <input
           type="datetime-local"
-          onChange={e =>
-            setFilters({ ...filters, from: e.target.value })
-          }
+          onChange={e => setFilters({ ...filters, from: e.target.value })}
         />
 
         <input
           type="datetime-local"
-          onChange={e =>
-            setFilters({ ...filters, to: e.target.value })
-          }
+          onChange={e => setFilters({ ...filters, to: e.target.value })}
         />
 
         <button onClick={fetchRevenue}>Apply</button>
@@ -95,17 +96,23 @@ function RevenueReport() {
       <table>
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Subscriptions</th>
-            <th>Revenue (₹)</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Plan</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Amount (₹)</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((r, i) => (
-            <tr key={i}>
-              <td>{r.date}</td>
-              <td>{r.count}</td>
-              <td>{r.totalAmount}</td>
+          {data.map(sub => (
+            <tr key={sub.id}>
+              <td>{sub.email}</td>
+              <td>{sub.role}</td>
+              <td>{sub.planCode}</td>
+              <td>{new Date(sub.startDate).toLocaleString()}</td>
+              <td>{new Date(sub.endDate).toLocaleString()}</td>
+              <td>{getPriceFromPlan(sub.planCode)}</td>
             </tr>
           ))}
         </tbody>

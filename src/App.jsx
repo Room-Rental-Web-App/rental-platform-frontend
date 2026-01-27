@@ -55,9 +55,6 @@ function App() {
             <Route path="/verify-otp" element={<OtpVerify />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
-
-
-
             <Route path="/home" element={<HomePage />} />
             <Route path="/search" element={<SearchRoom />} />
             <Route path="/room/:roomId" element={<RoomDetailPage />} />
@@ -91,7 +88,6 @@ function App() {
             <Route path="/admin/pending-approvals" element={<PendingOwners />} />
             <Route path="/admin/pending-rooms" element={<PendingRooms />} />
             <Route path="/admin/reports" element={<Reports />} />
-            {/* Fallback */}
             <Route path="/admin/revenue-report" element={<RevenueReport />} />
           </Route>
 
