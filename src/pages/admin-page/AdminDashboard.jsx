@@ -12,6 +12,7 @@ import {
 import RevenueReport from "./RevenueReport"
 
 import "../../css/adminDashboard.css";
+import Api from "../../api/Api";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -21,6 +22,7 @@ const AdminDashboard = () => {
     pendingOwners: 0,
     pendingRooms: 0,
     pendingUsers: 0,
+    roomCities: 0,
   });
 
   const [loading, setLoading] = useState(true);
@@ -41,6 +43,7 @@ const AdminDashboard = () => {
       axios.get(API_ENDPOINTS.ADMIN_PENDING_OWNERS, headers),
       axios.get(API_ENDPOINTS.ADMIN_PENDING_ROOMS, headers),
       axios.get(API_ENDPOINTS.ADMIN_PENDING_USERS, headers),
+      axios.get(API_ENDPOINTS.CITIES_COVERED, headers),
     ]);
 
     const getCount = (res) =>
@@ -53,6 +56,7 @@ const AdminDashboard = () => {
       pendingOwners: getCount(responses[3]),
       pendingRooms: getCount(responses[4]),
       pendingUsers: getCount(responses[5]),
+      roomCities: getCount(responses[6]),
     });
   } catch (e) {
     console.error(e);
@@ -109,6 +113,12 @@ const AdminDashboard = () => {
           <AlertCircle size={26} />
           <h3>Pending Users</h3>
           <p>{stats.pendingUsers}</p>
+        </div>
+
+        <div className="dash-card">
+          <Building2 size={26} />
+          <h3>Cities Covered</h3>
+          <p>{stats.roomCities}</p>
         </div>
       </div>
 
