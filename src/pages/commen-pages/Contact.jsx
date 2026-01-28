@@ -4,10 +4,11 @@ import { MessageSquare, Send, AlertCircle, Loader2 } from "lucide-react";
 import Api from "../../api/Api";
 import "../../css/contact.css";
 import { ISSUE_LABELS } from "../../data/roomsDekhoData"
-
+import { useNavigate } from "react-router-dom";
 
 function ContactForm() {
   const email = localStorage.getItem("email");
+  const navTo = useNavigate();
 
   const [formData, setFormData] = useState({
     name: localStorage.getItem("fullName") || "",
@@ -37,6 +38,8 @@ function ContactForm() {
 
   useEffect(() => {
     if (email) getMySupportRequests();
+
+
   }, [email]);
 
   const handleChange = (e) => {
@@ -45,6 +48,15 @@ function ContactForm() {
   };
 
   const handleSubmit = async (e) => {
+
+    if (confirm("You need to be logged in to contact support. Go to login page?")) {
+      navTo("/login");
+    }else{
+      e.preventDefault();
+      setError("You need to be logged in to contact support.");
+      return;
+    }
+
     e.preventDefault();
     setError("");
     setStatus("");
