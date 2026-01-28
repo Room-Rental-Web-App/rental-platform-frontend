@@ -43,6 +43,10 @@ import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import RevenueReport from "./pages/admin-page/RevenueReport";
 import OwnerUsersPage from "./pages/room-owner-page/OwnerUsersPage";
+import BlogPage from "./pages/commen-pages/BlogPage";
+import CareerPage from "./pages/commen-pages/CareerPage";
+import AdminSupport from "./pages/admin-page/AdminSupport";
+import Faqs from "./pages/commen-pages/Faqs";
 
 function App() {
   return (
@@ -66,6 +70,10 @@ function App() {
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/refund" element={<RefundPolicy />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/blogs" element={<BlogPage />} />
+            <Route path="/career" element={<CareerPage />} />
+            <Route path="/faq" element={<Faqs />} />
+
 
             {/* User */}
             <Route path="/wishlist" element={<Wishlist />} />
@@ -89,6 +97,7 @@ function App() {
             <Route path="/admin/pending-rooms" element={<PendingRooms />} />
             <Route path="/admin/reports" element={<Reports />} />
             <Route path="/admin/revenue-report" element={<RevenueReport />} />
+            <Route path="/admin/support" element={<AdminSupport />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/home" />} />

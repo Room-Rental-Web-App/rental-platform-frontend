@@ -1,0 +1,43 @@
+.faq-page {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.faq-page h1 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.faq-subtitle {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+section {
+  margin-bottom: 30px;
+}
+
+section h2 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 4px;
+}
+
+.faq-item {
+  margin-bottom: 14px;
+}
+
+.faq-item h3 {
+  font-size: 16px;
+  margin-bottom: 4px;
+  color: #222;
+}
+
+.faq-item p {
+  font-size: 14px;
+  color: #444;
+  line-height: 1.6;
+}

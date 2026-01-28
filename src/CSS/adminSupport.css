@@ -1,0 +1,85 @@
+.admin-support-page {
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 16px;
+}
+
+.admin-support-page h1 {
+  margin-bottom: 16px;
+}
+
+.filter-bar {
+  margin-bottom: 16px;
+}
+
+.filter-bar select {
+  padding: 6px 10px;
+}
+
+.admin-ticket-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.admin-ticket-card {
+  border: 1px solid #ddd;
+  padding: 14px;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.status {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+
+.status.OPEN {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status.IN_PROGRESS {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.status.RESOLVED {
+  background: #d4edda;
+  color: #155724;
+}
+
+.urgency {
+  font-weight: bold;
+  margin: 6px 0;
+}
+
+.urgency.HIGH {
+  color: #dc3545;
+}
+
+.urgency.MEDIUM {
+  color: #fd7e14;
+}
+
+.urgency.LOW {
+  color: #28a745;
+}
+
+.message-box {
+  background: #f8f9fa;
+  padding: 8px;
+  border-radius: 4px;
+  margin: 8px 0;
+}
+
+.actions select {
+  padding: 4px 8px;
+}

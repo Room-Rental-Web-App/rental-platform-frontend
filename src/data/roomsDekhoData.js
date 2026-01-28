@@ -88,6 +88,43 @@ export const premiumUserPlans = [
 ];
 
 
+export const ISSUE_LABELS = {
+  PAYMENT: "Payment",
+  REFUND: "Refund",
+  INVOICE: "Invoice",
+
+  ROOM_LISTING: "Room Listing",
+  ROOM_UNAVAILABLE: "Room Not Available",
+  ROOM_CONDITION: "Room Condition Issue",
+  FAKE_LISTING: "Fake Listing",
+  PRICE_MISMATCH: "Price Mismatch",
+
+  OWNER_PROBLEM: "Owner Problem",
+  OWNER_NOT_RESPONDING: "Owner Not Responding",
+  USER_BEHAVIOR: "User Behavior Issue",
+
+  BOOKING_ISSUE: "Booking Issue",
+  CHECK_IN_PROBLEM: "Check-in Problem",
+  CHECK_OUT_PROBLEM: "Check-out Problem",
+  CANCELLATION: "Cancellation",
+
+  ACCOUNT: "Account Issue",
+  LOGIN_ISSUE: "Login Issue",
+  VERIFICATION_ISSUE: "Verification Issue",
+  PROFILE_UPDATE: "Profile Update",
+
+  APP_BUG: "App Bug",
+  PAYMENT_FAILURE: "Payment Failed",
+  NOTIFICATION_ISSUE: "Notification Issue",
+
+  SAFETY_CONCERN: "Safety Concern",
+  FRAUD_REPORT: "Fraud Report",
+  POLICY_VIOLATION: "Policy Violation",
+
+  OTHER: "Other"
+};
+
+
 
 
 

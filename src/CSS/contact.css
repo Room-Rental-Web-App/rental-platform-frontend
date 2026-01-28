@@ -163,3 +163,118 @@ textarea {
     flex-direction: column;
   }
 }
+
+/* PAGE WRAPPER */
+.my-support-page {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 16px;
+  font-family: Arial, sans-serif;
+}
+
+/* PAGE TITLE */
+.my-support-page h2 {
+  margin-bottom: 12px;
+  font-size: 22px;
+  color: #222;
+}
+
+/* SUBTEXT */
+.my-support-page .subtitle {
+  color: #666;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* EMPTY STATE */
+.no-requests {
+  text-align: center;
+  color: #777;
+  margin-top: 40px;
+}
+
+/* TICKET LIST */
+.ticket-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* TICKET ITEM */
+.ticket-item {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 14px;
+  background: #fff;
+}
+
+/* TOP ROW */
+.ticket-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+/* ISSUE TYPE */
+.ticket-issue {
+  font-weight: bold;
+  color: #111;
+}
+
+/* STATUS */
+.ticket-status {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.ticket-status.OPEN {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.ticket-status.IN_PROGRESS {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.ticket-status.RESOLVED {
+  background: #d4edda;
+  color: #155724;
+}
+
+/* META */
+.ticket-meta {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+/* MESSAGE */
+.ticket-message {
+  font-size: 14px;
+  color: #333;
+  background: #f8f9fa;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+/* URGENCY */
+.ticket-urgency {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.ticket-urgency.high {
+  color: #dc3545;
+}
+
+.ticket-urgency.medium {
+  color: #fd7e14;
+}
+
+.ticket-urgency.low {
+  color: #28a745;
+}

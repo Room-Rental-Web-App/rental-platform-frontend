@@ -52,7 +52,7 @@ function Footer() {
             <Link to="/search" className="footer-link">
               Properties
             </Link>
-            <Link to="/blog" className="footer-link">
+            <Link to="/blogs" className="footer-link">
               Blog
             </Link>
             <Link to="/career" className="footer-link">
@@ -67,7 +67,7 @@ function Footer() {
         <div className="footer-section">
           <h3 className="footer-title">Support</h3>
           <div className="footer-links">
-            <Link to="/help" className="footer-link">
+            <Link to="/contact" className="footer-link">
               Help Center
             </Link>
             <Link to="/faq" className="footer-link">

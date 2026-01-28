@@ -1,7 +1,8 @@
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
-import { useState } from "react";
+import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
+import { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import "../css/map-picker.css";
 
 // Fix marker icons
 delete L.Icon.Default.prototype._getIconUrl;
@@ -23,18 +24,81 @@ function ClickHandler({ onMove }) {
   return null;
 }
 
+function RecenterMap({ position }) {
+  const map = useMap();
+  useEffect(() => {
+    map.setView(position, 13);
+  }, [position, map]);
+  return null;
+}
+
 export default function MapPicker({ center, onConfirm, onClose }) {
   const [draftPosition, setDraftPosition] = useState(center);
+  const [query, setQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+
+  // 🔍 SEARCH API (Nominatim)
+  useEffect(() => {
+    if (query.length < 3) {
+      setSuggestions([]);
+      return;
+    }
+
+    const controller = new AbortController();
+
+    fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${query}&addressdetails=1&limit=5`,
+      { signal: controller.signal }
+    )
+      .then((res) => res.json())
+      .then((data) => setSuggestions(data))
+      .catch(() => {});
+
+    return () => controller.abort();
+  }, [query]);
+
+  const selectLocation = (lat, lon, displayName) => {
+    const pos = { lat: Number(lat), lng: Number(lon) };
+    setDraftPosition(pos);
+    setQuery(displayName);
+    setSuggestions([]);
+  };
 
   return (
     <div className="map-overlay" onClick={onClose}>
       <div className="map-container" onClick={(e) => e.stopPropagation()}>
+
+        {/* 🔍 SEARCH INPUT */}
+        <div className="map-search">
+          <input
+            type="text"
+            placeholder="Search location (city, area, landmark)"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+
+          {suggestions.length > 0 && (
+            <ul className="suggestions">
+              {suggestions.map((s) => (
+                <li
+                  key={s.place_id}
+                  onClick={() =>
+                    selectLocation(s.lat, s.lon, s.display_name)
+                  }
+                >
+                  {s.display_name}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
         <MapContainer
           center={draftPosition}
           zoom={13}
-          style={{ height: "400px", width: "100%" }}
         >
-          {/* FREE street map */}
+          <RecenterMap position={draftPosition} />
+
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution="© OpenStreetMap contributors"
@@ -52,13 +116,11 @@ export default function MapPicker({ center, onConfirm, onClose }) {
           />
 
           <ClickHandler
-            onMove={(lat, lng) => {
-              setDraftPosition({ lat, lng });
-            }}
+            onMove={(lat, lng) => setDraftPosition({ lat, lng })}
           />
         </MapContainer>
 
-        {/* ✅ CONFIRM ACTIONS */}
+        {/* ✅ ACTIONS */}
         <div className="map-actions">
           <button onClick={onClose}>Cancel</button>
           <button
