@@ -1,0 +1,46 @@
+.blog-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 24px;
+  line-height: 1.7;
+  color: #222;
+}
+
+.blog-container h1 {
+  font-size: 2.2rem;
+  margin-bottom: 16px;
+}
+
+.blog-container h2 {
+  margin-top: 32px;
+  font-size: 1.5rem;
+}
+
+.blog-container p {
+  margin: 12px 0;
+}
+
+.blog-container ul {
+  padding-left: 20px;
+}
+
+.blog-container li {
+  margin-bottom: 6px;
+}
+
+.blog-hero {
+  width: 100%;
+  border-radius: 8px;
+  margin: 16px 0;
+}
+
+.blog-image {
+  width: 100%;
+  border-radius: 6px;
+  margin: 12px 0;
+}
+
+.intro {
+  font-size: 1.1rem;
+  color: #444;
+}

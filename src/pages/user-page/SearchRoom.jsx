@@ -39,20 +39,20 @@ export default function SearchRoom() {
     setDraftFilters(prev => ({ ...prev, [name]: value }));
   };
 
- const handleUseLocation = () => {
-  if (!isPremiumUser) return;
+  const handleUseLocation = () => {
+    if (!isPremiumUser) return;
 
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      setMapCenter({
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude,
-      });
-      setOpenMap(true); // 👈 open map, not search
-    },
-    () => alert("Enable location access")
-  );
-};
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setMapCenter({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        });
+        setOpenMap(true); // 👈 open map, not search
+      },
+      () => alert("Enable location access")
+    );
+  };
 
 
   return (
@@ -65,15 +65,15 @@ export default function SearchRoom() {
         isPremiumUser={isPremiumUser}
       />
       {openMap && mapCenter && (
-  <MapPicker
-    center={mapCenter}
-    onClose={() => setOpenMap(false)}
-    onConfirm={(lat, lng) => {
-      setLocation(lat, lng); // ✅ FINAL location
-      setOpenMap(false);
-    }}
-  />
-)}
+        <MapPicker
+          center={mapCenter}
+          onClose={() => setOpenMap(false)}
+          onConfirm={(lat, lng) => {
+            setLocation(lat, lng); // ✅ FINAL location
+            setOpenMap(false);
+          }}
+        />
+      )}
 
 
       <div className="rooms-grid">

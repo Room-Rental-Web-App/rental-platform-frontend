@@ -1,69 +1,130 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import emailjs from "emailjs-com";
-import { MessageSquare, Send, AlertCircle } from "lucide-react";
+import { MessageSquare, Send, AlertCircle, Loader2 } from "lucide-react";
+import Api from "../../api/Api";
 import "../../css/contact.css";
+import { ISSUE_LABELS } from "../../data/roomsDekhoData"
+
 
 function ContactForm() {
+  const email = localStorage.getItem("email");
+
   const [formData, setFormData] = useState({
-    name: "",
-    email: localStorage.getItem("email") || "",
-    phone: "",
+    name: localStorage.getItem("fullName") || "",
+    email: email || "",
+    phone: localStorage.getItem("phone") || "",
     issueType: "",
     urgency: "",
     message: "",
   });
 
+  const [supportRequests, setSupportRequests] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
+
+  /* ✅ FETCH MY SUPPORT REQUESTS */
+  const getMySupportRequests = async () => {
+    try {
+      const res = await Api.get(`/support/my`, {
+        params: { email },
+      });
+      setSupportRequests(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    if (email) getMySupportRequests();
+  }, [email]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setStatus("");
+    setLoading(true);
 
-    emailjs
-      .send(
+    try {
+      /* 1️⃣ SAVE TO BACKEND */
+      await Api.post("/support/create", formData);
+
+      /* 2️⃣ EMAIL NOTIFICATION */
+      await emailjs.send(
         "service_aub721b",
         "template_qerjj4y",
-        {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          issueType: formData.issueType,
-          urgency: formData.urgency,
-          message: formData.message,
-        },
+        formData,
         "D8EKQaaZrMYkyP71k"
-      )
-      .then(() => {
-        setStatus("Message sent successfully! Our team will contact you soon.");
+      );
 
-        setFormData({
-          name: "",
-          email: localStorage.getItem("email") || "",
-          phone: "",
-          issueType: "",
-          urgency: "",
-          message: "",
-        });
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        setError("Failed to send message. Try again later.");
-      });
+      setStatus("Support request submitted successfully.");
+
+      /* 3️⃣ RESET FORM (CORRECTLY) */
+      setFormData((prev) => ({
+        ...prev,
+        issueType: "",
+        urgency: "",
+        message: "",
+      }));
+
+      /* 4️⃣ REFRESH LIST */
+      getMySupportRequests();
+    } catch (err) {
+      console.error(err);
+      setError("Failed to submit request. Try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="contact-form-wrapper" >
-      <div className="form-header" >
+    <div className="contact-form-wrapper">
+      <div className="form-header">
         <MessageSquare size={32} />
         <h2>Contact Support</h2>
-        <p>Tell us your problem and we’ll help you out.</p>
+        <p>We actually read these.</p>
+      </div>
+
+      {/* MY SUPPORT REQUESTS */}
+      <div className="my-support-page">
+        <h2>My Support Requests</h2>
+
+        {supportRequests.length === 0 ? (
+          <p className="no-requests">No support requests yet.</p>
+        ) : (
+          <div className="ticket-list">
+            {supportRequests.map((ticket) => (
+              <div className="ticket-item" key={ticket.id}>
+                <div className="ticket-top">
+                  <span className="ticket-issue">
+                    {ISSUE_LABELS[ticket.issueType]}
+                  </span>
+                  <span className={`ticket-status ${ticket.status}`}>
+                    {ticket.status}
+                  </span>
+                </div>
+
+                <div className="ticket-meta">
+                  Submitted on{" "}
+                  {new Date(ticket.createdAt).toLocaleDateString()}
+                </div>
+
+                <div className="ticket-message">
+                  {ticket.message}
+                </div>
+
+                <div className={`ticket-urgency ${ticket.urgency}`}>
+                  Urgency: {ticket.urgency}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {error && (
@@ -74,87 +135,78 @@ function ContactForm() {
 
       {status && <div className="contact-success">{status}</div>}
 
+      {/* SUPPORT FORM */}
       <form className="contact-form" onSubmit={handleSubmit}>
         <div className="form-row">
-          <div className="form-group" >
+          <div className="form-group">
             <label>Full Name *</label>
-            <input name="name" value={formData.name} onChange={handleChange} required />
+            <input name="name" value={formData.name} readOnly />
           </div>
 
-          <div className="form-group" >
+          <div className="form-group">
             <label>Email *</label>
-            <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+            <input value={formData.email} readOnly />
           </div>
         </div>
 
         <div className="form-row">
-          <div className="form-group" >
+          <div className="form-group">
             <label>Phone *</label>
-            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
+            <input
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+            />
           </div>
 
-          <div className="form-group" >
+          <div className="form-group">
             <label>Issue Type *</label>
-            <select name="issueType" value={formData.issueType} onChange={handleChange} required>
-              <option value="">Select Issue</option>
-              <option value="payment">Payment Problem</option>
-              <option value="room-listing">Room Listing Issue</option>
-              <option value="fake-listing">Report Fake Listing</option>
-              <option value="owner-problem">Owner Problem</option>
-              <option value="account">Account Issue</option>
-              <option value="other">Other</option>
+            <select
+              name="issueType"
+              value={formData.issueType}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select</option>
+              {Object.keys(ISSUE_LABELS).map((key) => (
+                <option key={key} value={key}>
+                  {ISSUE_LABELS[key]}
+                </option>
+              ))}
             </select>
           </div>
         </div>
 
-        <div className="form-group" >
+        <div className="form-group">
           <label>Urgency *</label>
-          <select name="urgency" value={formData.urgency} onChange={handleChange} required>
+          <select
+            name="urgency"
+            value={formData.urgency}
+            onChange={handleChange}
+            required
+          >
             <option value="">Select</option>
-            <option value="high">High (Immediate)</option>
-            <option value="medium">Medium</option>
-            <option value="low">Low</option>
+            <option value="HIGH">High</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="LOW">Low</option>
           </select>
         </div>
 
-        <div className="form-group" >
-          <label>Describe Your Issue *</label>
-          <textarea name="message" value={formData.message} onChange={handleChange} required />
+        <div className="form-group">
+          <label>Describe Issue *</label>
+          <textarea
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            required
+          />
         </div>
 
-        <button type="submit" className="submit-button">
-          <Send size={20} /> Submit Request
+        <button className="submit-button" disabled={loading}>
+          {loading ? <Loader2 className="spin" /> : <Send />} Submit
         </button>
       </form>
-
-      <p className="privacy-note" >
-        🔒 All messages are confidential and secure
-      </p>
-
-
-      {/* NEW SUPPORT INFO SECTION */}
-      <div className="support-info-box" data-aos="fade-up">
-        <h3>Need Immediate Help?</h3>
-
-        <div className="support-options">
-
-          <a href="tel:+919876543210" className="support-card">
-            📞 Call Support
-            <span>+91 98765 43210</span>
-          </a>
-
-          <a
-            href="https://wa.me/919876543210"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="support-card whatsapp"
-          >
-            💬 WhatsApp Support
-            <span>Chat with us</span>
-          </a>
-
-        </div>
-        </div>
     </div>
   );
 }
