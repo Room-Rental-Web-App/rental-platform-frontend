@@ -5,7 +5,7 @@ import { useWishlist } from "../context/WishlistContext";
 import {FolderLock, User, LogOut, Settings, ChevronDown } from "lucide-react";
 
 import "../css/Navbar.css";
-import logoImg from "../assets/logo.jpg";
+import logoImg from "../assets/logo.png";
 
 const Navbar = ({ isLoggedIn, onLogout }) => {
   const userRole = localStorage.getItem("role");
