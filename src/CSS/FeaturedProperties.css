@@ -1,0 +1,93 @@
+.compact-properties-wrapper {
+  max-width: 1100px; /* Thoda kam width for tighter look */
+  margin: 0 auto;
+  padding: 10px;
+}
+
+/* 1 row mein 3 data */
+.compact-three-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px; /* Gap kam kiya taaki space bache */
+}
+
+.small-card {
+  background: var(--bg-secondary); /* */
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-primary); /* */
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.small-card:hover { transform: translateY(-3px); }
+
+/* Images ka size kam kiya */
+.small-img-box {
+  height: 140px; /* Desktop par height kam rakhi taaki space bache */
+  width: 100%;
+  position: relative;
+}
+
+.small-img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.small-heart {
+  position: absolute;
+  top: 8px; right: 8px;
+  background: rgba(255,255,255,0.8);
+  border: none; border-radius: 50%;
+  padding: 5px; color: var(--error); /* */
+  display: flex;
+}
+
+/* Details Section Compact Padding */
+.small-details { padding: 10px; }
+
+.small-price-row .small-amt {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary); /* */
+}
+
+.small-price-row .small-unit { font-size: 0.7rem; color: var(--text-secondary); }
+
+.small-title {
+  font-size: 0.95rem; /* Text size chota kiya */
+  font-weight: 600;
+  margin: 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Bada title ek line mein */
+}
+
+.small-loc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.small-footer {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-primary); /* */
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+/* RESPONSIVE CSS */
+@media (max-width: 992px) {
+  .compact-three-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .compact-three-grid { grid-template-columns: 1fr; }
+  .small-img-box { height: 180px; } /* Mobile par image thodi badi better lagti hai */
+}

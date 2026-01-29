@@ -1,0 +1,62 @@
+.testimonial-section-wrapper {
+  padding: 30px 10px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-header-compact h2 {
+  font-size: 1.5rem;
+  text-align: center;
+  color: var(--primary); /* */
+  margin-bottom: 20px;
+}
+
+/* 1 row mein 3 testimonials */
+.testimonial-grid-three {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.testimonial-card-small {
+  background: var(--bg-secondary); /* */
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid var(--border-primary); /* */
+  box-shadow: var(--shadow-sm); /* */
+}
+
+.renter-info-compact {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.renter-avatar-small {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.renter-name-small {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.renter-quote-small {
+  font-size: 0.8rem;
+  color: var(--text-secondary); /* */
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .testimonial-grid-three { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .testimonial-grid-three { grid-template-columns: 1fr; }
+}
