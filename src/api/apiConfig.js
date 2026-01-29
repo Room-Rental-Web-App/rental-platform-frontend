@@ -16,6 +16,8 @@ export const API_ENDPOINTS = {
   DELETE_ROOM: (id) => `${BASE_URL}/rooms/delete/${id}`,
   MY_LISTINGS: `${BASE_URL}/rooms/my-listings`,
   SEARCH_ROOMS: `${BASE_URL}/rooms/search`,
+  FEATURED_ROOMS: `${BASE_URL}/rooms/featured`,
+  REVIEWS_TOP: `${BASE_URL}/reviews/top`,
   // Admin Endpoints
   ADMIN_ALL_USERS: `${BASE_URL}/admin/users`,
   ADMIN_ALL_ROOMS: `${BASE_URL}/admin/rooms`,
@@ -36,7 +38,7 @@ export const API_ENDPOINTS = {
   WISHLIST_GET: `${BASE_URL}/wishlist`,
   WISHLIST_COUNT: `${BASE_URL}/wishlist/count`,
 
-  GET_ROOM_BY_ID: (id) => `${BASE_URL}/rooms/${id}`, 
+  GET_ROOM_BY_ID: (id) => `${BASE_URL}/rooms/${id}`,
 };
 
 export const getAuthHeaders = () => {

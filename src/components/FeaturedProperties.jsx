@@ -1,71 +1,69 @@
-import React from "react";
-import { MapPin, Bed, Bath, LayoutGrid, Heart } from "lucide-react";
-// import roomImg from "../../assets/room-placeholder.jpg"; // Example room image
-
-const properties = [
-  {
-    id: 1,
-    // image: roomImg,
-    title: "Cozy Studio in Hitech City",
-    price: "₹12,000/month",
-    location: "Gachibowli, Hyderabad",
-    beds: 2,
-    baths: 1,
-    area: "850 sqft",
-    verified: true,
-  },
-  {
-    id: 2,
-    // image: roomImg,
-    title: "Full Flat near Kondapur",
-    price: "₹15,000/month",
-    location: "Kondapur, Hyderabad",
-    beds: 2,
-    baths: 2,
-    area: "1000 sqft",
-    verified: true,
-  },
-  // Add more properties here
-];
-
+import React, { useEffect, useState } from "react";
+import { MapPin, Bed, LayoutGrid, Heart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_ENDPOINTS } from "../api/apiConfig"; //
+import "../css/featuredProperties.css";
 const FeaturedProperties = () => {
+  const navigate = useNavigate();
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        const response = await axios.get(API_ENDPOINTS.FEATURED_ROOMS); //
+        setProperties(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Fetch error:", error);
+        setLoading(false);
+      }
+    };
+    fetchFeatured();
+  }, []);
+
+  if (loading) return <div className="loader-small">Loading...</div>;
+
   return (
-    <div className="featured-properties-grid">
-      {properties.map((property) => (
-        <div key={property.id} className="property-card">
-          <div className="property-image-container">
-            <img
-              src={property.image}
-              alt={property.title}
-              className="property-image"
-            />
-            {property.verified && (
-              <span className="verified-badge">Verified</span>
-            )}
-            <button className="wishlist-btn">
-              <Heart size={20} />
-            </button>
-          </div>
-          <div className="property-details">
-            <h3 className="property-title">{property.title}</h3>
-            <p className="property-price">{property.price}</p>
-            <p className="property-location">
-              <MapPin size={14} /> {property.location}
-            </p>
-            <div className="property-amenities">
-              <span>
-                <Bed size={14} /> {property.beds} Beds
-              </span>
-              <span>
-                <Bath size={14} /> {property.baths} Bath
-              </span>
-              <span>
-                <LayoutGrid size={14} /> {property.area}
-              </span>
+    <div className="compact-properties-wrapper">
+      <div className="compact-three-grid">
+        {properties.map((room) => (
+          <div
+            key={room.id}
+            className="small-card"
+            onClick={() => navigate(`/room/${room.id}`)}
+          >
+            <div className="small-img-box">
+              <img src={room.imageUrls?.[0] || "/placeholder.jpg"} alt="" />
+              <button
+                className="small-heart"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Heart size={16} />
+              </button>
+            </div>
+            <div className="small-details">
+              <div className="small-price-row">
+                <span className="small-amt">₹{room.price}</span>
+                <span className="small-unit">/mo</span>
+              </div>
+              <h4 className="small-title">{room.title}</h4>
+              <p className="small-loc">
+                <MapPin size={12} /> {room.city}
+              </p>
+              <div className="small-footer">
+                <span>
+                  <Bed size={12} /> {room.roomType}
+                </span>
+                <span>
+                  <LayoutGrid size={12} /> {room.sqft || 0} sqft
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

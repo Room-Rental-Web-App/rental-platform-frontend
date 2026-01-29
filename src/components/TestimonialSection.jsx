@@ -1,64 +1,65 @@
-import React from "react";
-import { Star } from "lucide-react";
-// import avatarImg from "../../assets/avatar-placeholder.jpg"; 
-
-const testimonials = [
-  {
-    id: 1,
-    name: "Anjali S.",
-    // avatar: avatarImg,
-    quote: "Found a great PG near my college! Seamless experience.",
-    rating: 5,
-  },
-  {
-    id: 2,
-    name: "Dosmar S.",
-    // avatar: avatarImg,
-    quote: "Easy to use platform, very helpful customer support.",
-    rating: 4,
-  },
-  {
-    id: 3,
-    name: "Rohan M.",
-    // avatar: avatarImg,
-    quote: "Saved a lot on brokerage, directly connected with owner.",
-    rating: 5,
-  },
-];
+import React, { useEffect, useState } from "react";
+import { Star, User } from "lucide-react";
+import axios from "axios";
+import { API_ENDPOINTS } from "../api/apiConfig";
+import "../CSS/TestimonialSection.css";
 
 const TestimonialSection = () => {
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchHomeReviews = async () => {
+      try {
+        const response = await axios.get(API_ENDPOINTS.REVIEWS_TOP);
+        setReviews(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching home reviews:", error);
+        setLoading(false);
+      }
+    };
+    fetchHomeReviews();
+  }, []);
+
   const renderStars = (rating) => {
-    return Array.from({ length: 5 }, (_, i) => (
+    return [...Array(5)].map((_, i) => (
       <Star
         key={i}
-        size={16}
-        fill={i < rating ? "var(--warning)" : "none"}
-        stroke={i < rating ? "var(--warning)" : "var(--text-tertiary)"}
+        size={14}
+        fill={i < rating ? "#fbbf24" : "none"}
+        color="#fbbf24"
       />
     ));
   };
 
+  if (loading || reviews.length === 0) return null;
+
   return (
     <section className="testimonial-section-wrapper">
-      <div className="section-header">
+      <div className="section-header-compact">
         <h2>What Our Renters Say</h2>
-        <p>Hear from our happy customers.</p>
       </div>
-      <div className="testimonial-grid">
-        {testimonials.map((testimonial) => (
-          <div key={testimonial.id} className="testimonial-card">
-            <div className="renter-info">
-              <img
-                src={testimonial.avatar}
-                alt={testimonial.name}
-                className="renter-avatar"
-              />
-              <p className="renter-name">{testimonial.name}</p>
+      <div className="testimonial-grid-three">
+        {reviews.map((rev) => (
+          <div key={rev.id} className="testimonial-card-small">
+            <div className="renter-info-compact">
+              {/* Kyunki aapke model mein avatar nahi hai, hum icon use karenge */}
+              <div className="avatar-placeholder">
+                <User size={20} />
+              </div>
+              <div className="renter-meta">
+                {/* Email ka pehla part as Name dikhayenge (e.g. 'ram' from 'ram@gmail.com') */}
+                <p className="renter-name-small">
+                  {rev.userEmail.split("@")[0]}
+                </p>
+                <div className="renter-rating-small">
+                  {renderStars(rev.rating)}
+                </div>
+              </div>
             </div>
-            <p className="renter-quote">"{testimonial.quote}"</p>
-            <div className="renter-rating">
-              {renderStars(testimonial.rating)}
-            </div>
+            {/* Model mein field ka naam 'comment' hai */}
+            <p className="renter-quote-small">"{rev.comment}"</p>
           </div>
         ))}
       </div>
