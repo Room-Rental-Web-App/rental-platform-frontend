@@ -74,7 +74,7 @@ export const premiumOwnerPlans = [
 export const premiumUserFeatures = [
   "Only verified owners",
   "24h early access to new rooms",
-  "Nearby radius search (500m–1km)",
+  "Search by your selected location through map",
   "Direct contact numbers unlocked",
   "Instant booking request",
   "Best deal priority",

@@ -45,8 +45,7 @@ export default function useRoomSearch({ mode = "PUBLIC" } = {}) {
                 },
             });
 
-            setRooms(prev =>
-                append ? [...prev, ...res.data.content] : res.data.content
+            setRooms(prev => append ? [...prev, ...res.data.content] : res.data.content
             );
             setHasMore(!res.data.last);
             setPage(pageNo);
