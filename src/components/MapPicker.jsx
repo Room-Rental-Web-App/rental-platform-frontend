@@ -52,7 +52,7 @@ export default function MapPicker({ center, onConfirm, onClose }) {
     )
       .then((res) => res.json())
       .then((data) => setSuggestions(data))
-      .catch(() => {});
+      .catch(() => { });
 
     return () => controller.abort();
   }, [query]);
@@ -70,65 +70,28 @@ export default function MapPicker({ center, onConfirm, onClose }) {
 
         {/* 🔍 SEARCH INPUT */}
         <div className="map-search">
-          <input
-            type="text"
-            placeholder="Search location (city, area, landmark)"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
+          <input type="text" placeholder="Search location (city, area, landmark)" value={query} onChange={(e) => setQuery(e.target.value)} />
 
           {suggestions.length > 0 && (
             <ul className="suggestions">
               {suggestions.map((s) => (
-                <li
-                  key={s.place_id}
-                  onClick={() =>
-                    selectLocation(s.lat, s.lon, s.display_name)
-                  }
-                >
-                  {s.display_name}
-                </li>
+                <li key={s.place_id} onClick={() => selectLocation(s.lat, s.lon, s.display_name)}> {s.display_name}</li>
               ))}
             </ul>
           )}
         </div>
 
-        <MapContainer
-          center={draftPosition}
-          zoom={13}
-        >
+        <MapContainer center={draftPosition} zoom={13}>
           <RecenterMap position={draftPosition} />
-
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution="© OpenStreetMap contributors"
-          />
-
-          <Marker
-            position={draftPosition}
-            draggable
-            eventHandlers={{
-              dragend: (e) => {
-                const { lat, lng } = e.target.getLatLng();
-                setDraftPosition({ lat, lng });
-              },
-            }}
-          />
-
-          <ClickHandler
-            onMove={(lat, lng) => setDraftPosition({ lat, lng })}
-          />
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="© OpenStreetMap contributors" />
+          <Marker position={draftPosition} draggable eventHandlers={{ dragend: (e) => { const { lat, lng } = e.target.getLatLng(); setDraftPosition({ lat, lng }); }, }} />
+          <ClickHandler onMove={(lat, lng) => setDraftPosition({ lat, lng })} />
         </MapContainer>
 
         {/* ✅ ACTIONS */}
         <div className="map-actions">
           <button onClick={onClose}>Cancel</button>
-          <button
-            className="confirm-btn"
-            onClick={() =>
-              onConfirm(draftPosition.lat, draftPosition.lng)
-            }
-          >
+          <button className="confirm-btn" onClick={() => onConfirm(draftPosition.lat, draftPosition.lng)}>
             Confirm Location
           </button>
         </div>
