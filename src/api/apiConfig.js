@@ -32,6 +32,8 @@ export const API_ENDPOINTS = {
   ADMIN_PENDING_ROOMS: `${BASE_URL}/admin/pending-rooms`,
   APPROVE_ROOM: (id) => `${BASE_URL}/admin/approve-room/${id}`,
   REJECT_ROOM: (id) => `${BASE_URL}/admin/reject-room/${id}`,
+  ADMIN_HIGH_INTEREST: `${BASE_URL}/admin/high-interest-rooms`,
+  ADMIN_MARK_BOOKED: (id) => `${BASE_URL}/admin/mark-booked/${id}`,
   // Wishlist Endpoints
   WISHLIST_ADD: (roomId) => `${BASE_URL}/wishlist/${roomId}`,
   WISHLIST_REMOVE: (roomId) => `${BASE_URL}/wishlist/${roomId}`,
