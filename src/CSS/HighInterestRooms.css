@@ -1,0 +1,117 @@
+/* --- High Interest Rooms Special Styles --- */
+
+.admin-header-box {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  border-left: 5px solid #ef4444; /* Red border for Alert vibe */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.admin-header-box h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #1f2937;
+  margin: 0;
+}
+
+.flagged-row {
+  transition: background 0.3s ease;
+}
+
+.flagged-row:hover {
+  background-color: #fef2f2; /* Light red tint on hover */
+}
+
+.view-count-badge {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: inline-block;
+  border: 1px solid #fecaca;
+}
+
+.contact-info p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin: 4px 0;
+}
+
+.btn-mark-booked {
+  background-color: #10b981; /* Green color for success action */
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-mark-booked:hover {
+  background-color: #059669;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.no-data {
+  text-align: center;
+  padding: 50px;
+  background: white;
+  border-radius: 12px;
+  color: #6b7280;
+  font-size: 1.1rem;
+  border: 2px dashed #e5e7eb;
+}
+
+/* Room Cell Styling */
+.room-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.room-cell strong {
+  color: #111827;
+  font-size: 1rem;
+}
+
+.room-cell span {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+  .admin-table thead {
+    display: none;
+  }
+  .admin-table tr {
+    display: block;
+    margin-bottom: 15px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 10px;
+  }
+  .admin-table td {
+    display: block;
+    text-align: right;
+    padding: 8px;
+    border: none;
+  }
+  .admin-table td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+  }
+}

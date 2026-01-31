@@ -1,226 +1,208 @@
-/* Main Container */
+/* Container & Header */
 .my-listings-container {
-  max-width: 1200px;
-  margin: 30px auto;
   padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.my-listings-container h2 {
-  color: var(--text-primary);
+.my-listings-header h2 {
+  color: #1f2937;
   margin-bottom: 20px;
+  font-size: 1.8rem;
+  border-left: 5px solid #4f46e5;
+  padding-left: 15px;
 }
 
-/* Grid Layout */
+/* Grid System */
 .listings-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
 }
 
-/* Card */
+/* Card Styling */
 .listing-card {
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-primary);
+  background: white;
   border-radius: 12px;
   overflow: hidden;
-
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #e5e7eb;
 }
 
 .listing-card:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--primary);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-/* Image */
-.listing-card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  background-color: var(--bg-tertiary);
+/* Status Badges Overlay */
+.badge-container {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-/* Info Section */
-.card-info {
-  padding: 16px;
-}
-
-.card-info h3 {
-  color: var(--text-primary);
-  margin-bottom: 8px;
-}
-
-.card-info p {
-  color: var(--text-secondary);
-  font-size: 14px;
-  margin: 4px 0;
-
+.badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 6px;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.badge.available { background-color: #10b981; } /* Green */
+.badge.pending { background-color: #f59e0b; }   /* Orange */
+.badge.booked { background-color: #ef4444; }    /* Red */
+
+/* Booked Opacity State */
+.booked-opacity {
+  border: 1px solid #fca5a5;
+}
+
+.booked-opacity img {
+  filter: grayscale(100%);
+  opacity: 0.6;
+}
+
+/* Image & Info */
+.listing-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-info {
+  padding: 15px;
+}
+
+.card-info h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.price-location {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin-bottom: 12px;
+}
+
+/* Interest/Views Bar */
+.interest-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f3f4f6;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 0.85rem;
+  color: #374151;
+  border: 1px solid #e5e7eb;
 }
 
 /* Action Buttons */
 .actions {
   display: flex;
   gap: 10px;
-  margin-top: 12px;
 }
 
-/* Edit Button */
-.edit-btn {
+.actions button {
   flex: 1;
   padding: 8px;
-
-  background-color: var(--primary);
-  color: var(--text-inverse);
-
-  border: none;
-  border-radius: 8px;
-
-  cursor: pointer;
-  transition: all 0.3s ease;
-
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-}
-
-.edit-btn:hover {
-  background-color: var(--primary-hover);
-  box-shadow: var(--shadow-sm);
-}
-
-/* Delete Button */
-.delete-btn {
-  flex: 1;
-  padding: 8px;
-
-  background-color: var(--error);
-  color: var(--text-inverse);
-
-  border: none;
-  border-radius: 8px;
-
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-
-.delete-btn:hover {
-  box-shadow: var(--shadow-sm);
-}
-
-/* Modal Overlay */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  background-color: rgba(0, 0, 0, 0.6);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  z-index: 999;
-}
-
-/* Modal Content */
-.modal-content {
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
-
-  border-radius: 12px;
-  padding: 20px;
-  width: 90%;
-  max-width: 500px;
-
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-primary);
-}
-
-/* Modal Header */
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  margin-bottom: 16px;
-}
-
-/* Form Groups */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 14px;
-}
-
-.form-group label {
-  margin-bottom: 6px;
-  color: var(--text-secondary);
-  font-size: 14px;
-}
-
-.form-group input,
-.form-group textarea {
-  padding: 10px 12px;
-
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-
-  border: 1px solid var(--border-primary);
-  border-radius: 8px;
-
-  font-size: 15px;
-  transition: all 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--bg-overlay);
-}
-
-/* Save Button */
-.save-btn {
-  width: 100%;
-  padding: 10px;
-
-  background-color: var(--primary);
-  color: var(--text-inverse);
-
-  border: none;
-  border-radius: 8px;
-
-  cursor: pointer;
-  transition: all 0.3s ease;
-
+  gap: 5px;
+  font-size: 0.85rem;
   font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
 }
 
-.save-btn:hover {
-  background-color: var(--primary-hover);
-  box-shadow: var(--shadow-md);
+.edit-btn { background: #eff6ff; color: #2563eb; border-color: #dbeafe !important; }
+.edit-btn:hover:not(:disabled) { background: #dbeafe; }
+.edit-btn:disabled { cursor: not-allowed; opacity: 0.5; }
+
+.delete-btn { background: #fef2f2; color: #dc2626; border-color: #fee2e2 !important; max-width: 45px; }
+.delete-btn:hover { background: #fee2e2; }
+
+/* Status Toggle Buttons */
+.status-btn-booked {
+  background: #fff7ed;
+  color: #ea580c;
+  border-color: #ffedd5 !important;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .actions {
-    flex-direction: column;
-  }
+.status-btn-booked:hover {
+  background: #ffedd5;
+}
 
-  .listings-grid {
-    grid-template-columns: 1fr;
-  }
+.status-btn-available {
+  background: #f0fdf4;
+  color: #16a34a;
+  border-color: #dcfce7 !important;
+}
+
+.status-btn-available:hover {
+  background: #dcfce7;
+}/* Jab room available ho (toh button Booked mark karne ke liye red/orange dikhega) */
+.status-btn-mark-booked {
+  background: #fef2f2 !important;
+  color: #dc2626 !important;
+  border: 1px solid #fecaca !important;
+}
+
+/* Jab room booked ho (toh button wapas live karne ke liye green dikhega) */
+.status-btn-mark-available {
+  background: #f0fdf4 !important;
+  color: #16a34a !important;
+  border: 1px solid #bbf7d0 !important;
+}
+
+.status-btn-mark-booked:hover { background: #fee2e2 !important; }
+.status-btn-mark-available:hover { background: #dcfce7 !important; }
+/* Action Button - Mark Booked (Danger/Alert) */
+.status-btn-mark-booked {
+  background-color: #fff1f2 !important;
+  color: #e11d48 !important;
+  border: 1px solid #fda4af !important;
+}
+
+/* Action Button - Re-list (Success/Live) */
+.status-btn-mark-available {
+  background-color: #f0fdf4 !important;
+  color: #16a34a !important;
+  border: 1px solid #86efac !important;
+}
+
+/* Hover effects for better interaction */
+.status-btn-mark-booked:hover { background-color: #ffe4e6 !important; }
+.status-btn-mark-available:hover { background-color: #dcfce7 !important; }
+
+/* Visual feedback for Booked listings */
+.booked-opacity {
+  border: 1px dashed #94a3b8;
+  background-color: #f8fafc;
+}
+
+.booked-opacity img {
+  filter: grayscale(100%);
+  opacity: 0.6;
 }
