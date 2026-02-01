@@ -1,189 +1,305 @@
-/* Container */
+/* room-detail.css */
 .room-detail-container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 30px auto;
   padding: 0 20px;
 }
 
-/* Loading & Error */
-.room-loading,
-.room-error {
-  text-align: center;
-  padding: 40px;
-  color: var(--text-secondary);
+.room-main-content {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
 }
 
-/* Image Gallery */
-.room-images {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 10px;
-  margin-bottom: 20px;
+/* LEFT SIDE - GALLERY */
+.room-left-side {
+  flex: 1.4;
+  max-width: 600px;
 }
 
-.room-images img {
+.main-image-wrapper {
   width: 100%;
-  height: 220px;
+  height: 400px; /* Medium size as requested */
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f4f4f4;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.main-room-img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-
-  border-radius: 12px;
-  border: 1px solid var(--border-primary);
-  background-color: var(--bg-tertiary);
-
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
 }
 
-.room-images img:hover {
-  transform: scale(1.02);
-}
-
-/* Info Section */
-.room-info {
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-primary);
-  border-radius: 12px;
-
-  padding: 20px;
-  margin-bottom: 20px;
-
-  box-shadow: var(--shadow-sm);
-}
-
-.room-info h1 {
-  color: var(--text-primary);
-  margin-bottom: 6px;
-}
-
-.room-city {
-  color: var(--text-secondary);
-  margin-bottom: 10px;
-}
-
-.room-info h2 {
-  color: var(--primary);
-  margin-bottom: 10px;
-}
-
-.room-info p {
-  color: var(--text-secondary);
-  margin-bottom: 10px;
-}
-
-/* Meta Info */
-.room-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-
-  margin-top: 10px;
-  margin-bottom: 14px;
-
-  color: var(--text-primary);
-  font-size: 14px;
-}
-
-.room-meta span {
-  background-color: var(--bg-tertiary);
-  padding: 6px 10px;
-  border-radius: 8px;
-}
-
-/* Amenities */
-.amenities {
-  display: flex;
-  flex-wrap: wrap;
+.thumbnail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
   gap: 10px;
-
-  list-style: none;
-  padding: 0;
 }
 
-.amenities li {
-  background-color: var(--bg-tertiary);
-  color: var(--text-secondary);
-
-  padding: 6px 12px;
+.thumbnail-img {
+  width: 100%;
+  height: 70px;
+  object-fit: cover;
   border-radius: 8px;
-
-  font-size: 14px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.2s;
 }
 
-/* Owner Card */
-.owner-card {
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-primary);
-  border-radius: 12px;
-
-  padding: 16px;
-  margin-bottom: 20px;
-
-  box-shadow: var(--shadow-sm);
+.thumbnail-img:hover {
+  transform: translateY(-2px);
 }
 
-.owner-card h3 {
-  margin-bottom: 10px;
-  color: var(--text-primary);
+.active-thumb {
+  border-color: #6366f1;
+  opacity: 0.7;
 }
 
-/* Owner Info */
-.owner-info {
-  display: flex;
-  align-items: center;
+/* RIGHT SIDE - STICKY */
+.room-right-side {
+  flex: 1;
+  position: sticky;
+  top: 80px;
+}
+
+.room-title { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+.room-location { color: #666; margin-bottom: 20px; }
+.room-price-tag { font-size: 1.8rem; color: #2ecc71; margin-bottom: 20px; }
+.room-price-tag span { font-size: 1rem; color: #888; }
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
 }
 
-/* Avatar */
-.owner-avatar {
-  width: 48px;
-  height: 48px;
+.amenity-badge {
+  background: #eef2ff;
+  color: #4f46e5;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  margin: 4px;
+  display: inline-block;
+}
 
+/* OWNER CARD */
+.owner-side-card {
+  padding: 20px;
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.call-now-btn {
+  display: block;
+  text-align: center;
+  background: #25d366;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .room-main-content { flex-direction: column; }
+  .room-right-side { position: static; width: 100%; }
+}
+/* --- BOTTOM SECTION (REVIEWS & REPORTS) --- */
+
+.room-bottom-section {
+  margin-top: 50px;
+  padding-top: 30px;
+  border-top: 2px solid #f0f0f0;
+}
+
+/* Review Section Styling */
+.reviews-container {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  margin-bottom: 40px;
+}
+
+.reviews-container h2 {
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  color: #333;
   display: flex;
   align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background-color: var(--primary);
-  color: var(--text-inverse);
-
-  font-size: 20px;
-  font-weight: 600;
+  gap: 10px;
 }
 
-/* Owner Email */
-.owner-email {
-  color: var(--text-primary);
-  margin-bottom: 6px;
+/* Report Box Styling */
+.report-box {
+  background: #fff5f5; /* Light red background for attention */
+  border: 1px dashed #feb2b2;
+  padding: 25px;
+  border-radius: 15px;
+  margin-bottom: 50px;
 }
 
-/* Call Button */
-.call-btn {
-  display: inline-block;
+.report-box h3 {
+  color: #c53030;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
 
-  background-color: var(--primary);
-  color: var(--text-inverse);
+.report-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 500px;
+}
 
-  padding: 8px 12px;
+.report-controls select {
+  padding: 12px;
   border-radius: 8px;
-
-  text-decoration: none;
-  transition: all 0.3s ease;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.call-btn:hover {
-  background-color: var(--primary-hover);
-  box-shadow: var(--shadow-sm);
+.report-controls select:focus {
+  border-color: #6366f1;
+  outline: none;
 }
 
-/* Reviews Section Inherits Global Styles */
+/* Divider line */
+.divider {
+  border: 0;
+  height: 1px;
+  background: #eee;
+  margin: 40px 0;
+}
 
-/* Responsive */
+/* Mobile responsive for bottom section */
 @media (max-width: 768px) {
-  .room-images img {
-    height: 180px;
+  .report-controls {
+    max-width: 100%;
   }
+}
+/* room-detail.css */
+.room-detail-container {
+  max-width: 1250px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
 
-  .room-meta {
-    flex-direction: column;
-  }
+.room-main-content {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 50px;
+}
+
+/* --- UPPER LEFT: GALLERY --- */
+.room-left-side { flex: 1.5; max-width: 700px; }
+.main-image-wrapper {
+  width: 100%;
+  height: 450px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+}
+.main-room-img { width: 100%; height: 100%; object-fit: cover; }
+.thumbnail-grid { display: flex; gap: 10px; flex-wrap: wrap; }
+.thumbnail-img {
+  width: 80px; height: 60px; object-fit: cover;
+  border-radius: 8px; cursor: pointer; border: 2px solid transparent;
+}
+.active-thumb { border-color: #4f46e5; }
+
+/* --- UPPER RIGHT: DETAILS --- */
+.room-right-side { flex: 1; position: sticky; top: 90px; }
+.room-title { font-size: 2.2rem; font-weight: 800; color: #1a1a1a; }
+.room-price-tag { color: #10b981; font-size: 1.8rem; margin: 15px 0; }
+.info-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  background: #f9fafb; padding: 15px; border-radius: 12px;
+}
+.amenity-badge {
+  background: #e0e7ff; color: #4338ca; padding: 5px 12px;
+  border-radius: 20px; font-size: 0.85rem; margin: 4px; display: inline-block;
+}
+.owner-side-card {
+  margin-top: 25px; padding: 20px; border: 1px solid #e5e7eb;
+  border-radius: 15px; background: white;
+}
+.call-now-btn {
+  display: block; text-align: center; background: #22c55e;
+  color: white; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 600;
+}
+
+/* --- BOTTOM SECTION SPLIT --- */
+.room-bottom-split {
+  display: flex;
+  gap: 50px;
+  padding-top: 40px;
+  border-top: 1px solid #e5e7eb;
+}
+.bottom-left { flex: 1.5; }
+.bottom-right { flex: 1; position: sticky; top: 100px; }
+
+.report-box {
+  background: #fff5f5; border: 1px solid #fee2e2;
+  padding: 25px; border-radius: 15px;
+}
+.report-box h3 { color: #b91c1c; margin-bottom: 10px; }
+.report-subtext { font-size: 0.9rem; color: #7f1d1d; margin-bottom: 15px; }
+.report-controls select {
+  width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #fca5a5; margin-bottom: 15px;
+}
+
+.divider { margin: 40px 0; border: 0; border-top: 1px solid #eee; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .room-main-content, .room-bottom-split { flex-direction: column; }
+  .room-right-side, .bottom-right { position: static; width: 100%; }
+}
+/* Centering the Loader */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh; /* Screen ke beech mein dikhane ke liye */
+  width: 100%;
+}
+
+/* Modern Spinner */
+.room-loader {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #6366f1; /* Indigo color to match your theme */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loader-container p {
+  color: #666;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
 }

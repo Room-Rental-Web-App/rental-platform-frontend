@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // useNavigate add kiya password reset ke liye
 import ThemeToggle from "../components/ThemeToggle";
 import { useWishlist } from "../context/WishlistContext";
-import {FolderLock, User, LogOut, Settings, ChevronDown } from "lucide-react";
+import { FolderLock, User, LogOut, Settings, ChevronDown } from "lucide-react";
 
 import "../css/Navbar.css";
 import logoImg from "../assets/logo.png";
@@ -10,7 +10,7 @@ import logoImg from "../assets/logo.png";
 const Navbar = ({ isLoggedIn, onLogout }) => {
   const userRole = localStorage.getItem("role");
   const { wishlistCount } = useWishlist();
-
+  const navigate = useNavigate();
 
   const [openMenu, setOpenMenu] = useState(false);
   const menuRef = useRef();
@@ -27,34 +27,52 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const renderLink = (to, icon, text, extra = null) => (
-    <li>
-      <Link to={to}>
+  // FIXED: RenderLink ab hamesha ek unique 'key' lega
+  const renderLink = (to, icon, text, extra = null, key) => (
+    <li key={key || to}>
+      <Link to={to} onClick={() => setOpenMenu(false)}>
         {extra}
         {icon} <span>{text}</span>
       </Link>
     </li>
   );
 
-  const roleLinks = {
-    ROLE_USER: [
-      renderLink(
-        "/wishlist", null, "Wishlist",
-        wishlistCount > 0 && <span className="wishlist-badge">{wishlistCount}</span>
-      ),
-      renderLink("/premium", null, "Premium"),
-    ],
-
-    ROLE_OWNER: [
-      renderLink("/add-room", null, "Add Room"),
-      renderLink("/my-listings", null, "My Rooms"),
-      renderLink("/premium", null, "Premium"),
-      renderLink("/owner/users", null, "Owner Users"),
-    ],
-
-    ROLE_ADMIN: [
-      renderLink("/admin/all-users", null, "Admin Dashboard"),
-    ],
+  // FIXED: roleLinks ko object ki jagah function banaya taaki 'key' pass ho sake
+  const getRoleLinks = () => {
+    switch (userRole) {
+      case "ROLE_USER":
+        return [
+          renderLink(
+            "/wishlist",
+            null,
+            "Wishlist",
+            wishlistCount > 0 && (
+              <span className="wishlist-badge">{wishlistCount}</span>
+            ),
+            "wishlist",
+          ),
+          renderLink("/premium", null, "Premium", null, "premium"),
+        ];
+      case "ROLE_OWNER":
+        return [
+          renderLink("/add-room", null, "Add Room", null, "add"),
+          renderLink("/my-listings", null, "My Rooms", null, "listings"),
+          renderLink("/premium", null, "Premium", null, "premium-owner"),
+          renderLink("/owner/users", null, "Owner Users", null, "owner-users"),
+        ];
+      case "ROLE_ADMIN":
+        return [
+          renderLink(
+            "/admin/all-users",
+            null,
+            "Admin Dashboard",
+            null,
+            "admin",
+          ),
+        ];
+      default:
+        return [];
+    }
   };
 
   return (
@@ -66,18 +84,19 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
       </div>
 
       <ul className="nav-links">
-        {renderLink("/home", null, "Home")}
-        {renderLink("/about", null, "About")}
+        {renderLink("/home", null, "Home", null, "home")}
+        {renderLink("/about", null, "About", null, "about")}
 
         {!isLoggedIn || userRole === "ROLE_USER"
-          ? renderLink("/search", null, "Search Rooms")
+          ? renderLink("/search", null, "Search Rooms", null, "search")
           : null}
 
-        {isLoggedIn && roleLinks[userRole]}
+        {/* FIXED: Role specific links rendering with unique keys */}
+        {isLoggedIn && getRoleLinks()}
 
         {/* SETTINGS DROPDOWN */}
         {isLoggedIn && (
-          <li className="settings-menu" ref={menuRef}>
+          <li className="settings-menu" ref={menuRef} key="settings-dropdown">
             <button
               className="settings-btn"
               onClick={() => setOpenMenu(!openMenu)}
@@ -89,8 +108,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
             {openMenu && (
               <div className="dropdown-menu">
                 <Link to="/profile" onClick={() => setOpenMenu(false)}>
-                  <User size={16} />
-                  Profile
+                  <User size={16} /> Profile
                 </Link>
 
                 <div className="theme-toggle-wrapper">
@@ -104,16 +122,17 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                     setOpenMenu(false);
                   }}
                 >
-                  <LogOut size={16} />
-                  Logout
+                  <LogOut size={16} /> Logout
                 </button>
 
                 <button
                   className="reset-password-btn"
-                  onClick={() => {n}}
+                  onClick={() => {
+                    setOpenMenu(false);
+                    navigate("/forgot-password"); // Link updated
+                  }}
                 >
-                  <FolderLock size={16} />
-                  Reset Password
+                  <FolderLock size={16} /> Reset Password
                 </button>
               </div>
             )}
@@ -121,7 +140,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
         )}
 
         {!isLoggedIn && (
-          <li>
+          <li key="login-btn">
             <Link to="/login" className="login-link">
               <User size={20} />
               <span>Login</span>
