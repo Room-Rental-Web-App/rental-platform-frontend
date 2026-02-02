@@ -4,11 +4,12 @@ import Api from "../../api/Api";
 import "../../css/room-detail.css";
 import Reviews from "../../components/Reviews";
 import CreateReport from "../../components/CreateReport";
+import RoomShare from "../../components/RoomShare";
 
 function RoomDetailPage() {
   const { roomId } = useParams();
   const [room, setRoom] = useState(null);
-  const [roomOwner, setRoomOwner] = useState(null);
+  const [roomOwner, setRoomOwner] = useState();
   const [mainImage, setMainImage] = useState("");
   const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem("userId") || null;
@@ -29,7 +30,9 @@ function RoomDetailPage() {
         // 2. Fetch Owner Details (Backend path fix included)
         if (roomData.ownerEmail) {
           Api.get(`/users/roomOwner/${roomId}/${roomData.ownerEmail}`)
-            .then((ownerRes) => setRoomOwner(ownerRes.data))
+            .then((ownerRes) => {
+              setRoomOwner(ownerRes.data)
+            })
             .catch((err) => {
               console.error("Owner API error:", err);
               setRoomOwner(null);
@@ -157,6 +160,7 @@ function RoomDetailPage() {
                 Owner information is currently being verified.
               </div>
             )}
+
           </div>
         </div>
       </div>
@@ -208,6 +212,9 @@ function RoomDetailPage() {
           </div>
         </div>
       </div>
+
+      {roomOwner?.id  && <RoomShare ownerId={roomOwner.id} roomId={roomId}/>}
+
     </div>
   );
 }
