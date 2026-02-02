@@ -53,7 +53,6 @@ export const howItWorks = [
 
 export const premiumOwnerFeatures = [
   "Top position in search",
-  "Homepage featured banner",
   "Priority direct contact",
   "Featured owner badge",
   "Spam / fake lead protection",
