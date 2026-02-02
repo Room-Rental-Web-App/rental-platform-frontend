@@ -30,9 +30,7 @@ export const WishlistProvider = ({ children }) => {
   }, [email]);
 
   return (
-    <WishlistContext.Provider
-      value={{ wishlistCount, setWishlistCount, fetchCount }}
-    >
+    <WishlistContext.Provider value={{ wishlistCount, setWishlistCount, fetchCount }}>
       {children}
     </WishlistContext.Provider>
   );

@@ -1,233 +1,142 @@
-/* Navbar Container */
+/* ===== NAVBAR ROOT ===== */
 .navbar {
-  background-color: var(--bg-secondary);
-  border-bottom: 1px solid var(--border-primary);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 24px;
+  height: 72px;
+  padding: 0 24px;
+
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-primary);
   box-shadow: var(--shadow-sm);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
 }
 
-/* Logo */
-.navbar .logo {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--primary);
+/* ===== LEFT ===== */
+.nav-left {
+  flex: 1;
 }
 
-/* Navigation Links */
-.nav-links {
-  list-style: none;
+.navbar-logo {
+  height: 35px;
+  object-fit: contain;
+}
+
+/* ===== CENTER ===== */
+.nav-center {
+  flex: 2;
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 28px;
 }
 
-/* Individual Link */
-.nav-links li {
+.nav-link {
   position: relative;
-}
-
-.nav-links a,
-.nav-links button {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border-radius: 8px;
+  text-decoration: none;
   font-size: 15px;
   font-weight: 500;
-  color: var(--text-secondary);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  color: var(--text-primary);
+  transition: color 0.2s ease;
 }
 
-/* Hover Effect */
-.nav-links a:hover,
-.nav-links button:hover {
-  background-color: var(--bg-overlay);
+.nav-link:hover {
   color: var(--primary);
 }
 
-/* Active Link Style */
-.nav-links a.active {
-  background-color: var(--primary);
-  color: var(--text-inverse);
-}
-
-/* Login / Logout Button */
-.login-link {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background-color: var(--primary);
-  color: var(--text-inverse);
-  border-radius: 8px;
-  padding: 8px 14px;
-  transition: all 0.3s ease;
-}
-
-.login-link:hover {
-  background-color: var(--primary-hover);
-  box-shadow: var(--shadow-md);
-}
-
-/* Wishlist Badge */
+/* ===== WISHLIST BADGE ===== */
 .wishlist-badge {
-  background-color: var(--error);
-  color: var(--text-inverse);
-  font-size: 12px;
-  padding: 2px 6px;
-  border-radius: 50%;
   margin-left: 6px;
+  background-color: var(--primary);
+  color: var(--text-inverse);
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-weight: 600;
 }
 
-/* Theme Toggle Alignment */
-.navbar .theme-toggle {
-  margin-left: 10px;
+/* ===== RIGHT ===== */
+.nav-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
 }
 
-/* Responsive Navbar */
-@media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .nav-links {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-}
-
-/* ============================================================================= */
-
-
-/* SETTINGS DROPDOWN MENU */
+/* ===== SETTINGS DROPDOWN ===== */
 .settings-menu {
   position: relative;
 }
 
-/* Settings Button */
 .settings-btn {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--text-secondary);
   background: transparent;
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-primary);
 }
 
 .settings-btn:hover {
-  background-color: var(--bg-overlay);
   color: var(--primary);
 }
 
-/* Dropdown Container */
+/* ===== DROPDOWN ===== */
 .dropdown-menu {
   position: absolute;
   right: 0;
-  top: 45px;
+  top: 48px;
+
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: 10px;
-  width: 190px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+
+  min-width: 180px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  padding: 8px;
-  box-shadow: var(--shadow-md);
-  z-index: 999;
-  animation: fadeIn 0.2s ease-in-out;
+  gap: 10px;
 }
 
-/* Dropdown Items */
 .dropdown-menu a,
 .dropdown-menu button {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 8px;
+  gap: 8px;
   font-size: 14px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  background: transparent;
+  background: none;
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
-  width: 100%;
+  color: var(--text-primary);
+  text-decoration: none;
 }
 
-/* Hover Effect */
 .dropdown-menu a:hover,
 .dropdown-menu button:hover {
-  background-color: var(--bg-overlay);
   color: var(--primary);
 }
 
-/* Theme Toggle Inside Dropdown */
-.theme-toggle-wrapper {
-  display: flex;
-  justify-content: center;
-  padding: 6px 0;
-  border-top: 1px solid var(--border-primary);
-  border-bottom: 1px solid var(--border-primary);
-  margin: 6px 0;
-}
-
-/* Logout Button Special Style */
+/* ===== LOGOUT ===== */
 .logout-btn {
   color: var(--error);
 }
 
 .logout-btn:hover {
-  background-color: rgba(255, 0, 0, 0.1);
+  opacity: 0.85;
 }
 
-/* Simple Fade Animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.logo-container {
+/* ===== LOGIN LINK ===== */
+.login-link {
   display: flex;
   align-items: center;
-  height: 100%;
+  gap: 6px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-decoration: none;
 }
 
-.navbar-logo {
-  /* Height navbar ke hisab se set karo */
-  height: 40px; 
-  width: auto;
-  mix-blend-mode: multiply;
-  
-  /* Image ki quality maintain rakhta hai */
-  object-fit: contain; 
-  
-  /* Hover effect (Optional) */
-  transition: transform 0.3s ease;
-  cursor: pointer;
-}
-
-.navbar-logo:hover {
-  transform: scale(1.05); /* Halka sa zoom on hover */
+.login-link:hover {
+  color: var(--primary);
 }

@@ -1,8 +1,5 @@
 
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Navbar from "./non-outlets/Navbar";
-import Footer from "./non-outlets/Footer";
-import Login from "./components/Auth";
 import { WishlistProvider } from "./context/WishlistContext";
 // Legal Pages
 import TermsAndService from "./pages/commen-pages/TermsAndService";

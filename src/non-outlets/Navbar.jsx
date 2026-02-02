@@ -2,7 +2,10 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom"; // useNavigate add kiya password reset ke liye
 import ThemeToggle from "../components/ThemeToggle";
 import { useWishlist } from "../context/WishlistContext";
+
+import { User, LogOut, Settings, ChevronDown, ChevronUp  } from "lucide-react";
 import { FolderLock, User, LogOut, Settings, ChevronDown } from "lucide-react";
+
 
 import "../css/Navbar.css";
 import logoImg from "../assets/logo.png";
@@ -13,20 +16,45 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
   const navigate = useNavigate();
 
   const [openMenu, setOpenMenu] = useState(false);
-  const menuRef = useRef();
+  const menuRef = useRef(null);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
         setOpenMenu(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const roleLinks = {
+    ROLE_USER: (
+      <>
+        <Link to="/wishlist" className="nav-link">
+          Wishlist
+          {wishlistCount > 0 && (
+            <span className="wishlist-badge">{wishlistCount}</span>
+          )}
+        </Link>
+        <Link to="/premium" className="nav-link">Premium</Link>
+      </>
+    ),
+
+    ROLE_OWNER: (
+      <>
+        <Link to="/add-room" className="nav-link">Add Room</Link>
+        <Link to="/my-listings" className="nav-link">My Rooms</Link>
+        <Link to="/premium" className="nav-link">Premium</Link>
+        <Link to="/owner/users" className="nav-link">Users</Link>
+      </>
+    ),
+
+    ROLE_ADMIN: (
+      <Link to="/admin/all-users" className="nav-link">
+        Dashboard
+      </Link>
+    ),
   // FIXED: RenderLink ab hamesha ek unique 'key' lega
   const renderLink = (to, icon, text, extra = null, key) => (
     <li key={key || to}>
@@ -77,12 +105,30 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
 
   return (
     <nav className="navbar">
-      <div className="logo-container">
+
+      {/* LEFT */}
+      <div className="nav-left">
         <Link to="/home">
-          <img src={logoImg} alt="RoomsDekho Logo" className="navbar-logo" />
+          <img src={logoImg} alt="RoomsDekho" className="navbar-logo" />
         </Link>
       </div>
 
+      {/* CENTER */}
+      <div className="nav-center">
+        <Link to="/home" className="nav-link">Home</Link>
+        <Link to="/about" className="nav-link">About</Link>
+
+        {(!isLoggedIn || userRole === "ROLE_USER") && (
+          <Link to="/search" className="nav-link">Search Rooms</Link>
+        )}
+
+        {isLoggedIn && roleLinks[userRole]}
+      </div>
+
+      {/* RIGHT */}
+      <div className="nav-right">
+        {isLoggedIn ? (
+          <div className="settings-menu" ref={menuRef}>
       <ul className="nav-links">
         {renderLink("/home", null, "Home", null, "home")}
         {renderLink("/about", null, "About", null, "about")}
@@ -102,7 +148,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
               onClick={() => setOpenMenu(!openMenu)}
             >
               <Settings size={20} />
-              <ChevronDown size={16} />
+              {openMenu ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             </button>
 
             {openMenu && (
@@ -111,9 +157,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                   <User size={16} /> Profile
                 </Link>
 
-                <div className="theme-toggle-wrapper">
-                  <ThemeToggle />
-                </div>
+                <ThemeToggle />
 
                 <button
                   className="logout-btn"
@@ -136,8 +180,13 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                 </button>
               </div>
             )}
-          </li>
+          </div>
+        ) : (
+          <Link to="/login" className="login-link">
+            <User size={20} /> Login
+          </Link>
         )}
+      </div>
 
         {!isLoggedIn && (
           <li key="login-btn">

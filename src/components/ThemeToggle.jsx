@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Sun, Moon } from "lucide-react";
 import '../css/themeToggle.css';
 
 const ThemeToggle = () => {
@@ -20,13 +21,18 @@ const ThemeToggle = () => {
   };
 
   return (
-    <button 
-      onClick={toggleTheme} 
-      className="theme-toggle-btn"
-      aria-label="Toggle Dark Mode"
-    >
-      {/* Show Sun icon if Dark, Moon icon if Light */}
-      {theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}
+  <button className="theme-toggle-btn" onClick={toggleTheme}>
+      {theme === "dark" ? (
+        <>
+          <Sun size={16} />
+          <span>Light Mode</span>
+        </>
+      ) : (
+        <>
+          <Moon size={16} />
+          <span>Dark Mode</span>
+        </>
+      )}
     </button>
   );
 };
