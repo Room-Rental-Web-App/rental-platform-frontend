@@ -1,25 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
-import {
-  Home,
-  MapPin,
-  Camera,
-  ChevronRight,
-  ChevronLeft,
-  CheckCircle,
-  Wifi,
-  Wind,
-  Car,
-  Utensils,
-  Navigation,
-  Video,
-  X,
-  Upload,
-  Lock,
-  Info,
-} from "lucide-react";
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import { Home, MapPin, Camera, ChevronRight, CheckCircle, Wifi, Wind, Car, Utensils, Navigation, Video, X, Upload, Lock, Info, } from "lucide-react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "../../CSS/AddRoom.css";
@@ -28,6 +10,7 @@ import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import usePremiumStatus from "../../customHook/usePremiumStatus";
 import { useNavigate } from "react-router-dom";
+import MapPicker from "../../components/MapPicker";
 
 let DefaultIcon = L.icon({
   iconUrl: markerIcon,
@@ -61,6 +44,10 @@ const AddRoom = () => {
     amenities: [],
   });
 
+
+
+  const [openMap, setOpenMap] = useState(false);
+  const [mapCenter, setMapCenter] = useState(null);
   const [images, setImages] = useState([]);
   const [video, setVideo] = useState(null);
   const [previews, setPreviews] = useState([]);
@@ -71,6 +58,21 @@ const AddRoom = () => {
     { id: "parking", label: "Parking", icon: <Car size={16} /> },
     { id: "kitchen", label: "Kitchen", icon: <Utensils size={16} /> },
   ];
+  const handleUseLocation = () => {
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setMapCenter({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        });
+        setOpenMap(true);
+      },
+      () => alert("Enable location access"),
+    );
+  };
+
+  useEffect(() => handleUseLocation(), [])
 
   // --- 1. PRE-CHECK LOGIC ---
   if (loading) {
@@ -118,18 +120,7 @@ const AddRoom = () => {
   }
 
   // --- 2. FORM HELPERS ---
-  const LocationPicker = () => {
-    useMapEvents({
-      click(e) {
-        setFormData({
-          ...formData,
-          latitude: e.latlng.lat,
-          longitude: e.latlng.lng,
-        });
-      },
-    });
-    return <Marker position={[formData.latitude, formData.longitude]} />;
-  };
+
 
   const handleAmenityChange = (id) => {
     const updated = formData.amenities.includes(id)
@@ -138,20 +129,7 @@ const AddRoom = () => {
     setFormData({ ...formData, amenities: updated });
   };
 
-  const getGeoLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setFormData({
-            ...formData,
-            latitude: pos.coords.latitude,
-            longitude: pos.coords.longitude,
-          });
-        },
-        () => alert("Enable GPS to fetch location."),
-      );
-    }
-  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -171,7 +149,7 @@ const AddRoom = () => {
       if (err.response && err.response.status === 403) {
         alert(
           err.response.data.message ||
-            "Limit exceeded! Redirecting to Premium.",
+          "Limit exceeded! Redirecting to Premium.",
         );
         navigate("/premium");
       } else {
@@ -277,55 +255,28 @@ const AddRoom = () => {
         {/* STEP 2: LOCATION */}
         {step === 2 && (
           <div className="fade-in">
-            <h3 className="step-title">
-              <MapPin /> Location
-            </h3>
-            <button type="button" className="geo-btn" onClick={getGeoLocation}>
-              <Navigation size={16} /> Current Location
-            </button>
-            <div
-              className="map-container"
-              style={{
-                height: "250px",
-                borderRadius: "12px",
-                overflow: "hidden",
-                margin: "15px 0",
-              }}
-            >
-              <MapContainer
-                center={[formData.latitude, formData.longitude]}
-                zoom={13}
-                style={{ height: "100%", width: "100%" }}
-              >
-                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                <LocationPicker />
-              </MapContainer>
-            </div>
+
+            <button onClick={handleUseLocation}>location</button>
+            {openMap && mapCenter && (
+              <MapPicker
+                center={mapCenter}
+                onClose={() => setOpenMap(false)}
+                onConfirm={(lat, lng) => {
+                  setFormData({ ...formData, latitude: lat, longitude: lng })
+                  setOpenMap(false);
+                }}
+              />
+            )}
+
+
             <div className="input-box">
               <label>Address</label>
-              <textarea
-                required
-                value={formData.address}
-                onChange={(e) =>
-                  setFormData({ ...formData, address: e.target.value })
-                }
+              <textarea required value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })}
               />
             </div>
             <div className="btn-row">
-              <button
-                type="button"
-                onClick={() => setStep(1)}
-                className="btn-prev"
-              >
-                Back
-              </button>
-              <button
-                type="button"
-                onClick={() => setStep(3)}
-                className="btn-next"
-              >
-                Next <ChevronRight size={18} />
-              </button>
+              <button type="button" onClick={() => setStep(1)} className="btn-prev"> Back</button>
+              <button type="button" onClick={() => setStep(3)} className="btn-next" > Next <ChevronRight size={18} /></button>
             </div>
           </div>
         )}
@@ -333,26 +284,16 @@ const AddRoom = () => {
         {/* STEP 3: MEDIA */}
         {step === 3 && (
           <div className="fade-in">
-            <h3 className="step-title">
-              <Camera /> Media
-            </h3>
+            <h3 className="step-title"> <Camera /> Media </h3>
             <div className="upload-section">
               <label className="upload-card">
                 <Upload />
                 <span>Upload Photos</span>
-                <input
-                  type="file"
-                  multiple
-                  hidden
-                  accept="image/*"
-                  onChange={(e) => {
-                    const files = Array.from(e.target.files);
-                    setImages([...images, ...files]);
-                    setPreviews([
-                      ...previews,
-                      ...files.map((f) => URL.createObjectURL(f)),
-                    ]);
-                  }}
+                <input type="file" multiple hidden accept="image/*" onChange={(e) => {
+                  const files = Array.from(e.target.files);
+                  setImages([...images, ...files]);
+                  setPreviews([...previews, ...files.map((f) => URL.createObjectURL(f)),]);
+                }}
                 />
               </label>
             </div>
@@ -360,28 +301,17 @@ const AddRoom = () => {
               {previews.map((p, i) => (
                 <div key={i} className="preview-item">
                   <img src={p} alt="preview" />
-                  <X
-                    className="remove-icon"
-                    size={14}
-                    onClick={() => {
-                      setImages(images.filter((_, idx) => idx !== i));
-                      setPreviews(previews.filter((_, idx) => idx !== i));
-                    }}
+                  <X className="remove-icon" size={14} onClick={() => {
+                    setImages(images.filter((_, idx) => idx !== i));
+                    setPreviews(previews.filter((_, idx) => idx !== i));
+                  }}
                   />
                 </div>
               ))}
             </div>
             <div className="btn-row">
-              <button
-                type="button"
-                onClick={() => setStep(2)}
-                className="btn-prev"
-              >
-                Back
-              </button>
-              <button type="submit" className="btn-publish">
-                Publish
-              </button>
+              <button type="button" onClick={() => setStep(2)} className="btn-prev" >Back</button>
+              <button type="submit" className="btn-publish"> Publish </button>
             </div>
           </div>
         )}
@@ -392,13 +322,7 @@ const AddRoom = () => {
             <CheckCircle size={80} color="#10b981" />
             <h2>Published Successfully!</h2>
             <p>Your listing is waiting for admin approval.</p>
-            <button
-              type="button"
-              onClick={() => navigate("/my-listings")}
-              className="btn-next"
-            >
-              View Listings
-            </button>
+            <button type="button" onClick={() => navigate("/my-listings")} className="btn-next"> View Listings </button>
           </div>
         )}
       </form>

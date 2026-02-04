@@ -43,8 +43,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
         <Link to="/my-listings" className="nav-link">My Rooms</Link>
         <Link to="/premium" className="nav-link">Premium</Link>
         <Link to="/owner/users" className="nav-link">Users</Link>
-        <Link to="/owner/sharedRoomRequests" className="nav-link">Shared Room Requests
-        </Link>
+
       </>
     ),
 
