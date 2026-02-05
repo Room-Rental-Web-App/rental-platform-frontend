@@ -58,6 +58,7 @@ const AddRoom = () => {
     { id: "parking", label: "Parking", icon: <Car size={16} /> },
     { id: "kitchen", label: "Kitchen", icon: <Utensils size={16} /> },
   ];
+
   const handleUseLocation = () => {
 
     navigator.geolocation.getCurrentPosition(
@@ -151,7 +152,8 @@ const AddRoom = () => {
           err.response.data.message ||
           "Limit exceeded! Redirecting to Premium.",
         );
-        navigate("/premium");
+        if(confirm("Will you want to permium member"))navigate("/premium")
+        
       } else {
         alert("Upload failed. Please check your internet or file size.");
       }
