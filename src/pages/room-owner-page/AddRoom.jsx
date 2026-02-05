@@ -22,7 +22,7 @@ L.Marker.prototype.options.icon = DefaultIcon;
 
 const AddRoom = () => {
   const navigate = useNavigate();
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
 
   // Get smart status from our custom hook
   const { canAddMoreRooms, roomLimit, currentRoomCount, loading, planCode } =
