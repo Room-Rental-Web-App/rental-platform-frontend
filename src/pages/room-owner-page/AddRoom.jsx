@@ -22,7 +22,7 @@ L.Marker.prototype.options.icon = DefaultIcon;
 
 const AddRoom = () => {
   const navigate = useNavigate();
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
 
   // Get smart status from our custom hook
   const { canAddMoreRooms, roomLimit, currentRoomCount, loading, planCode } =
@@ -58,6 +58,7 @@ const AddRoom = () => {
     { id: "parking", label: "Parking", icon: <Car size={16} /> },
     { id: "kitchen", label: "Kitchen", icon: <Utensils size={16} /> },
   ];
+
   const handleUseLocation = () => {
 
     navigator.geolocation.getCurrentPosition(
@@ -151,7 +152,8 @@ const AddRoom = () => {
           err.response.data.message ||
           "Limit exceeded! Redirecting to Premium.",
         );
-        navigate("/premium");
+        if(confirm("Will you want to permium member"))navigate("/premium")
+        
       } else {
         alert("Upload failed. Please check your internet or file size.");
       }
