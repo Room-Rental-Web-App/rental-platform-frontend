@@ -49,10 +49,8 @@ const MyListings = () => {
 
     try {
       const res = await axios.put(
-        API_ENDPOINTS.UPDATE_ROOM(room.id),
-        { ...room, isAvailable: newStatus },
+        API_ENDPOINTS.UPDATE_ROOM_Availability(room.id, newStatus),
         {
-          params: { email: localStorage.getItem("email") },
           headers: getAuthHeaders(),
         },
       );
@@ -175,23 +173,8 @@ const MyListings = () => {
                 </button>
 
                 {/* Status Toggle Button */}
-                <button
-                  onClick={() => handleToggleStatus(room)}
-                  className={
-                    (room.isAvailable ?? true)
-                      ? "status-btn-mark-booked"
-                      : "status-btn-mark-available"
-                  }
-                >
-                  {(room.isAvailable ?? true) ? (
-                    <>
-                      <BookCheck size={16} /> Mark Booked
-                    </>
-                  ) : (
-                    <>
-                      <RotateCcw size={16} /> Re-list
-                    </>
-                  )}
+                <button onClick={() => handleToggleStatus(room)} className={ (room.isAvailable ?? true)? "status-btn-mark-booked": "status-btn-mark-available"}>
+                  {(room.isAvailable ?? true) ? (<><BookCheck size={16} /> Mark Booked</>) : (<><RotateCcw size={16} /> Re-list</>)}
                 </button>
 
                 <button

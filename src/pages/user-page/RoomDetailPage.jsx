@@ -4,7 +4,8 @@ import Api from "../../api/Api";
 import "../../css/room-detail.css";
 import Reviews from "../../components/Reviews";
 import CreateReport from "../../components/CreateReport";
-import RoomShare from "../../components/RoomShare";
+
+import NotifiedWhenAvailable from "../../components/NotifiedWhenAvailable";
 
 function RoomDetailPage() {
   const { roomId } = useParams();
@@ -121,7 +122,7 @@ function RoomDetailPage() {
               <h3>Description</h3>
               <p>{room.description}</p>
             </div>
-
+            {roomId && userId && !room.isAvailable && (<NotifiedWhenAvailable userId={userId} roomId={roomId} />)}
             <div className="amenities-section">
               <h3>Amenities</h3>
               <div className="amenities-list">
@@ -213,7 +214,6 @@ function RoomDetailPage() {
         </div>
       </div>
 
-      {roomOwner?.id  && <RoomShare ownerId={roomOwner.id} roomId={roomId}/>}
 
     </div>
   );
