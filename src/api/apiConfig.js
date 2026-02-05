@@ -13,6 +13,7 @@ export const API_ENDPOINTS = {
   // Room Endpoints
   ADD_ROOM: `${BASE_URL}/rooms/add`,
   UPDATE_ROOM: (id) => `${BASE_URL}/rooms/update/${id}`,
+  UPDATE_ROOM_Availability: (id,status) => `${BASE_URL}/rooms/update-status/${id}/${status}`,
   DELETE_ROOM: (id) => `${BASE_URL}/rooms/delete/${id}`,
   MY_LISTINGS: `${BASE_URL}/rooms/my-listings`,
   SEARCH_ROOMS: `${BASE_URL}/rooms/search`,

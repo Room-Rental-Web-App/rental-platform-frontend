@@ -14,7 +14,6 @@ import Profile from "./pages/commen-pages/Profile";
 // Owner
 import AddRoom from "./pages/room-owner-page/AddRoom";
 import MyListings from "./pages/room-owner-page/MyListings";
-import SharedRoomRequests from "./pages/room-owner-page/SharedRoomRequests";
 
 
 // User
@@ -82,7 +81,6 @@ function App() {
             <Route path="/add-room" element={<AddRoom />} />
             <Route path="/my-listings" element={<MyListings />} />
             <Route path="/owner/users" element={<OwnerUsersPage />} />
-            <Route path="/owner/sharedRoomRequests" element={<SharedRoomRequests />} />
 
             <Route path="/premium" element={<PremiumPage />} />
 
