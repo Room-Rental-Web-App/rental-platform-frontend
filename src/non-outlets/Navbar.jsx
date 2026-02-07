@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 import { useWishlist } from "../context/WishlistContext";
-import { User, LogOut, Settings, ChevronDown, ChevronUp } from "lucide-react";
+import { User, LogOut, Settings, ChevronDown, ChevronUp, MessageCircle } from "lucide-react";
 
 import "../css/Navbar.css";
 import logoImg from "../assets/logo.png";
@@ -94,18 +94,16 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                   <User size={16} /> Profile
                 </Link>
 
-
                 <ThemeToggle />
-
-                <button
-                  className="logout-btn"
-                  onClick={() => {
-                    onLogout();
-                    setOpenMenu(false);
-                  }}
-                >
+                {userRole === "ROLE_USER" && (
+                  <Link to="/notify_rooms" onClick={() => setOpenMenu(false)}>
+                    <MessageCircle size={16} /> Notify Rooms
+                  </Link>
+                )}
+                <button className="logout-btn" onClick={() => { onLogout(); setOpenMenu(false); }}>
                   <LogOut size={16} /> Logout
                 </button>
+                
               </div>
             )}
           </div>
