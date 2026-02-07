@@ -45,6 +45,7 @@ import BlogPage from "./pages/commen-pages/BlogPage";
 import CareerPage from "./pages/commen-pages/CareerPage";
 import AdminSupport from "./pages/admin-page/AdminSupport";
 import Faqs from "./pages/commen-pages/Faqs";
+import NotifyRoom from "./pages/user-page/NotifyRoom";
 
 
 
@@ -76,6 +77,7 @@ function App() {
 
             {/* User */}
             <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/notify_rooms" element={<NotifyRoom />} />l̥
 
             {/* Room-Owner */}
             <Route path="/add-room" element={<AddRoom />} />
