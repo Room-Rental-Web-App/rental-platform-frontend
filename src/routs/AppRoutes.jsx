@@ -24,7 +24,6 @@ import PendingRooms from "../pages/admin-page/PendingRooms";
 import PendingOwners from "../pages/admin-page/PendingOwners";
 import PendingUsers from "../pages/admin-page/PendingUsers";
 import AllOwner from "../pages/admin-page/AllOwners";
-import AdminAllRooms from "../pages/admin-page/AllRooms";
 import AllUsers from "../pages/admin-page/AllUsers";
 import AdminDashboard from "../pages/admin-page/AdminDashboard";
 import OwnerUsersPage from "../pages/room-owner-page/OwnerUsersPage";
@@ -36,7 +35,6 @@ import Wishlist from "../pages/user-page/Wishlist";
 import Contact from "../pages/commen-pages/Contact"
 {/* Public */ }
 const PublicRoutes = [
-  <Route path="*" element={<Navigate to="/home" />} />,
   <Route path="/login" element={<Auth />} />,
   <Route path="/verify-otp" element={<OtpVerify />} />,
   <Route path="/forgot-password" element={<ForgotPassword />} />,
@@ -80,7 +78,7 @@ const RoomOwnerRoutes = [
 const AdminRoutes = [
   <Route path="/admin/dashboard" element={<AdminDashboard />} />,
   <Route path="/admin/all-users" element={<AllUsers />} />,
-  <Route path="/admin/all-rooms" element={<AdminAllRooms />} />,
+  <Route path="/admin/search" element={<SearchRoom />} />,
   <Route path="/admin/all-owners" element={<AllOwner />} />,
   <Route path="/admin/pending-users" element={<PendingUsers />} />,
   <Route path="/admin/pending-approvals" element={<PendingOwners />} />,

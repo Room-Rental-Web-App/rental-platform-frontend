@@ -13,8 +13,8 @@ import {
   BarChart3,
   AlertCircle,
 } from "lucide-react";
-import ThemeToggle from "../../components/ThemeToggle"
-import "../../CSS/AdminSidebar.css";
+import ThemeToggle from "../components/ThemeToggle";
+import "../css/AdminSidebar.css";
 
 const AdminSidebar = () => {
 
@@ -47,7 +47,7 @@ const AdminSidebar = () => {
         </NavLink>
 
         <NavLink
-          to="/admin/all-rooms"
+          to="/admin/search"
           className={({ isActive }) => (isActive ? "active-link" : "")}
         >
           <Building2 size={20} /> All Rooms

@@ -34,7 +34,7 @@ export default function Auth() {
     localStorage.setItem("phone", data.phone);
     console.log("Logged in user data:", data);
 
-    data.role === "ROLE_ADMIN" ? nav("/admin/all-users") : nav("/home");
+    nav("/")
 
     window.location.reload();
   };

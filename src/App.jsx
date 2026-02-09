@@ -18,8 +18,8 @@ function App() {
       <WishlistProvider>
         <Routes>
           <Route element={<Layout />}>
-            {PublicRoutes}
             {FooterRoutes}
+            {PublicRoutes}
             {role === "ROLE_USER" && UserRoutes}
             {role === "ROLE_OWNER" && RoomOwnerRoutes}
             {role === "ROLE_ADMIN" && AdminRoutes}
