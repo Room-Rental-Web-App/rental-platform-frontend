@@ -14,6 +14,7 @@ function RoomDetailPage() {
   const [mainImage, setMainImage] = useState("");
   const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem("userId") || null;
+  const role = localStorage.getItem("role") || null;
   const [reportType, setReportType] = useState("ROOM_OWNER");
 
   useEffect(() => {
@@ -176,42 +177,47 @@ function RoomDetailPage() {
         </div>
 
         {/* BOTTOM RIGHT: REPORT BOX */}
-        <div className="bottom-right">
-          <div className="report-box">
-            <h3>🚩 Report Property</h3>
-            <p className="report-subtext">
-              Is there something wrong with this listing? Please let us know.
-            </p>
 
-            <div className="report-controls">
-              <select
-                value={reportType}
-                onChange={(e) => setReportType(e.target.value)}
-              >
-                <option value="ROOM">Report Inaccurate Details</option>
-                <option value="ROOM_OWNER">Report Suspicious Owner</option>
-              </select>
+        {role !== "ROLE_ADMIN" && (
 
-              {reportType === "ROOM" ? (
-                <CreateReport
-                  reporterId={userId}
-                  reportType="ROOM"
-                  targetId={room.id}
-                />
-              ) : roomOwner ? (
-                <CreateReport
-                  reporterId={userId}
-                  reportType="ROOM_OWNER"
-                  targetId={roomOwner.id}
-                />
-              ) : (
-                <p className="error-text">
-                  Reporting unavailable: Owner details not verified.
-                </p>
-              )}
+          <div className="bottom-right">
+            <div className="report-box">
+              <h3>🚩 Report Property</h3>
+              <p className="report-subtext">
+                Is there something wrong with this listing? Please let us know.
+              </p>
+
+              <div className="report-controls">
+                <select
+                  value={reportType}
+                  onChange={(e) => setReportType(e.target.value)}
+                >
+                  <option value="ROOM">Report Inaccurate Details</option>
+                  <option value="ROOM_OWNER">Report Suspicious Owner</option>
+                </select>
+
+                {reportType === "ROOM" ? (
+                  <CreateReport
+                    reporterId={userId}
+                    reportType="ROOM"
+                    targetId={room.id}
+                  />
+                ) : roomOwner ? (
+                  <CreateReport
+                    reporterId={userId}
+                    reportType="ROOM_OWNER"
+                    targetId={roomOwner.id}
+                  />
+                ) : (
+                  <p className="error-text">
+                    Reporting unavailable: Owner details not verified.
+                  </p>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+
+        )}
       </div>
 
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
-import AdminSidebar from "./AdminSidebar"; // Corrected Sidebar Import
 import { Check, X, ExternalLink, Loader2, Clock } from "lucide-react";
 import "../../CSS/PendingOwners.css";
 

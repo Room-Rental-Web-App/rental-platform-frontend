@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
-import AdminSidebar from "./AdminSidebar";
 import { Trash2, User } from "lucide-react";
 import "../../css/adminCommon.css";
 const AllUsers = () => {

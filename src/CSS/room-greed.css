@@ -1,0 +1,181 @@
+/* ===== COMMON RESET ===== */
+.rooms-grid,
+.admin-rooms-grid {
+  display: grid;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* ================= USER ROOMS GRID ================= */
+
+.rooms-grid {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+.room-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.room-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+.room-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 14px;
+}
+
+.card-content h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #222;
+}
+
+.card-content p {
+  font-size: 13px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.price-type-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.price {
+  font-weight: 700;
+  color: #0d6efd;
+}
+
+.room-type-tag {
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.view-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  margin-top: 10px;
+  color: #0d6efd;
+}
+
+/* Empty state */
+.no-rooms {
+  text-align: center;
+  padding: 40px;
+  color: #777;
+  font-size: 15px;
+}
+
+/* ================= ADMIN ROOMS GRID ================= */
+
+.admin-rooms-grid {
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+.admin-room-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease;
+}
+
+.admin-room-card:hover {
+  transform: translateY(-4px);
+}
+
+.admin-room-card img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.admin-room-card .details {
+  padding: 14px;
+}
+
+.admin-room-card h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.admin-room-card p {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+/* Status badge */
+.status {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.status.approved {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status.pending {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Delete button */
+.del-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ef4444;
+  border: none;
+  color: white;
+  padding: 6px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.del-btn:hover {
+  background: #dc2626;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 600px) {
+  .room-card img,
+  .admin-room-card img {
+    height: 150px;
+  }
+}
