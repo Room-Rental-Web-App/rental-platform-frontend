@@ -111,7 +111,7 @@ const MyListings = () => {
 
       <div className="listings-grid">
         {rooms.map((room) => (
-          <div
+          <div 
             key={room.id}
             className={`listing-card ${(room.isAvailable ?? true) === false ? "booked-opacity" : ""}`}
           >

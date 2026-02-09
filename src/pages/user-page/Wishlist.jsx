@@ -3,10 +3,12 @@ import Api from "../../api/Api";
 import "../../css/wishlist.css";
 // IMPORT: Added the hook to talk to the Navbar
 import { useWishlist } from "../../context/WishlistContext";
+import { useNavigate } from "react-router-dom";
 
 function Wishlist() {
   const email = localStorage.getItem("email");
   const [items, setItems] = useState([]);
+  const navTo = useNavigate();
 
   // HOOK: Get the fetchCount function from Context
   const { fetchCount } = useWishlist();
@@ -39,7 +41,7 @@ function Wishlist() {
 
       <div className="wishlist-grid">
         {items.map((item) => (
-          <div key={item.id} className="wishlist-card">
+          <div key={item.id} className="wishlist-card" onClick={()=>navTo(`/room/${item.id}`)}>
             {/* Added fallback image check */}
             <img
               src={
