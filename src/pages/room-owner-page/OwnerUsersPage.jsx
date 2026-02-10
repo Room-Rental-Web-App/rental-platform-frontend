@@ -90,15 +90,8 @@ export default function OwnerUsersPage() {
                             </button>
                         ) : (
                             <>
-                                <CreateReport
-                                    reporterId={currentUser.id}
-                                    reportType="USER"
-                                    targetId={user.id}
-                                />
-                                <button
-                                    className="cancel-btn"
-                                    onClick={() => setReportUserId(null)}
-                                >
+                                <CreateReport reporterId={currentUser.id} reportType="USER" targetId={user.id} />
+                                <button className="cancel-btn" onClick={() => setReportUserId(null)}>
                                     Cancel
                                 </button>
                             </>
