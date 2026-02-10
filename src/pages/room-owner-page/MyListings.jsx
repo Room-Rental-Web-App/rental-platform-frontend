@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Featured from "../../components/FeaturedRoom.jsx"
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
 import {
   Edit,
