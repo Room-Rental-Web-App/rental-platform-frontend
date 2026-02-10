@@ -6,7 +6,7 @@ import {
   FooterRoutes,
   UserRoutes,
   RoomOwnerRoutes
-} from "./routs/AppRoutes";
+} from "./routes/AppRoutes";
 import Layout from "./layout/Layouts";
 
 function App() {
