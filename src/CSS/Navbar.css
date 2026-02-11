@@ -36,6 +36,9 @@
 }
 
 /* Dark theme */
+.light-logo {
+  filter: brightness(1) contrast(1) saturate(1);
+}
 .dark-logo {
   filter: brightness(1.5) contrast(1.2) saturate(1.5);
 }
