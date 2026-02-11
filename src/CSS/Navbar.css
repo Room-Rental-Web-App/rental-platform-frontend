@@ -1,142 +1,247 @@
-/* ===== NAVBAR ROOT ===== */
+.nav-container {}
+
+/* =========================
+   NAVBAR SHELL
+========================= */
 .navbar {
+  position: sticky;
+  top: 14px;
+  z-index: 1000;
+
+  height: 64px;
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 22px;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 72px;
-  padding: 0 24px;
 
-  background-color: var(--bg-primary);
-  border-bottom: 1px solid var(--border-primary);
-  box-shadow: var(--shadow-sm);
+  background: var(--bg-primary);
+  border-radius: 999px;
+  box-shadow: var(--shadow-md);
 }
 
-/* ===== LEFT ===== */
-.nav-left {
-  flex: 1;
-}
-
+/* =========================
+   LOGO
+========================= */
 .navbar-logo {
-  height: 35px;
-  object-fit: contain;
+  height: 34px;
+  display: block;
 }
 
-/* ===== CENTER ===== */
-.nav-center {
-  flex: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 28px;
+.navbar-logo:hover{
+  scale: 1.05;
+  transition: all .2s ease-in-out;
 }
 
+/* Dark theme */
+.dark-logo {
+  filter: brightness(1.5) contrast(1.2) saturate(1.5);
+}
+
+
+/* =========================
+   SHARED NAV LINKS
+========================= */
 .nav-link {
-  position: relative;
   text-decoration: none;
-  font-size: 15px;
-  font-weight: 500;
   color: var(--text-primary);
-  transition: color 0.2s ease;
+  font-weight: 500;
+  font-size: 15px;
+  position: relative;
+  white-space: nowrap;
 }
 
 .nav-link:hover {
   color: var(--primary);
 }
 
-/* ===== WISHLIST BADGE ===== */
+/* wishlist badge */
 .wishlist-badge {
   margin-left: 6px;
-  background-color: var(--primary);
-  color: var(--text-inverse);
+  background: var(--primary);
+  color: #fff;
   font-size: 11px;
   padding: 2px 6px;
-  border-radius: 12px;
-  font-weight: 600;
+  border-radius: 999px;
 }
 
-/* ===== RIGHT ===== */
-.nav-right {
-  flex: 1;
+/* =========================
+   DESKTOP NAV
+========================= */
+.desktop-nav {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-  gap: 16px;
+  gap: 28px;
 }
 
-/* ===== SETTINGS DROPDOWN ===== */
+/* =========================
+   RIGHT AREA
+========================= */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* =========================
+   HAMBURGER
+========================= */
+.hamburger {
+  display: none !important;
+}
+
+/* =========================
+   SETTINGS MENU
+========================= */
 .settings-menu {
   position: relative;
 }
 
 .settings-btn {
-  background: transparent;
-  border: none;
+  border-radius: 999px;
+  padding: 6px 10px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-secondary);
   cursor: pointer;
+
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+
   color: var(--text-primary);
+  /* 🔥 THIS WAS MISSING */
 }
 
-.settings-btn:hover {
-  color: var(--primary);
-}
 
-/* ===== DROPDOWN ===== */
 .dropdown-menu {
   position: absolute;
+  top: 56px;
   right: 0;
-  top: 48px;
 
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-primary);
-  border-radius: 8px;
-  box-shadow: var(--shadow-md);
+  width: 210px;
+  background: var(--bg-primary);
+  border-radius: 14px;
+  box-shadow: var(--shadow-lg);
 
-  min-width: 180px;
-  padding: 10px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
 .dropdown-menu a,
 .dropdown-menu button {
+  padding: 12px 16px;
   display: flex;
+  gap: 10px;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
+
   background: none;
   border: none;
   cursor: pointer;
   color: var(--text-primary);
-  text-decoration: none;
 }
 
 .dropdown-menu a:hover,
 .dropdown-menu button:hover {
-  color: var(--primary);
+  background: var(--bg-secondary);
 }
 
-/* ===== LOGOUT ===== */
-.logout-btn {
-  color: var(--error);
+/* =========================
+   MOBILE DRAWER
+========================= */
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+
+  width: 400px ;
+  max-width: 70vw;
+  height: 100vh;
+
+  background: var(--bg-primary);
+  padding: 20px;
+
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+
+  z-index: 1200;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.logout-btn:hover {
-  opacity: 0.85;
+/* MOBILE NAV ICON SIZE */
+.mobile-drawer .nav-link svg {
+  width: 25px;
+  height: 25px;
+  min-width: 25px;
 }
 
-/* ===== LOGIN LINK ===== */
-.login-link {
+.mobile-drawer.open {
+  border-radius: 10px 0% 0% 10px;
+  transform: translateX(0);
+}
+
+/* drawer header */
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.drawer-logo {
+  height: 40px;
+  margin: auto;
+}
+
+/* MOBILE NAV LINKS — BIGGER TEXT */
+.mobile-drawer .nav-link {
+  width: 100%;
+  padding: 14px 10px;
+
+  font-size: 18px;
+  /* ⬆️ text size */
+  font-weight: 600;
+  /* slightly bolder */
+
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-weight: 500;
-  color: var(--text-primary);
-  text-decoration: none;
+  gap: 14px;
+  /* space between icon & text */
+
+  border-radius: 10px;
 }
 
-.login-link:hover {
-  color: var(--primary);
+
+.mobile-drawer .nav-link:hover {
+  background: var(--bg-secondary);
+}
+
+/* =========================
+   BACKDROP
+========================= */
+.nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  z-index: 1100;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 1100px) {
+  .desktop-nav {
+    display: none;
+  }
+
+  .hamburger {
+    display: block !important;
+    z-index: 1300;
+  }
 }
