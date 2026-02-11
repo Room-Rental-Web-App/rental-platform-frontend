@@ -6,9 +6,11 @@ import Reviews from "../../components/Reviews";
 import CreateReport from "../../components/CreateReport";
 
 import NotifiedWhenAvailable from "../../components/NotifiedWhenAvailable";
+import usePremiumStatus from "../../customHook/usePremiumStatus";
 
 function RoomDetailPage() {
   const { roomId } = useParams();
+  const { isPremiumUser } = usePremiumStatus();
   const [room, setRoom] = useState(null);
   const [roomOwner, setRoomOwner] = useState();
   const [mainImage, setMainImage] = useState("");
@@ -16,7 +18,6 @@ function RoomDetailPage() {
   const userId = localStorage.getItem("userId") || null;
   const role = localStorage.getItem("role") || null;
   const [reportType, setReportType] = useState("ROOM_OWNER");
-
   useEffect(() => {
     // 1. Fetch Room Details
     Api.get(`/rooms/roomDetails/${roomId}`)
@@ -135,13 +136,39 @@ function RoomDetailPage() {
               </div>
             </div>
 
+            <div className="room-address-section">
+              {isPremiumUser ? (
+                <div>
+                  <strong>Full Address:</strong> {room.address}
+                </div>
+              ) : (
+                <div>
+                  <h3>Address:</h3> {room.address.split(" ")[0]}…
+                  <span className="upgrade-hint">
+                    (Upgrade to view full address)
+                  </span>
+                </div>
+              )}
+            </div>
+
             {/* OWNER CARD */}
-            {roomOwner ? (
+            {!isPremiumUser && (
+              <div className="owner-locked-card">
+                <div className="lock-icon">🔒</div>
+                <p className="locked-title">Owner Contact Locked</p>
+                <p className="locked-desc">
+                  Upgrade to Premium to contact the property owner directly.
+                </p>
+                <button className="upgrade-btn">Upgrade Now</button>
+              </div>
+            )}
+            {isPremiumUser && (
               <div className="owner-side-card">
                 <div className="owner-header">
                   <div className="owner-avatar-small">
                     {roomOwner.email?.charAt(0).toUpperCase()}
                   </div>
+
                   <div>
                     <p className="owner-label">Property Owner</p>
                     <p className="owner-name">
@@ -149,6 +176,7 @@ function RoomDetailPage() {
                     </p>
                   </div>
                 </div>
+
                 <a
                   href={`tel:${roomOwner.phone}`}
                   className="call-now-btn"
@@ -157,11 +185,8 @@ function RoomDetailPage() {
                   📞 Contact Owner
                 </a>
               </div>
-            ) : (
-              <div className="owner-error-box">
-                Owner information is currently being verified.
-              </div>
-            )}
+            
+  )}
 
           </div>
         </div>
