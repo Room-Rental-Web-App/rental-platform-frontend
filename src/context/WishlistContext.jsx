@@ -25,6 +25,7 @@ export const WishlistProvider = ({ children }) => {
     }
   };
 
+  
   useEffect(() => {
     fetchCount();
   }, [email]);

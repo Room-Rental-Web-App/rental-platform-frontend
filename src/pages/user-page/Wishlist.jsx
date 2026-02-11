@@ -41,7 +41,7 @@ function Wishlist() {
 
       <div className="wishlist-grid">
         {items.map((item) => (
-          <div key={item.id} className="wishlist-card" onClick={()=>navTo(`/room/${item.id}`)}>
+          <div key={item.id} className="wishlist-card">
             {/* Added fallback image check */}
             <img
               src={
@@ -55,7 +55,7 @@ function Wishlist() {
               <p className="loc">{item.room.city}</p>
               <p className="type">{item.room.roomType}</p>
               <h4>₹{item.room.price}</h4>
-
+              <span className="view-link" onClick={()=>navTo(`/room/${item.id}`)}>view detalils</span>
               <button
                 className="remove-btn"
                 onClick={() => removeFromWishlist(item.room.id)}
