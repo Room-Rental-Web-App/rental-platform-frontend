@@ -8,6 +8,8 @@ export default function useRoomSearch({ mode = "PUBLIC" } = {}) {
     const [loading, setLoading] = useState(false);
     const [userLocation, setUserLocation] = useState(null);
 
+
+
     const [draftFilters, setDraftFilters] = useState({
         city: "",
         pincode: "",
@@ -18,17 +20,11 @@ export default function useRoomSearch({ mode = "PUBLIC" } = {}) {
     });
 
     const [appliedFilters, setAppliedFilters] = useState(draftFilters);
-
-    const endpoint = "/rooms/filter";
-
     const loadRooms = async (pageNo, append) => {
-
-
         if (loading) return;
-
         setLoading(true);
         try {
-            const res = await Api.get(endpoint, {
+            const res = await Api.get("/rooms/filter", {
                 params: {
                     city: appliedFilters.city || null,
                     pincode: appliedFilters.pincode || null,

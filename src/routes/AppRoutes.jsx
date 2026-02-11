@@ -32,7 +32,8 @@ import AddRoom from "../pages/room-owner-page/AddRoom";
 import NotifyRoom from "../pages/user-page/NotifyRoom";
 import Wishlist from "../pages/user-page/Wishlist";
 
-import Contact from "../pages/commen-pages/Contact"
+import Contact from "../pages/commen-pages/Contact" 
+import QuickSearchPage from "../pages/commen-pages/QuickSearchPage";
 {/* Public */ }
 const PublicRoutes = [
   <Route path="/login" element={<Auth />} />,
@@ -42,6 +43,8 @@ const PublicRoutes = [
   <Route path="/home" element={<HomePage />} />,
   <Route path="/search" element={<SearchRoom />} />,
   <Route path="/room/:roomId" element={<RoomDetailPage />} />,
+  <Route path="/quick-search/:searchInput" element={<QuickSearchPage />} />,
+  
   <Route path="/about" element={<About />} />,
   <Route path="/profile" element={<Profile />} />,
   <Route path="/premium" element={<PremiumPage />} />,
