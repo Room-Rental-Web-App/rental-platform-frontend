@@ -18,13 +18,16 @@ import {
   Crown,
   LayoutDashboard,
   PlusCircle,
-  Building2
+  Building2,
 } from "lucide-react";
 import { useWishlist } from "../context/WishlistContext";
+// Hook import kiya status check karne ke liye
+import usePremiumStatus from "../customHook/usePremiumStatus";
 
 import "../css/Navbar.css";
-import logo from "../assets/logo.png"
-const Navbar = ({ isLoggedIn, onLogout }) => {
+import logo from "../assets/logo.png";
+
+const Navbar = ({ isLoggedIn, onLogout, isPremiumUser }) => {
   const { wishlistCount } = useWishlist();
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const navTo = useNavigate();
@@ -32,6 +35,10 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const [role, setRole] = useState(localStorage.getItem("role"));
+
+  // Premium status check
+  const { premium } = usePremiumStatus();
+  const showBadge = premium || isPremiumUser;
 
   const menuRef = useRef(null);
 
@@ -53,7 +60,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
   }, [mobileMenu]);
 
   /* ======================
-     SHARED NAV LINKS
+      SHARED NAV LINKS
   ====================== */
   const NavLinks = ({ onClick, variant = "desktop" }) => {
     const isMobile = variant === "mobile";
@@ -130,7 +137,6 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
               alt="Logo"
               className={`navbar-logo ${theme === "dark" ? "dark-logo" : "light-logo"}`}
             />
-
           </Link>
         </div>
 
@@ -148,20 +154,33 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
             <Menu />
           </button>
           {!isLoggedIn && (
-            <button className="settings-btn" onClick={()=>navTo("/login")}>
+            <button className="settings-btn" onClick={() => navTo("/login")}>
               <User size={18} />
               <span>Login</span>
             </button>
           )}
           {isLoggedIn && (
             <div className="settings-menu" ref={menuRef}>
-              <button
-                className="settings-btn"
-                onClick={() => setOpenMenu(!openMenu)}
-              >
-                <Settings size={18} />
-                {openMenu ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-              </button>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {/* Premium Badge inject kiya */}
+                {showBadge && (
+                  <div className="nav-premium-tag">
+                    <Crown size={12} fill="currentColor" />
+                    <span>PREMIUM</span>
+                  </div>
+                )}
+                <button
+                  className="settings-btn"
+                  onClick={() => setOpenMenu(!openMenu)}
+                >
+                  <Settings size={18} />
+                  {openMenu ? (
+                    <ChevronUp size={14} />
+                  ) : (
+                    <ChevronDown size={14} />
+                  )}
+                </button>
+              </div>
 
               {openMenu && (
                 <div className="dropdown-menu">
@@ -190,10 +209,20 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
       {/* MOBILE DRAWER */}
       <div className={`mobile-drawer ${mobileMenu ? "open" : ""}`}>
         <div className="drawer-header">
-          <img src={logo} alt="Logo" className={`navbar-logo  drawer-logo ${theme === "dark" ? "dark-logo" : "light-logo"}`}
-          />
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <img
+              src={logo}
+              alt="Logo"
+              className={`navbar-logo drawer-logo ${theme === "dark" ? "dark-logo" : "light-logo"}`}
+            />
+            {showBadge && <Crown size={18} color="#FFD700" fill="#FFD700" />}
+          </div>
 
-          <button className="settings-btn" onClick={() => setMobileMenu(false)} aria-label="Close menu">
+          <button
+            className="settings-btn"
+            onClick={() => setMobileMenu(false)}
+            aria-label="Close menu"
+          >
             <X />
           </button>
         </div>
@@ -202,10 +231,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
       </div>
 
       {mobileMenu && (
-        <div
-          className="nav-backdrop"
-          onClick={() => setMobileMenu(false)}
-        />
+        <div className="nav-backdrop" onClick={() => setMobileMenu(false)} />
       )}
     </>
   );

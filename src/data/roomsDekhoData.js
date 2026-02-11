@@ -61,18 +61,58 @@ export const premiumOwnerFeatures = [
   "3–5x more enquiries"
 ];
 
-
-
-export const premiumUserFeatures = [
-  "Only verified owners",
-  "24h early access to new rooms",
-  "Search by your selected location through map",
-  "Direct contact numbers unlocked",
-  "Instant booking request",
-  "Best deal priority",
-  "No broker, no fake listings"
-];
-
+export const premiumPlans = {
+  "7D_OWNER": {
+    name: "Starter Plan",
+    duration: "7 Days",
+    roomLimit: 3,
+    features: [
+      "Top position in search (7 Days)",
+      "Add up to 3 rooms",
+      "Verified owner badge",
+      "Priority direct contact",
+      "Spam protection",
+    ],
+  },
+  "30D_OWNER": {
+    name: "Professional Plan",
+    duration: "30 Days",
+    roomLimit: 6,
+    features: [
+      "Top position in search (30 Days)",
+      "Add up to 6 rooms",
+      "Featured owner badge",
+      "Priority direct contact",
+      "3x more enquiries",
+    ],
+  },
+  "180D_OWNER": {
+    name: "Business Plan",
+    duration: "180 Days",
+    roomLimit: 15,
+    features: [
+      "Top position in search (6 Months)",
+      "Add up to 15 rooms",
+      "Featured owner badge",
+      "Priority direct contact",
+      "5x more enquiries",
+      "Spam / fake lead protection",
+    ],
+  },
+  "365D_OWNER": {
+    name: "Enterprise Plan",
+    duration: "1 Year",
+    roomLimit: 40,
+    features: [
+      "Top position in search (Full Year)",
+      "Add up to 40 rooms",
+      "Verified + Featured badge",
+      "Priority direct contact",
+      "Max visibility & enquiries",
+      "Dedicated support",
+    ],
+  },
+};
 // Keeping your original prices, just adding descriptive labels for the UI
 export const premiumOwnerPlans = [
   { label: "Trial Boost", amount: 99, duration: "7 Days", code: "OWNER_TRIAL", note: "Quick visibility" },
@@ -87,7 +127,14 @@ export const premiumUserPlans = [
   { label: "1 Year Premium", amount: 499, duration: "1 Year", code: "USER_12M", save: "25% Off" }
 ];
 
-
+// Add this at the end of your roomsDekhoData.js
+export const premiumUserFeatures = [
+  "View Unlimited Owner Contacts",
+  "Instant Notifications for New Rooms",
+  "Priority Support 24/7",
+  "Early Access to Hot Deals",
+  "No Advertisements"
+];
 export const ISSUE_LABELS = {
   PAYMENT: "Payment",
   REFUND: "Refund",

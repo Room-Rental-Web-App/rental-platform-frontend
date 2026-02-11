@@ -1,23 +1,56 @@
 import React from "react";
 import "../../css/premium.css";
-import { TrendingUp, Shield, Crown, Home, Lock, Zap } from "lucide-react";
+import {
+  TrendingUp,
+  Shield,
+  Crown,
+  Home,
+  Lock,
+  Zap,
+  CheckCircle,
+} from "lucide-react";
 import RazorPayConfig from "../../components/RazorPayConfig";
 import usePremiumStatus from "../../customHook/usePremiumStatus";
+// Fix: Sirf wahi cheezein mangao jo roomsDekhoData mein export hain
 import {
-  premiumOwnerFeatures,
   premiumOwnerPlans,
+  premiumOwnerFeatures,
 } from "../../data/roomsDekhoData";
 import MyPlans from "../../components/MyPlans";
 
 export default function OwnerPremium() {
-  // 1. Hook se destructing sahi kari (premium, planCode, endDate, refresh)
   const { premium, planCode, endDate, refresh, loading } = usePremiumStatus();
+
+  // Helper function to get room limit based on plan code
+  const getRoomLimit = (code) => {
+    if (code.includes("TRIAL")) return 3;
+    if (code.includes("1M")) return 6;
+    if (code.includes("6M")) return 15;
+    if (code.includes("12M")) return 40;
+    return 2; // Default for free
+  };
+
+  // Helper function to get dynamic features
+  const getPlanFeatures = (plan) => {
+    const limit = getRoomLimit(plan.code);
+    return [
+      `Add up to ${limit} Room Listings`,
+      "Top position in search results",
+      plan.code.includes("6M") || plan.code.includes("12M")
+        ? "Featured owner badge"
+        : "Verified owner badge",
+      "Priority direct contact from tenants",
+      "Spam / fake lead protection",
+      plan.code.includes("12M")
+        ? "Dedicated relationship manager"
+        : "3–5x more enquiries",
+    ];
+  };
 
   if (loading) return <div className="loader">Verifying your status...</div>;
 
   return (
     <div className="premium-container owner-premium">
-      {/* 2. Banner Logic Fixed */}
       {premium && (
         <div className="premium-active-banner">
           <Crown size={18} />
@@ -28,7 +61,6 @@ export default function OwnerPremium() {
 
       <MyPlans />
 
-      {/* COMPARISON TABLE */}
       <div className="compare-table">
         <h2>Free vs Premium Owner</h2>
         <table>
@@ -43,7 +75,7 @@ export default function OwnerPremium() {
             <tr>
               <td>Rooms Allowed</td>
               <td>2 Rooms Only</td>
-              <td className="premium-col">Unlimited Rooms</td>
+              <td className="premium-col">Up to 40 Rooms (Based on Plan)</td>
             </tr>
             <tr>
               <td>Search Ranking</td>
@@ -60,11 +92,6 @@ export default function OwnerPremium() {
               <td>Not Available</td>
               <td className="premium-col">Yes</td>
             </tr>
-            <tr>
-              <td>Booking Requests</td>
-              <td>Spam Calls</td>
-              <td className="premium-col">Serious Tenants Only</td>
-            </tr>
           </tbody>
         </table>
       </div>
@@ -74,7 +101,6 @@ export default function OwnerPremium() {
         Free listings get buried. Premium rooms get booked.
       </p>
 
-      {/* 3. Blocked box logic: Hide if already premium */}
       {!premium && (
         <div className="blocked-box owner-block">
           <Lock size={20} />
@@ -82,29 +108,18 @@ export default function OwnerPremium() {
         </div>
       )}
 
-      {/* FEATURE GRID */}
-      <div className="premium-grid">
-        {premiumOwnerFeatures.map((f, i) => (
-          <div key={i} className="premium-card highlight">
-            <Crown /> <h3>{f}</h3>
-            <p>Premium feature benefit</p>
-          </div>
-        ))}
-      </div>
-
-      {/* PLANS */}
       <div className="pricing-dual owner-price">
         {premiumOwnerPlans.map((plan) => {
-          // 4. Checking current plan correctly
           const isCurrent = planCode === plan.code;
+          const currentLimit = getRoomLimit(plan.code);
+          const features = getPlanFeatures(plan);
+
           const hierarchy = [
             "OWNER_TRIAL",
             "OWNER_1M",
             "OWNER_6M",
             "OWNER_12M",
           ];
-
-          // Disable lower plans logic
           const disable =
             premium &&
             hierarchy.indexOf(plan.code) < hierarchy.indexOf(planCode);
@@ -120,17 +135,21 @@ export default function OwnerPremium() {
               )}
 
               <h2>{plan.label}</h2>
+              <div className="limit-badge-card">
+                Allows {currentLimit} Rooms
+              </div>
               <p className="price">
                 ₹{plan.amount} <span>/ {plan.duration}</span>
               </p>
 
-              <ul>
-                {premiumOwnerFeatures.map((f) => (
-                  <li key={f}>{f}</li>
+              <ul className="plan-feature-list">
+                {features.map((f, index) => (
+                  <li key={index}>
+                    <CheckCircle size={14} className="check-icon" /> {f}
+                  </li>
                 ))}
               </ul>
 
-              {/* 5. ADDED onSuccess={refresh} trigger */}
               <RazorPayConfig
                 amountToPay={plan.amount}
                 planCode={plan.code}
