@@ -36,6 +36,8 @@ import Contact from "../pages/commen-pages/Contact"
 import QuickSearchPage from "../pages/commen-pages/QuickSearchPage";
 {/* Public */ }
 const PublicRoutes = [
+  <Route path="/" element={<HomePage />} />,
+  <Route path="/auth" element={<Auth />} />, // Yahan /login ko /auth kar de
   <Route path="/login" element={<Auth />} />,
   <Route path="/verify-otp" element={<OtpVerify />} />,
   <Route path="/forgot-password" element={<ForgotPassword />} />,
@@ -44,7 +46,7 @@ const PublicRoutes = [
   <Route path="/search" element={<SearchRoom />} />,
   <Route path="/room/:roomId" element={<RoomDetailPage />} />,
   <Route path="/quick-search/:searchInput" element={<QuickSearchPage />} />,
-  
+
   <Route path="/about" element={<About />} />,
   <Route path="/profile" element={<Profile />} />,
   <Route path="/premium" element={<PremiumPage />} />,

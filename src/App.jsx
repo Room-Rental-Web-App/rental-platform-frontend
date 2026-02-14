@@ -18,6 +18,7 @@ function App() {
       <WishlistProvider>
         <Routes>
           <Route element={<Layout />}>
+          
             {FooterRoutes}
             {PublicRoutes}
             {role === "ROLE_USER" && UserRoutes}

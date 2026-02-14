@@ -1,250 +1,169 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
+import React from "react";
+import "../../css/premium.css";
 import {
-  Edit,
-  Trash2,
-  X,
-  MapPin,
-  IndianRupee,
-  Users,
+  TrendingUp,
+  Shield,
+  Crown,
+  Lock,
+  Zap,
   CheckCircle,
-  Clock,
-  AlertCircle,
-  RotateCcw,
-  BookCheck,
+  Info,
 } from "lucide-react";
-import "../../CSS/MyListings.css";
+import RazorPayConfig from "../../components/RazorPayConfig";
+import usePremiumStatus from "../../customHook/usePremiumStatus";
+import { premiumOwnerPlans } from "../../data/roomsDekhoData";
+import MyPlans from "../../components/MyPlans";
 
-const MyListings = () => {
-  const [rooms, setRooms] = useState([]);
-  const [editingRoom, setEditingRoom] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+export default function OwnerPremium() {
+  const { premium, planCode, endDate, refresh, loading } = usePremiumStatus();
 
-  useEffect(() => {
-    fetchRooms();
-  }, []);
-
-  const fetchRooms = async () => {
-    try {
-      const res = await axios.get(API_ENDPOINTS.MY_LISTINGS, {
-        params: { email: localStorage.getItem("email") },
-        headers: getAuthHeaders(),
-      });
-      setRooms(res.data);
-    } catch (err) {
-      console.error("Fetch Error:", err);
-    }
+  const getRoomLimit = (code) => {
+    if (code.includes("TRIAL")) return 3;
+    if (code.includes("1M")) return 6;
+    if (code.includes("6M")) return 15;
+    if (code.includes("12M")) return 40;
+    return 2;
   };
 
-  const handleToggleStatus = async (room) => {
-    const currentStatus = room.isAvailable ?? true;
-    const newStatus = !currentStatus;
-
-    const confirmMsg = newStatus
-      ? "Are you sure you want to RE-LIST this property? It will be visible in search results again."
-      : "Are you sure you want to mark this property as BOOKED? It will be hidden from search results.";
-
-    if (!window.confirm(confirmMsg)) return;
-
-    try {
-      const res = await axios.put(
-        API_ENDPOINTS.UPDATE_ROOM_Availability(room.id, newStatus),
-        {
-          headers: getAuthHeaders(),
-        },
-      );
-      setRooms(rooms.map((r) => (r.id === room.id ? res.data : r)));
-      alert(
-        newStatus
-          ? "Property is now LIVE! ✅"
-          : "Property successfully marked as BOOKED! 🏠",
-      );
-    } catch (err) {
-      alert("Failed to update property status. Please try again.");
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (
-      !window.confirm(
-        "Are you sure you want to PERMANENTLY delete this listing? This action cannot be undone.",
-      )
-    )
-      return;
-    try {
-      await axios.delete(API_ENDPOINTS.DELETE_ROOM(id), {
-        params: { email: localStorage.getItem("email") },
-        headers: getAuthHeaders(),
-      });
-      setRooms(rooms.filter((r) => r.id !== id));
-      alert("Listing deleted successfully.");
-    } catch (err) {
-      alert("Deletion failed. Please contact support if the issue persists.");
-    }
-  };
-
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.put(
-        API_ENDPOINTS.UPDATE_ROOM(editingRoom.id),
-        editingRoom,
-        {
-          params: { email: localStorage.getItem("email") },
-          headers: getAuthHeaders(),
-        },
-      );
-      setRooms(rooms.map((r) => (r.id === editingRoom.id ? res.data : r)));
-      setIsModalOpen(false);
-      alert("Property details updated successfully!");
-    } catch (err) {
-      alert("Update failed. Please check the input data.");
-    }
-  };
+  if (loading)
+    return (
+      <div className="loader-full">
+        <div className="spinner"></div>
+        <p>Verifying Status...</p>
+      </div>
+    );
 
   return (
-    <div className="my-listings-container">
-      <div className="my-listings-header">
-        <h2>Your Properties</h2>
-      </div>
-
-      <div className="listings-grid">
-        {rooms.map((room) => (
-          <div 
-            key={room.id}
-            className={`listing-card ${(room.isAvailable ?? true) === false ? "booked-opacity" : ""}`}
-          >
-            {/* Status Badges Overlay */}
-            <div className="badge-container">
-              {!(room.isApprovedByAdmin ?? false) ? (
-                <span className="badge pending">
-                  <Clock size={12} /> Under Review
+    <div className="premium-page-wrapper">
+      {" "}
+      {/* New Wrapper for Centering */}
+      <div className="premium-content-center fade-in">
+        {/* 1. Visibility Meter */}
+        <div className="visibility-meter-box">
+          <div className="meter-header">
+            <div className="flex-center">
+              <TrendingUp
+                size={22}
+                className={premium ? "text-success" : "text-error"}
+              />
+              <h3>
+                Visibility Status:{" "}
+                <span className={premium ? "text-success" : "text-error"}>
+                  {premium ? "High" : "Low"}
                 </span>
-              ) : (room.isAvailable ?? true) ? (
-                <span className="badge available">
-                  <CheckCircle size={12} /> Live & Available
-                </span>
-              ) : (
-                <span className="badge booked">
-                  <AlertCircle size={12} /> Occupied / Booked
-                </span>
-              )}
-            </div>
-
-            <img
-              src={room.imageUrls?.[0] || "https://placehold.co/300x200"}
-              alt="Property"
-            />
-
-            <div className="card-info">
-              <h3>{room.title}</h3>
-
-              <div className="price-location">
-                <p>
-                  <IndianRupee size={14} /> <strong>{room.price}</strong>/month
-                </p>
-                <p>
-                  <MapPin size={14} /> {room.city}
-                </p>
-              </div>
-
-              {/* Interest Metrics */}
-              <div className="interest-bar">
-                <Users size={14} />
-                <span>{room.contactViewCount ?? 0} Inquiries received</span>
-              </div>
-
-              <div className="actions">
-                <button
-                  onClick={() => {
-                    setEditingRoom(room);
-                    setIsModalOpen(true);
-                  }}
-                  className="edit-btn"
-                  disabled={!(room.isAvailable ?? true)}
-                  title={
-                    !(room.isAvailable ?? true)
-                      ? "Re-list the property to edit details"
-                      : "Edit Property"
-                  }
-                >
-                  <Edit size={16} /> Edit
-                </button>
-
-                {/* Status Toggle Button */}
-                <button onClick={() => handleToggleStatus(room)} className={ (room.isAvailable ?? true)? "status-btn-mark-booked": "status-btn-mark-available"}>
-                  {(room.isAvailable ?? true) ? (<><BookCheck size={16} /> Mark Booked</>) : (<><RotateCcw size={16} /> Re-list</>)}
-                </button>
-
-                <button
-                  onClick={() => handleDelete(room.id)}
-                  className="delete-btn"
-                  title="Delete Listing"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
+              </h3>
             </div>
           </div>
-        ))}
-      </div>
+          <div className="meter-bar-bg">
+            <div
+              className="meter-bar-fill"
+              style={{ width: premium ? "95%" : "15%" }}
+            ></div>
+          </div>
+          <p className="meter-text">
+            {premium
+              ? "Your listings are ranking at the top!"
+              : "Free listings are buried. You're missing out on 90% of tenant calls."}
+          </p>
+        </div>
 
-      {/* Edit Modal */}
-      {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h3>Update Property Details</h3>
-              <X
-                onClick={() => setIsModalOpen(false)}
-                style={{ cursor: "pointer" }}
-              />
-            </div>
-            <form onSubmit={handleUpdate}>
-              <div className="form-group">
-                <label>Property Title</label>
-                <input
-                  value={editingRoom.title}
-                  onChange={(e) =>
-                    setEditingRoom({ ...editingRoom, title: e.target.value })
-                  }
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>Monthly Rent (₹)</label>
-                <input
-                  type="number"
-                  value={editingRoom.price}
-                  onChange={(e) =>
-                    setEditingRoom({ ...editingRoom, price: e.target.value })
-                  }
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>Description</label>
-                <textarea
-                  value={editingRoom.description}
-                  onChange={(e) =>
-                    setEditingRoom({
-                      ...editingRoom,
-                      description: e.target.value,
-                    })
-                  }
-                  required
-                />
-              </div>
-              <button type="submit" className="save-btn">
-                Confirm Changes
-              </button>
-            </form>
+        {premium && (
+          <div className="premium-active-banner">
+            <Crown size={20} />
+            <span>
+              Active Premium Owner until{" "}
+              <b>{new Date(endDate).toDateString()}</b>
+            </span>
+          </div>
+        )}
+
+        <MyPlans />
+
+        <div className="header-text-group text-center">
+          <h1 className="main-title">Get More Calls, Rent Faster</h1>
+          <p className="sub-text">
+            Choose a plan that fits your property management needs.
+          </p>
+        </div>
+
+        {/* 2. Comparison Checklist */}
+        <div className="comparison-grid">
+          <div className="comp-card">
+            <h4>Free</h4>
+            <ul>
+              <li>
+                <Lock size={14} /> 2 Listings
+              </li>
+              <li>
+                <Lock size={14} /> Basic Ranking
+              </li>
+            </ul>
+          </div>
+          <div className="comp-card highlight">
+            <h4>Premium</h4>
+            <ul>
+              <li>
+                <CheckCircle size={14} /> Up to 40 Listings
+              </li>
+              <li>
+                <CheckCircle size={14} /> Top Ranking
+              </li>
+            </ul>
           </div>
         </div>
-      )}
+
+        {/* 3. Pricing Grid */}
+        <div className="pricing-dual">
+          {premiumOwnerPlans.map((plan) => {
+            const isCurrent = planCode === plan.code;
+            const isPopular = plan.code === "OWNER_1M";
+            const hierarchy = [
+              "OWNER_TRIAL",
+              "OWNER_1M",
+              "OWNER_6M",
+              "OWNER_12M",
+            ];
+            const isLower =
+              premium &&
+              hierarchy.indexOf(plan.code) < hierarchy.indexOf(planCode);
+
+            return (
+              <div
+                key={plan.code}
+                className={`pricing-box ${isCurrent ? "current" : ""} ${isPopular ? "popular" : ""} ${isLower ? "lower" : ""}`}
+              >
+                {isPopular && <div className="popular-tag">BEST VALUE</div>}
+                <h2>{plan.label}</h2>
+                <div className="limit-pill">
+                  Up to {getRoomLimit(plan.code)} Rooms
+                </div>
+                <div className="price-tag">
+                  ₹{plan.amount} <span>/ {plan.duration}</span>
+                </div>
+
+                <ul className="plan-list">
+                  <li>
+                    <Zap size={14} className="zap" /> Top Position Rank
+                  </li>
+                  <li>
+                    <Zap size={14} className="zap" /> Direct Inquiries
+                  </li>
+                </ul>
+
+                <RazorPayConfig
+                  amountToPay={plan.amount}
+                  planCode={plan.code}
+                  onSuccess={refresh}
+                  value={
+                    isCurrent ? "Extend" : premium ? "Upgrade" : "Select Plan"
+                  }
+                  disabled={isLower}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
-};
-
-export default MyListings;
+}
