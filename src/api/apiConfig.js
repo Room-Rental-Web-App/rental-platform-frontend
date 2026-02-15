@@ -1,7 +1,6 @@
-// src/apiConfig.js
-
-const isLocal = window.location.hostname === "localhost"; 
-const BASE_URL = isLocal ? "http://localhost:8080/api" : "https://rental-platform-backend-esyq.onrender.com/api";
+ 
+import {API_BASE} from "../data/env"
+const BASE_URL =  API_BASE ;
 
 export const API_ENDPOINTS = {
   // Auth Endpoints

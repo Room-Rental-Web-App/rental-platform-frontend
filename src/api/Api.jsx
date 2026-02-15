@@ -1,11 +1,8 @@
 import axios from "axios";
 
-const isLocal = window.location.hostname === "localhost";
-
+import {API_BASE} from "../data/env"
 const Api = axios.create({
-    baseURL: isLocal
-        ? "http://localhost:8080/api"
-        : "https://rental-platform-backend-esyq.onrender.com/api"
+    baseURL: API_BASE
 });
 
 
