@@ -49,8 +49,7 @@ function RazorPayConfig({ amountToPay, value, planCode, onSuccess }) {
             if (verifyRes.status === 200) {
               alert("Congratulations! Payment Successful.");
 
-              // window.location.reload() KO HATA DIYA HAI ❌
-              // Ab hum hook wala refresh call karenge ✅
+              
               if (onSuccess) {
                 onSuccess();
               }

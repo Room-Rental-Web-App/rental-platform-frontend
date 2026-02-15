@@ -1,93 +1,125 @@
-/* Container & Header */
+/* ==========================================================================
+   GLOBAL THEME & VARIABLES
+   ========================================================================== */
+:root {
+  --primary: #e99e34;
+  --primary-hover: #d18b28;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-inverse: #ffffff;
+  --border-primary: #e2e8f0;
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+  --error: #ef4444;
+  --success: #10b981;
+  --warning: #f59e0b;
+}
+
+/* --- Global Animations --- */
+.fade-in { animation: fadeIn 0.4s ease-in-out; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.spinner { animation: rotate 1s linear infinite; }
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   MY LISTINGS PAGE STYLES (COMPACT VERSION)
+   ========================================================================== */
 .my-listings-container {
-  padding: 20px;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 30px auto;
+  padding: 0 20px;
 }
 
-.my-listings-header h2 {
-  color: #1f2937;
-  margin-bottom: 20px;
-  font-size: 1.8rem;
-  border-left: 5px solid #4f46e5;
-  padding-left: 15px;
+.my-listings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
 }
 
-/* Grid System */
+.my-listings-header h2 { font-size: 1.5rem; color: var(--text-primary); }
+
+.add-new-btn {
+  background: var(--primary);
+  color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* --- Listings Grid --- */
 .listings-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 25px;
+  /* Card width kam ki taaki line mein zyada aayein */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
 }
 
-/* Card Styling */
 .listing-card {
+  position: relative;
   background: white;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  position: relative;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-primary);
+  box-shadow: var(--shadow-sm);
+  transition: 0.3s ease;
 }
 
-.listing-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-}
+.listing-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.08); }
 
-/* Status Badges Overlay */
+/* --- Compact Badge System --- */
 .badge-container {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
 }
 
 .badge {
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  gap: 4px;
+  backdrop-filter: blur(4px);
 }
 
-.badge.available { background-color: #10b981; } /* Green */
-.badge.pending { background-color: #f59e0b; }   /* Orange */
-.badge.booked { background-color: #ef4444; }    /* Red */
+.badge.available { background: rgba(16, 185, 129, 0.95); color: white; }
+.badge.pending { background: rgba(245, 158, 11, 0.95); color: white; }
+.badge.booked { background: rgba(30, 41, 59, 0.85); color: white; }
 
-/* Booked Opacity State */
-.booked-opacity {
-  border: 1px solid #fca5a5;
-}
-
-.booked-opacity img {
-  filter: grayscale(100%);
-  opacity: 0.6;
-}
-
-/* Image & Info */
+/* --- Card Image (Height Reduced) --- */
 .listing-card img {
   width: 100%;
-  height: 200px;
+  height: 160px; /* Pehle 220px tha, ab 160px hai */
   object-fit: cover;
 }
 
-.card-info {
-  padding: 15px;
-}
+.booked-opacity { filter: grayscale(0.9); opacity: 0.7; }
 
-.card-info h3 {
-  font-size: 1.1rem;
-  margin-bottom: 10px;
-  color: #111827;
+/* --- Card Content (Tighter Spacing) --- */
+.card-info { padding: 15px; }
+
+.card-info h3 { 
+  font-size: 1rem; 
+  margin-bottom: 8px; 
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -96,113 +128,111 @@
 .price-location {
   display: flex;
   justify-content: space-between;
-  font-size: 0.9rem;
-  color: #4b5563;
+  font-size: 13px;
+  color: var(--text-secondary);
   margin-bottom: 12px;
 }
 
-/* Interest/Views Bar */
+.price-location strong { color: var(--text-primary); }
+
 .interest-bar {
+  background: var(--bg-tertiary);
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: #f3f4f6;
-  padding: 8px 12px;
-  border-radius: 8px;
+  gap: 6px;
   margin-bottom: 15px;
-  font-size: 0.85rem;
-  color: #374151;
-  border: 1px solid #e5e7eb;
+  color: var(--text-secondary);
 }
 
-/* Action Buttons */
+/* --- Action Buttons (Slimmer) --- */
 .actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  align-items: center;
 }
 
-.actions button {
+.edit-btn, .status-btn-mark-booked, .status-btn-mark-available {
   flex: 1;
-  padding: 8px;
-  border-radius: 6px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  border: none;
+}
+
+.edit-btn { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.status-btn-mark-booked { background: #f8fafc; color: #64748b; border: 1px solid var(--border-primary); }
+.status-btn-mark-available { background: var(--primary); color: white; }
+.delete-btn { padding: 8px; background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; border-radius: 8px; cursor: pointer; }
+
+/* ==========================================================================
+   MODAL & STEP-FORM (COMPACT)
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: 1px solid transparent;
+  z-index: 2000;
+  padding: 15px;
 }
 
-.edit-btn { background: #eff6ff; color: #2563eb; border-color: #dbeafe !important; }
-.edit-btn:hover:not(:disabled) { background: #dbeafe; }
-.edit-btn:disabled { cursor: not-allowed; opacity: 0.5; }
-
-.delete-btn { background: #fef2f2; color: #dc2626; border-color: #fee2e2 !important; max-width: 45px; }
-.delete-btn:hover { background: #fee2e2; }
-
-/* Status Toggle Buttons */
-.status-btn-booked {
-  background: #fff7ed;
-  color: #ea580c;
-  border-color: #ffedd5 !important;
+.modal-content {
+  background: white;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 16px;
+  overflow: hidden;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.status-btn-booked:hover {
-  background: #ffedd5;
+.modal-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.status-btn-available {
-  background: #f0fdf4;
-  color: #16a34a;
-  border-color: #dcfce7 !important;
+.modal-title-group h3 { font-size: 1.1rem; margin: 0; }
+
+.modal-step-body { padding: 20px; overflow-y: auto; }
+
+/* --- Mobile Fixes --- */
+@media (max-width: 768px) {
+  .listings-grid { grid-template-columns: 1fr; }
+  .actions { flex-wrap: wrap; }
+  .edit-btn, .status-btn-mark-booked, .status-btn-mark-available { width: 100%; flex: none; }
 }
 
-.status-btn-available:hover {
-  background: #dcfce7;
-}/* Jab room available ho (toh button Booked mark karne ke liye red/orange dikhega) */
-.status-btn-mark-booked {
-  background: #fef2f2 !important;
-  color: #dc2626 !important;
-  border: 1px solid #fecaca !important;
+/* --- Initial Loader & Empty State --- */
+.listing-loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  gap: 15px;
 }
 
-/* Jab room booked ho (toh button wapas live karne ke liye green dikhega) */
-.status-btn-mark-available {
-  background: #f0fdf4 !important;
-  color: #16a34a !important;
-  border: 1px solid #bbf7d0 !important;
-}
-
-.status-btn-mark-booked:hover { background: #fee2e2 !important; }
-.status-btn-mark-available:hover { background: #dcfce7 !important; }
-/* Action Button - Mark Booked (Danger/Alert) */
-.status-btn-mark-booked {
-  background-color: #fff1f2 !important;
-  color: #e11d48 !important;
-  border: 1px solid #fda4af !important;
-}
-
-/* Action Button - Re-list (Success/Live) */
-.status-btn-mark-available {
-  background-color: #f0fdf4 !important;
-  color: #16a34a !important;
-  border: 1px solid #86efac !important;
-}
-
-/* Hover effects for better interaction */
-.status-btn-mark-booked:hover { background-color: #ffe4e6 !important; }
-.status-btn-mark-available:hover { background-color: #dcfce7 !important; }
-
-/* Visual feedback for Booked listings */
-.booked-opacity {
-  border: 1px dashed #94a3b8;
-  background-color: #f8fafc;
-}
-
-.booked-opacity img {
-  filter: grayscale(100%);
-  opacity: 0.6;
+.empty-listings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
 }
