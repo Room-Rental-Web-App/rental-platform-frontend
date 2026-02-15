@@ -8,11 +8,9 @@ export default defineConfig({
     host: true,     // 👈 allows LAN access
     port: 5173,
   },
-})
-
-    watch: {
+  watch: {
       usePolling: true,
       interval: 100, // optional but improves detection
     },
-  },
-});
+})
+
