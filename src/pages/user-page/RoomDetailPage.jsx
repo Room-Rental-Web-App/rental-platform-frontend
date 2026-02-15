@@ -12,7 +12,7 @@ function RoomDetailPage() {
   const { roomId } = useParams();
   const { isPremiumUser } = usePremiumStatus();
   const [room, setRoom] = useState(null);
-  const [roomOwner, setRoomOwner] = useState();
+  const [roomOwner, setRoomOwner] = useState({});
   const [mainImage, setMainImage] = useState("");
   const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem("userId") || null;
@@ -166,7 +166,7 @@ function RoomDetailPage() {
               <div className="owner-side-card">
                 <div className="owner-header">
                   <div className="owner-avatar-small">
-                    {roomOwner.email?.charAt(0).toUpperCase()}
+                    {roomOwner?.email?.charAt(0).toUpperCase()}
                   </div>
 
                   <div>

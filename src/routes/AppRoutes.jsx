@@ -43,6 +43,7 @@ const PublicRoutes = [
   <Route path="/forgot-password" element={<ForgotPassword />} />,
   <Route path="/reset-password" element={<ResetPassword />} />,
   <Route path="/home" element={<HomePage />} />,
+  <Route path="/" element={<HomePage />} />,
   <Route path="/search" element={<SearchRoom />} />,
   <Route path="/room/:roomId" element={<RoomDetailPage />} />,
   <Route path="/quick-search/:searchInput" element={<QuickSearchPage />} />,
