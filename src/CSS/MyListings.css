@@ -63,7 +63,6 @@
 /* --- Listings Grid --- */
 .listings-grid {
   display: grid;
-  /* Card width kam ki taaki line mein zyada aayein */
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
 }
@@ -78,7 +77,10 @@
   transition: 0.3s ease;
 }
 
-.listing-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.08); }
+.listing-card:hover { 
+  transform: translateY(-5px); 
+  box-shadow: 0 8px 15px rgba(0,0,0,0.08); 
+}
 
 /* --- Compact Badge System --- */
 .badge-container {
@@ -104,16 +106,16 @@
 .badge.pending { background: rgba(245, 158, 11, 0.95); color: white; }
 .badge.booked { background: rgba(30, 41, 59, 0.85); color: white; }
 
-/* --- Card Image (Height Reduced) --- */
+/* --- Card Image --- */
 .listing-card img {
   width: 100%;
-  height: 160px; /* Pehle 220px tha, ab 160px hai */
+  height: 160px;
   object-fit: cover;
 }
 
 .booked-opacity { filter: grayscale(0.9); opacity: 0.7; }
 
-/* --- Card Content (Tighter Spacing) --- */
+/* --- Card Content --- */
 .card-info { padding: 15px; }
 
 .card-info h3 { 
@@ -147,14 +149,16 @@
   color: var(--text-secondary);
 }
 
-/* --- Action Buttons (Slimmer) --- */
+/* --- Action Buttons --- */
 .actions {
   display: flex;
   gap: 8px;
   align-items: center;
 }
 
-.edit-btn, .status-btn-mark-booked, .status-btn-mark-available {
+.edit-btn, 
+.status-btn-mark-booked, 
+.status-btn-mark-available {
   flex: 1;
   padding: 8px 10px;
   border-radius: 8px;
@@ -166,59 +170,204 @@
   gap: 5px;
   cursor: pointer;
   border: none;
+  transition: all 0.3s ease;
 }
 
-.edit-btn { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
-.status-btn-mark-booked { background: #f8fafc; color: #64748b; border: 1px solid var(--border-primary); }
-.status-btn-mark-available { background: var(--primary); color: white; }
-.delete-btn { padding: 8px; background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; border-radius: 8px; cursor: pointer; }
+.edit-btn { 
+  background: #eff6ff; 
+  color: #1d4ed8; 
+  border: 1px solid #bfdbfe; 
+}
+
+.edit-btn:hover:not(:disabled) {
+  background: #dbeafe;
+}
+
+.edit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.status-btn-mark-booked { 
+  background: #f8fafc; 
+  color: #64748b; 
+  border: 1px solid var(--border-primary); 
+}
+
+.status-btn-mark-booked:hover {
+  background: #f1f5f9;
+}
+
+.status-btn-mark-available { 
+  background: var(--primary); 
+  color: white; 
+}
+
+.status-btn-mark-available:hover {
+  background: var(--primary-hover);
+}
+
+.delete-btn { 
+  padding: 8px; 
+  background: #fff1f2; 
+  color: #e11d48; 
+  border: 1px solid #fecdd3; 
+  border-radius: 8px; 
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.delete-btn:hover {
+  background: #ffe4e6;
+}
 
 /* ==========================================================================
-   MODAL & STEP-FORM (COMPACT)
+   EDIT MODAL STYLES (CENTERED & CLEAN)
    ========================================================================== */
+
+/* Modal Overlay - Full Screen Dark Background */
 .modal-overlay {
   position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.5);
-  backdrop-filter: blur(4px);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2000;
-  padding: 15px;
+  z-index: 9999;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
 }
 
+/* Modal Content Box */
 .modal-content {
-  background: white;
+  background: #ffffff;
   width: 100%;
-  max-width: 600px;
+  max-width: 550px;
   border-radius: 16px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 
+              0 10px 10px -5px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   max-height: 85vh;
   display: flex;
   flex-direction: column;
+  animation: modalSlideUp 0.3s ease-out;
 }
 
+@keyframes modalSlideUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px) scale(0.95); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+/* Modal Header */
 .modal-header {
-  padding: 15px 20px;
+  padding: 20px 25px;
   border-bottom: 1px solid var(--border-primary);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: #fff;
 }
 
-.modal-title-group h3 { font-size: 1.1rem; margin: 0; }
-
-.modal-step-body { padding: 20px; overflow-y: auto; }
-
-/* --- Mobile Fixes --- */
-@media (max-width: 768px) {
-  .listings-grid { grid-template-columns: 1fr; }
-  .actions { flex-wrap: wrap; }
-  .edit-btn, .status-btn-mark-booked, .status-btn-mark-available { width: 100%; flex: none; }
+.modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
 }
 
-/* --- Initial Loader & Empty State --- */
+.modal-header svg {
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.modal-header svg:hover {
+  color: var(--error);
+}
+
+/* Modal Body - Form Container */
+.modal-content form {
+  padding: 25px;
+  overflow-y: auto;
+  max-height: calc(85vh - 80px);
+}
+
+/* Form Groups */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(233, 158, 52, 0.1);
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Save Button */
+.save-btn {
+  width: 100%;
+  background: var(--primary);
+  color: white;
+  padding: 14px 20px;
+  border-radius: 10px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.save-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(233, 158, 52, 0.3);
+}
+
+.save-btn:active {
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   LOADER & EMPTY STATE
+   ========================================================================== */
 .listing-loader-container {
   display: flex;
   flex-direction: column;
@@ -235,4 +384,58 @@
   justify-content: center;
   height: 60vh;
   text-align: center;
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVE
+   ========================================================================== */
+@media (max-width: 768px) {
+  .listings-grid { 
+    grid-template-columns: 1fr; 
+  }
+  
+  .actions { 
+    flex-wrap: wrap; 
+  }
+  
+  .edit-btn, 
+  .status-btn-mark-booked, 
+  .status-btn-mark-available { 
+    width: 100%; 
+    flex: none; 
+  }
+
+  .modal-overlay {
+    padding: 10px;
+  }
+
+  .modal-content {
+    max-height: 95vh;
+    border-radius: 12px;
+  }
+
+  .modal-header {
+    padding: 15px 20px;
+  }
+
+  .modal-content form {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    border-radius: 0;
+    max-height: 100vh;
+    height: 100%;
+  }
+
+  .modal-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
 }
