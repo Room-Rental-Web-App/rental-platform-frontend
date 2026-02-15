@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
-import { CheckCircle, Lock, Loader2 } from "lucide-react"; // Loader2 add kiya
+import {
+  CheckCircle,
+  Lock,
+  Loader2,
+  Crown,
+  ArrowRight,
+  Home,
+  AlertTriangle,
+} from "lucide-react";
 import "../../CSS/AddRoom.css";
 
 // Custom Hook and Components
@@ -82,59 +90,160 @@ const AddRoom = () => {
     } catch (err) {
       console.error("Error publishing room:", err);
       if (err.response?.status === 403) {
-        alert("Limit Reached! Please upgrade.");
+        alert("Limit Reached! Please upgrade to add more rooms.");
         navigate("/premium");
       } else {
-        alert("Server Error! Check logs.");
+        alert("Failed to publish listing. Please try again.");
       }
     } finally {
       setUploading(false);
     }
   };
 
+  // Get step labels
+  const getStepLabel = (stepNumber) => {
+    switch (stepNumber) {
+      case 1:
+        return "Basic Details";
+      case 2:
+        return "Location & Amenities";
+      case 3:
+        return "Photos & Video";
+      default:
+        return "";
+    }
+  };
+
   // Modern Loading View
-  if (loading)
+  if (loading) {
     return (
-      <div className="loading-screen-full">
-        <Loader2 className="spinner-icon" size={48} />
-        <p>Verifying Listing Limit...</p>
+      <div className="loading-screen-full fade-in">
+        <div className="loading-content">
+          <Loader2 className="spinner-icon" size={56} />
+          <h3>Verifying Your Listing Limit</h3>
+          <p>Please wait while we check your subscription status...</p>
+        </div>
       </div>
     );
+  }
 
   // Limit Check View
-  if (canAddMoreRooms === false)
+  if (canAddMoreRooms === false) {
     return (
       <div className="limit-reached-overlay fade-in">
         <div className="limit-card">
-          <Lock size={50} color="var(--primary)" />
-          <h2>Limit Reached!</h2>
-          <p>
-            You have used <b>{currentRoomCount}</b> out of <b>{roomLimit}</b>{" "}
-            slots.
+          <div className="limit-icon-wrapper">
+            <Lock size={56} />
+          </div>
+
+          <h2>Listing Limit Reached!</h2>
+
+          <div className="limit-info">
+            <div className="limit-stat">
+              <span className="stat-label">Current Listings</span>
+              <span className="stat-value">{currentRoomCount}</span>
+            </div>
+            <div className="limit-divider">/</div>
+            <div className="limit-stat">
+              <span className="stat-label">Maximum Allowed</span>
+              <span className="stat-value">{roomLimit}</span>
+            </div>
+          </div>
+
+          <p className="limit-description">
+            You've used all your available slots. Upgrade to Premium to add more
+            listings and get exclusive benefits!
           </p>
+
+          <div className="limit-benefits">
+            <div className="benefit-item">
+              <CheckCircle size={18} />
+              <span>Add up to 40 listings</span>
+            </div>
+            <div className="benefit-item">
+              <CheckCircle size={18} />
+              <span>Top search results</span>
+            </div>
+            <div className="benefit-item">
+              <CheckCircle size={18} />
+              <span>Featured badge</span>
+            </div>
+          </div>
+
           <button
             onClick={() => navigate("/premium")}
             className="upgrade-btn-main"
           >
+            <Crown size={20} />
             Upgrade to Premium
+            <ArrowRight size={20} />
+          </button>
+
+          <button
+            onClick={() => navigate("/my-listings")}
+            className="btn-secondary"
+          >
+            View My Listings
           </button>
         </div>
       </div>
     );
+  }
 
   return (
     <div className="add-room-wrapper fade-in">
-      <div className="stepper">
-        {[1, 2, 3].map((s) => (
-          <div
-            key={s}
-            className={`step-item ${step >= s ? "active" : ""} ${step > s ? "completed" : ""}`}
-          >
-            {step > s ? <CheckCircle size={22} /> : s}
+      {/* Header Section */}
+      <div className="add-room-header">
+        <div className="header-content">
+          <Home size={32} className="header-icon" />
+          <div>
+            <h1>Add New Listing</h1>
+            <p className="header-subtitle">
+              Fill in the details to publish your property
+            </p>
           </div>
-        ))}
+        </div>
+
+        {/* Progress Indicator */}
+        <div className="listing-progress">
+          <span className="progress-text">
+            {currentRoomCount} / {roomLimit} Listings
+          </span>
+          <div className="progress-bar-container">
+            <div
+              className="progress-bar-fill"
+              style={{ width: `${(currentRoomCount / roomLimit) * 100}%` }}
+            />
+          </div>
+        </div>
       </div>
 
+      {/* Stepper */}
+      <div className="stepper-wrapper">
+        <div className="stepper">
+          {[1, 2, 3].map((s) => (
+            <React.Fragment key={s}>
+              <div className="step-container">
+                <div
+                  className={`step-item ${step >= s ? "active" : ""} ${step > s ? "completed" : ""}`}
+                >
+                  {step > s ? (
+                    <CheckCircle size={24} />
+                  ) : (
+                    <span className="step-number">{s}</span>
+                  )}
+                </div>
+                <span className="step-label">{getStepLabel(s)}</span>
+              </div>
+              {s < 3 && (
+                <div className={`step-line ${step > s ? "completed" : ""}`} />
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+
+      {/* Form */}
       <form onSubmit={handleSubmit} className="modern-form">
         {step === 1 && (
           <Step1
@@ -163,18 +272,53 @@ const AddRoom = () => {
           />
         )}
 
+        {/* Success Screen */}
         {step === 4 && (
-          <div className="success-msg text-center fade-in">
-            <CheckCircle size={100} color="var(--success)" />
-            <h2>Listing Published Successfully!</h2>
-            <p>Your room is now visible to everyone.</p>
-            <button
-              type="button"
-              onClick={() => navigate("/my-listings")}
-              className="btn-next"
-            >
-              View My Listings
-            </button>
+          <div className="success-screen fade-in">
+            <div className="success-icon-wrapper">
+              <CheckCircle size={80} />
+            </div>
+
+            <h2 className="success-title">Listing Published Successfully!</h2>
+
+            <p className="success-description">
+              Your property is now live and visible to potential tenants. You'll
+              start receiving inquiries soon!
+            </p>
+
+            <div className="success-stats">
+              <div className="success-stat-item">
+                <span className="stat-icon">📍</span>
+                <span className="stat-text">Searchable Location</span>
+              </div>
+              <div className="success-stat-item">
+                <span className="stat-icon">✅</span>
+                <span className="stat-text">Under Review</span>
+              </div>
+              <div className="success-stat-item">
+                <span className="stat-icon">🔔</span>
+                <span className="stat-text">Notifications Active</span>
+              </div>
+            </div>
+
+            <div className="success-actions">
+              <button
+                type="button"
+                onClick={() => navigate("/my-listings")}
+                className="btn-primary-success"
+              >
+                <Home size={20} />
+                View My Listings
+              </button>
+
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="btn-secondary-success"
+              >
+                Add Another Listing
+              </button>
+            </div>
           </div>
         )}
       </form>
