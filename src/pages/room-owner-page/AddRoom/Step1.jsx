@@ -91,6 +91,7 @@ const Step1 = ({ formData, setFormData, setStep }) => {
             }
           >
             <option value="Anyone">Anyone</option>
+            <option value="Family Only">Family Only</option>
             <option value="Boys Only">Boys Only</option>
             <option value="Girls Only">Girls Only</option>
           </select>

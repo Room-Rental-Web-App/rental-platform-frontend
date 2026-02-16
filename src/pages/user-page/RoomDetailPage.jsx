@@ -62,6 +62,7 @@ function RoomDetailPage() {
       .catch((err) => console.error("Error recording interest", err));
   };
 
+
   return (
     <div className="room-detail-container">
       {/* TOP SECTION: IMAGE GALLERY & MAIN INFO */}
