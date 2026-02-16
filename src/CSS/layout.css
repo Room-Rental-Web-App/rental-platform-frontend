@@ -1,7 +1,20 @@
-.admin-layout{
-    display: flex;
-    min-height: 100vh;
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: pink;
 }
+
+/* Sidebar = 20% */
+.admin-layout > :first-child {
+  flex: 0 0 20%;
+}
+
+/* Content = 80% */
+.admin-content {
+  flex: 0 0 80%;
+}
+
 
 .page-container{
     margin-top: 1rem;

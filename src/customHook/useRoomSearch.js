@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import Api from "../api/Api";
 
-export default function useRoomSearch({ mode = "PUBLIC" } = {}) {
+export default function useRoomSearch({ mode = "PUBLIC", approved=true } = {}) {
     const [rooms, setRooms] = useState([]);
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
     const [userLocation, setUserLocation] = useState(null);
-
 
 
     const [draftFilters, setDraftFilters] = useState({
@@ -26,6 +25,7 @@ export default function useRoomSearch({ mode = "PUBLIC" } = {}) {
         try {
             const res = await Api.get("/rooms/filter", {
                 params: {
+                    approved: approved,
                     city: appliedFilters.city || null,
                     pincode: appliedFilters.pincode || null,
                     roomType: appliedFilters.roomType || null,

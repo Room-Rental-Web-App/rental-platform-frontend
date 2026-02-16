@@ -1,0 +1,259 @@
+.page-header {
+  margin-bottom: 22px;
+}
+
+.page-header-content {
+  padding: 16px 18px;
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    var(--bg-secondary),
+    var(--bg-primary)
+  );
+
+  border-left: 4px solid #6366f1;
+}
+
+.page-header-content h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-count {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #6366f1;
+  color: white;
+}
+
+.page-subtitle {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+
+/* =========================
+   PAGE WRAPPER
+========================= */
+.admin-users {
+  padding: 20px;
+}
+
+/* =========================
+   HEADER
+========================= */
+.page-header h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+/* =========================
+   SEARCH
+========================= */
+.admin-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+
+  max-width: 360px;
+  margin-bottom: 20px;
+}
+
+.admin-search input {
+  border: none;
+  outline: none;
+  width: 100%;
+  background: transparent;
+  font-size: 14px;
+  color: inherit;
+}
+
+/* =========================
+   LOADER
+========================= */
+.admin-loader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* =========================
+   USERS GRID
+========================= */
+.users-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+/* =========================
+   USER CARD
+========================= */
+.user-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 16px;
+  padding: 16px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* =========================
+   CARD HEADER
+========================= */
+.user-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  height: 42px;
+  width: 42px;
+  border-radius: 50%;
+  background: var(--bg-primary);
+
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.user-main h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.user-main .email {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* =========================
+   BADGES
+========================= */
+.badge {
+  margin-left: auto;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.badge.ROLE_USER {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.badge.ROLE_ADMIN {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+/* =========================
+   CARD BODY
+========================= */
+.user-card-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.info span {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.info p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Status */
+.status.approved {
+  color: #16a34a;
+}
+
+.status.pending {
+  color: #f59e0b;
+}
+
+.status.rejected {
+  color: #dc2626;
+}
+
+/* =========================
+   AADHAAR
+========================= */
+.user-card-footer span {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.aadhar-preview {
+  margin-top: 6px;
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border-primary);
+}
+
+.aadhar-preview.clickable {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.aadhar-preview.clickable:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.muted {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+.no-data {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 30px;
+  font-size: 14px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 600px) {
+  .user-card-body {
+    grid-template-columns: 1fr;
+  }
+
+  .badge {
+    font-size: 10px;
+  }
+}

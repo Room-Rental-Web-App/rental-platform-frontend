@@ -20,11 +20,6 @@ import PremiumPage from "../pages/commen-pages/PremiumPage";
 import HighInterestRooms from "../pages/admin-page/HighInterestRooms";
 import AdminSupport from "../pages/admin-page/AdminSupport";
 import RevenueReport from "../pages/admin-page/RevenueReport";
-import PendingRooms from "../pages/admin-page/PendingRooms";
-import PendingOwners from "../pages/admin-page/PendingOwners";
-import PendingUsers from "../pages/admin-page/PendingUsers";
-import AllOwner from "../pages/admin-page/AllOwners";
-import AllUsers from "../pages/admin-page/AllUsers";
 import AdminDashboard from "../pages/admin-page/AdminDashboard";
 import OwnerUsersPage from "../pages/room-owner-page/OwnerUsersPage";
 import MyListings from "../pages/room-owner-page/MyListings";
@@ -32,8 +27,9 @@ import AddRoom from "../pages/room-owner-page/AddRoom";
 import NotifyRoom from "../pages/user-page/NotifyRoom";
 import Wishlist from "../pages/user-page/Wishlist";
 
-import Contact from "../pages/commen-pages/Contact" 
+import Contact from "../pages/commen-pages/Contact"
 import QuickSearchPage from "../pages/commen-pages/QuickSearchPage";
+import AdminUsers from "../pages/admin-page/AdminUsers";
 {/* Public */ }
 const PublicRoutes = [
   <Route path="/" element={<HomePage />} />,
@@ -44,7 +40,7 @@ const PublicRoutes = [
   <Route path="/reset-password" element={<ResetPassword />} />,
   <Route path="/home" element={<HomePage />} />,
   <Route path="/" element={<HomePage />} />,
-  <Route path="/search" element={<SearchRoom />} />,
+  <Route path="/search" element={<SearchRoom approved={true} />} />,
   <Route path="/room/:roomId" element={<RoomDetailPage />} />,
   <Route path="/quick-search/:searchInput" element={<QuickSearchPage />} />,
 
@@ -83,12 +79,17 @@ const RoomOwnerRoutes = [
 {/* Admin */ }
 const AdminRoutes = [
   <Route path="/admin/dashboard" element={<AdminDashboard />} />,
-  <Route path="/admin/all-users" element={<AllUsers />} />,
+
+
+  <Route path="/admin/pending-rooms" element={<SearchRoom approved={false} />} />,
   <Route path="/admin/search" element={<SearchRoom />} />,
-  <Route path="/admin/all-owners" element={<AllOwner />} />,
-  <Route path="/admin/pending-users" element={<PendingUsers />} />,
-  <Route path="/admin/pending-approvals" element={<PendingOwners />} />,
-  <Route path="/admin/pending-rooms" element={<PendingRooms />} />,
+
+  <Route path="/admin/all-users" element={<AdminUsers endPoint="allUsers" role="ROLE_USER" />} />,
+  <Route path="/admin/all-owners" element={<AdminUsers endPoint="allUsers" role="ROLE_OWNER" />} />,
+  <Route path="/admin/pending-users" element={<AdminUsers endPoint="pending" role="ROLE_USER" />} />,
+  <Route path="/admin/pending-owners" element={<AdminUsers endPoint="pending" role="ROLE_OWNER" />} />,
+
+
   <Route path="/admin/reports" element={<Reports />} />,
   <Route path="/admin/revenue-report" element={<RevenueReport />} />,
   <Route path="/admin/support" element={<AdminSupport />} />,
