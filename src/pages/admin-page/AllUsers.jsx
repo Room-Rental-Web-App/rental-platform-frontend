@@ -3,15 +3,19 @@ import axios from "axios";
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
 import { Trash2, User } from "lucide-react";
 import "../../css/adminCommon.css";
+import MyLoader from "../../components/MyLoader";
 const AllUsers = () => {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
   const fetchUsers = async () => {
+
     try {
+      setLoading(true)
       const res = await axios.get(API_ENDPOINTS.ADMIN_ALL_USERS, {
         headers: getAuthHeaders(),
       });
@@ -19,6 +23,9 @@ const AllUsers = () => {
       setUsers(res.data);
     } catch (err) {
       console.error("Error fetching users", err);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -30,10 +37,12 @@ const AllUsers = () => {
       });
       setUsers(users.filter((u) => u.id !== id));
     } catch (err) {
+      console.log(err)
       alert("Failed to delete user");
     }
   };
 
+  if (loading) return <MyLoader data={"Loading Registered Users... Please wait..."} />
   return (
     <div className="admin-layout">
       <div className="admin-main-content">

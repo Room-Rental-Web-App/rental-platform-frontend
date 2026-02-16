@@ -3,9 +3,10 @@ import axios from "axios";
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
 import { UserCheck, Mail, Phone, ExternalLink, Trash2 } from "lucide-react";
 import "../../css/adminOwners.css";
+import MyLoader from "../../components/MyLoader";
 const AllOwner = () => {
   const [owners, setOwners] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchOwners();
@@ -13,14 +14,16 @@ const AllOwner = () => {
 
   const fetchOwners = async () => {
     try {
+      setLoading(true);
       // API call to get users filtered by ROLE_OWNER
       const res = await axios.get(API_ENDPOINTS.ADMIN_ALL_OWNERS, {
         headers: getAuthHeaders(),
       });
       setOwners(res.data);
-      setLoading(false);
     } catch (err) {
       console.error("Error fetching owners:", err);
+    }
+    finally {
       setLoading(false);
     }
   };
@@ -39,9 +42,12 @@ const AllOwner = () => {
       setOwners(owners.filter((o) => o.id !== id));
       alert("Owner deleted successfully.");
     } catch (err) {
+      console.log(err);
       alert("Failed to delete owner.");
     }
   };
+
+  if (loading) return <MyLoader data={"Loading Room-Owners... Please wait..."} />
 
   return (
     <div className="admin-layout">

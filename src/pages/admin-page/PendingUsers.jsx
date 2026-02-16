@@ -4,6 +4,7 @@ import { Clock, ExternalLink, Check, X, Loader2 } from 'lucide-react'
 import { API_ENDPOINTS, getAuthHeaders } from '../../api/apiConfig';
 import axios from 'axios';
 import '../../css/pendingUsers.css'
+import MyLoader from '../../components/MyLoader';
 function PendingUsers() {
     const [pendingList, setPendingList] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,33 +23,34 @@ function PendingUsers() {
         });
     };
 
-const updateStatus = async (id, action) => {
-    const confirmAction = window.confirm(
-      `Are you sure you want to ${action} this user?`
-    );
-    if (!confirmAction) return;
+    const updateStatus = async (id, action) => {
+        const confirmAction = window.confirm(
+            `Are you sure you want to ${action} this user?`
+        );
+        if (!confirmAction) return;
 
-    try {
-      const url =
-        action === "approve"
-          ? API_ENDPOINTS.APPROVE_OWNER(id)
-          : API_ENDPOINTS.REJECT_OWNER(id);
+        try {
+            const url =
+                action === "approve"
+                    ? API_ENDPOINTS.APPROVE_OWNER(id)
+                    : API_ENDPOINTS.REJECT_OWNER(id);
 
-      await axios.put(
-        url,
-        {},
-        {
-          headers: getAuthHeaders(),
+            await axios.put(
+                url,
+                {},
+                {
+                    headers: getAuthHeaders(),
+                }
+            );
+
+            alert(`Owner ${action}ed successfully!`);
+            fetchPendingUsers();
+        } catch (error) {
+            alert("Failed to update status.");
         }
-      );
-
-      alert(`Owner ${action}ed successfully!`);
-      fetchPendingUsers();
-    } catch (error) {
-      alert("Failed to update status.");
-    }
-  };
-
+    };
+    
+    if (loading) return <MyLoader data={"Loading Rooms for Approvel... Please wait..."} />
 
 
     return (

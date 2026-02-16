@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import QuickSearchInput from "../../components/QuickSearchInput";
 import RoomGrid from "../../components/RoomGrid";
 import Api from "../../api/Api";
+import MyLoader from "../../components/MyLoader";
 
 function QuickSearchPage() {
   const { searchInput } = useParams();
@@ -40,9 +41,7 @@ function QuickSearchPage() {
       <QuickSearchInput />
 
       {loading ? (
-        <div style={{ textAlign: "center", padding: "3rem", fontWeight: 600 }}>
-          Loading rooms...
-        </div>
+        <MyLoader data={"Quick searching... Please wait..."} />
       ) : (
         <RoomGrid rooms={rooms} />
       )}

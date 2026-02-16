@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
-import { Check, X, ExternalLink, Loader2, Clock } from "lucide-react";
+import { Check, X, ExternalLink, Loader2, Clock, Flag } from "lucide-react";
 import "../../CSS/PendingOwners.css";
+import MyLoader from "../../components/MyLoader";
 
 const PendingOwners = () => {
   const [pendingList, setPendingList] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchPendingOwners();
@@ -14,6 +15,7 @@ const PendingOwners = () => {
 
   const fetchPendingOwners = async () => {
     try {
+      setLoading(true);
       // Use getAuthHeaders() just like in AllUsers
       const response = await axios.get(API_ENDPOINTS.ADMIN_PENDING_OWNERS, {
         headers: getAuthHeaders(),
@@ -49,10 +51,12 @@ const PendingOwners = () => {
       alert(`Owner ${action}ed successfully!`);
       fetchPendingOwners();
     } catch (error) {
+       console.log(error)
       alert("Failed to update status.");
     }
   };
 
+  if (loading) return <MyLoader data={"Loading Owners for Approvel... Please wait..."} />
   return (
     <div className="admin-layout">
       {" "}
@@ -92,7 +96,7 @@ const PendingOwners = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="view-id-link"
-                      
+
                       >
                         <ExternalLink size={16} /> View Aadhaar
                       </a>
@@ -101,14 +105,14 @@ const PendingOwners = () => {
                       <button
                         className="btn-approve"
                         onClick={() => updateStatus(user.id, "approve")}
-                    
+
                       >
                         <Check size={16} />
                       </button>
                       <button
                         className="btn-reject"
                         onClick={() => updateStatus(user.id, "reject")}
-                  
+
                       >
                         <X size={16} />
                       </button>
@@ -120,7 +124,7 @@ const PendingOwners = () => {
                   <td
                     colSpan="4"
                     className="no-data"
-                   
+
                   >
                     No pending requests found.
                   </td>

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import Api from "../../api/Api";
 import { API_ENDPOINTS } from "../../api/apiConfig";
 import { AlertTriangle, CheckCircle, Phone, Mail, Home } from "lucide-react";
-import "../../CSS/HighInterestRooms.css"; 
+import "../../CSS/HighInterestRooms.css";
+import MyLoader from "../../components/MyLoader";
 
 const HighInterestRooms = () => {
   const [rooms, setRooms] = useState([]);
@@ -40,12 +41,13 @@ const HighInterestRooms = () => {
       alert("Room successfully marked as BOOKED!");
       fetchHighInterestRooms(); // List refresh karne ke liye
     } catch (err) {
+       console.log(err)
       alert("Error updating status. Please try again.");
     }
   };
 
-  if (loading)
-    return <div className="admin-loading">Loading Flagged Rooms...</div>;
+
+  if (loading) return <MyLoader data={"Loading Highest Interested Rooms... Please wait..."} />
 
   return (
     <div className="admin-container">

@@ -9,10 +9,10 @@ import {
   Home,
   AlertCircle
 } from "lucide-react";
+import MyLoader from "../../components/MyLoader"
 import RevenueReport from "./RevenueReport"
 
 import "../../css/adminDashboard.css";
-import Api from "../../api/Api";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -66,13 +66,8 @@ const AdminDashboard = () => {
 };
 
 
-  if (loading) {
-    return (
-      <div className="admin-dashboard-loading">
-        Loading Dashboard...
-      </div>
-    );
-  }
+  if (loading) return <MyLoader data={"Loading Dashboard Details"}/> 
+
 
   return (
     <div className="admin-dashboard">
