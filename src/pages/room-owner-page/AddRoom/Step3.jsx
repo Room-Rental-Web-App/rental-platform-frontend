@@ -1,16 +1,8 @@
 import React from "react";
 import { Camera, Upload, X, Video, Loader2 } from "lucide-react"; // Loader2 add kiya
 
-const Step3 = ({
-  images,
-  setImages,
-  previews,
-  setPreviews,
-  setVideo,
-  uploading,
-  progress,
-  setStep,
-}) => {
+const Step3 = ({ images, setImages, previews, setPreviews, setVideo, uploading, progress, setStep, }) => {
+  
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     setImages([...images, ...files]);

@@ -20,6 +20,7 @@ import {
   premiumOwnerFeatures,
 } from "../../data/roomsDekhoData";
 import MyPlans from "../../components/MyPlans";
+import MyLoader from "../../components/MyLoader";
 
 export default function OwnerPremium() {
   const { premium, planCode, endDate, refresh, loading } = usePremiumStatus();
@@ -82,16 +83,7 @@ export default function OwnerPremium() {
     return "orange";
   };
 
-  if (loading) {
-    return (
-      <div className="premium-container owner-premium">
-        <div className="premium-loader">
-          <Loader className="spinner-large" size={48} />
-          <p>Verifying your premium status...</p>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return <MyLoader data={"Verifying your premium status..."} />
 
   return (
     <div className="premium-container owner-premium">

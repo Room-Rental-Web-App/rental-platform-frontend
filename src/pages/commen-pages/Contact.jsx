@@ -5,10 +5,12 @@ import Api from "../../api/Api";
 import "../../css/contact.css";
 import { ISSUE_LABELS } from "../../data/roomsDekhoData"
 import { useNavigate } from "react-router-dom";
+import MyLoader from "../../components/MyLoader";
 
 function ContactForm() {
   const email = localStorage.getItem("email");
   const navTo = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: localStorage.getItem("fullName") || "",
@@ -20,13 +22,13 @@ function ContactForm() {
   });
 
   const [supportRequests, setSupportRequests] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
 
   /* ✅ FETCH MY SUPPORT REQUESTS */
   const getMySupportRequests = async () => {
     try {
+      setLoading(true)
       const res = await Api.get(`/support/my`, {
         params: { email },
       });
@@ -34,12 +36,13 @@ function ContactForm() {
     } catch (err) {
       console.error(err);
     }
+    finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     if (email) getMySupportRequests();
-
-
   }, [email]);
 
   const handleChange = (e) => {
@@ -51,7 +54,7 @@ function ContactForm() {
 
     if (confirm("You need to be logged in to contact support. Go to login page?")) {
       navTo("/login");
-    }else{
+    } else {
       e.preventDefault();
       setError("You need to be logged in to contact support.");
       return;
@@ -93,7 +96,7 @@ function ContactForm() {
       setLoading(false);
     }
   };
-
+    if (loading) return <MyLoader data={"My Support Request loading... Please wait..."} />
   return (
     <div className="contact-form-wrapper">
       <div className="form-header">
