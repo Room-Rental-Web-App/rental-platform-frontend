@@ -17,6 +17,7 @@ import {
   Loader,
 } from "lucide-react";
 import "../../CSS/MyListings.css";
+import MyLoader from "../../components/MyLoader";
 
 const MyListings = () => {
   const [rooms, setRooms] = useState([]);
@@ -146,18 +147,7 @@ const MyListings = () => {
   };
 
   // Loading State
-  if (isLoading) {
-    return (
-      <div className="my-listings-container">
-        <div className="listing-loader-container">
-          <Loader className="spinner" size={48} color="#e99e34" />
-          <p style={{ color: "#64748b", fontSize: "16px" }}>
-            Loading your properties...
-          </p>
-        </div>
-      </div>
-    );
-  }
+  if (isLoading) return <MyLoader data={" Loading your properties... Please wait..."} />
 
   // Empty State
   if (rooms.length === 0) {
@@ -217,7 +207,7 @@ const MyListings = () => {
                 imageErrors[room.id]
                   ? "https://placehold.co/300x200/f1f5f9/64748b?text=No+Image"
                   : room.imageUrls?.[0] ||
-                    "https://placehold.co/300x200/f1f5f9/64748b?text=No+Image"
+                  "https://placehold.co/300x200/f1f5f9/64748b?text=No+Image"
               }
               alt={room.title || "Property"}
               onError={() => handleImageError(room.id)}
