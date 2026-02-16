@@ -1,0 +1,66 @@
+/* ===========================
+   ALL USERS PAGE LAYOUT
+=========================== */
+
+.all-user-page {
+  padding: 24px;
+  min-height: 100%;
+}
+
+/* ===========================
+   PAGE TITLE
+=========================== */
+
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* ===========================
+   USERS LIST WRAPPER
+=========================== */
+
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ===========================
+   EMPTY STATE
+=========================== */
+
+.empty-text {
+  text-align: center;
+  padding: 48px 20px;
+
+  font-size: 14px;
+  opacity: 0.6;
+}
+
+/* ===========================
+   LOADER ALIGNMENT
+=========================== */
+
+.admin-main-content {
+  width: 100%;
+}
+
+/* ===========================
+   RESPONSIVE PAGE SPACING
+=========================== */
+
+@media (max-width: 768px) {
+  .all-user-page {
+    padding: 16px;
+  }
+
+  .page-title {
+    font-size: 20px;
+  }
+}

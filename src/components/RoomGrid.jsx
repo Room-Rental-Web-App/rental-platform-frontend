@@ -5,8 +5,10 @@ import { useWishlist } from "../context/WishlistContext";
 import Api from '../api/Api';
 import "../css/room-greed.css"
 // useLocation add kiya
-import { MapPin, ArrowRight, Trash2, Heart, HeartOff } from "lucide-react";
+import { MapPin, ArrowRight, Trash2, Heart, HeartOff, Check, X } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
+import { API_ENDPOINTS, getAuthHeaders } from "../api/apiConfig";
+import axios from "axios";
 
 
 function RoomGrid({ rooms, applyFilters }) {
@@ -29,15 +31,30 @@ function RoomGrid({ rooms, applyFilters }) {
     }
   };
   const isInWishlist = (roomId) => wishlistRoomIds.includes(roomId);
+  const handleApproval = async (id, action) => {
+    const confirmMessage = `Are you sure you want to ${action === "approve" ? "Approve" : "Reject"
+      } this listing?`;
+    if (!window.confirm(confirmMessage)) return;
 
+    try {
+      const endpoint =
+        action === "approve"
+          ? API_ENDPOINTS.APPROVE_ROOM(id)
+          : API_ENDPOINTS.REJECT_ROOM(id);
+
+      await axios.put(endpoint, {}, { headers: getAuthHeaders() });
+      alert(`Room ${action}ed successfully!`);
+      fetchPendingRooms(); // Refresh the list
+    } catch (err) {
+      alert("Action failed. Please try again.");
+    }
+  };
   const fetchWishlistIds = async () => {
     const email = localStorage.getItem("email");
-    console.log("Asdf")
     if (!email) return;
 
     Api.get(`/wishlist?email=${email}`)
       .then((res) => {
-        console.log(res.data)
         setWishlistRoomIds(res.data.map(r => r.room.id))
       })
       .catch((err) => console.error("Wishlist load failed", err));
@@ -96,6 +113,10 @@ function RoomGrid({ rooms, applyFilters }) {
             <span className={`status ${room.isApprovedByAdmin ? "approved" : "pending"}`}>
               {room.isApprovedByAdmin ? "Approved" : "Pending"}
             </span>
+          </div>
+          <div className="action-buttons">
+            <button onClick={() => handleApproval(room.id, "approve")} className="btn-approve"><Check size={18} /> Approve</button>
+            <button onClick={() => handleApproval(room.id, "reject")} className="btn-reject"> <X size={18} /> Reject</button>
           </div>
 
           <button

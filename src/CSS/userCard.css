@@ -1,0 +1,192 @@
+/* ===========================
+   USER CARD
+=========================== */
+
+.user-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+
+  padding: 16px 18px;
+  border-radius: 14px;
+
+  background: var(--bg-card, #ffffff);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.user-card:hover {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+/* ===========================
+   LEFT SECTION
+=========================== */
+
+.user-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  font-size: 18px;
+  font-weight: 600;
+
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff;
+}
+
+/* ===========================
+   DETAILS
+=========================== */
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.email,
+.phone {
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+/* ===========================
+   BADGES
+=========================== */
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.badge {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Role */
+.badge.role {
+  background: #eef2ff;
+  color: #3730a3;
+}
+
+/* Status */
+.badge.status.approved {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge.status.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge.status.rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Verification */
+.badge.verified {
+  background: #e0f2fe;
+  color: #075985;
+}
+
+.badge.unverified {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+/* Disabled */
+.badge.disabled {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* ===========================
+   ACTIONS
+=========================== */
+
+.user-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+/* View Aadhaar */
+.view-btn {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+
+  background: #eef2ff;
+  color: #3730a3;
+
+  transition: background 0.2s ease;
+}
+
+.view-btn:hover {
+  background: #e0e7ff;
+}
+
+/* Delete (Danger) */
+.delete-btn {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+
+  background: transparent;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: #fee2e2;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media (max-width: 640px) {
+  .user-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .user-actions {
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}

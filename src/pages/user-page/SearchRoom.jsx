@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom"; 
+import { useLocation } from "react-router-dom";
 import useInfiniteScroll from "../../customHook/useInfiniteScroll";
 import usePremiumStatus from "../../customHook/usePremiumStatus";
 import useRoomSearch from "../../customHook/useRoomSearch";
@@ -9,12 +9,12 @@ import { useState, useEffect } from "react"; // useEffect add kiya
 import RoomGrid from "../../components/RoomGrid";
 import MyLoader from "../../components/MyLoader";
 
-export default function SearchRoom() {
+export default function SearchRoom({ approved }) {
   const location = useLocation(); // URL track karne ke liye
   const { isPremiumUser } = usePremiumStatus();
   const [openMap, setOpenMap] = useState(false);
   const [mapCenter, setMapCenter] = useState(null);
-
+  console.log(approved);
   const {
     rooms,
     draftFilters,
@@ -25,7 +25,7 @@ export default function SearchRoom() {
     loading,
     page,
     setLocation,
-  } = useRoomSearch({ mode: "PUBLIC" });
+  } = useRoomSearch({ mode: "PUBLIC", approved: approved });
 
   // --- NAYA LOGIC: URL se Type uthane ke liye ---
   useEffect(() => {
@@ -48,6 +48,7 @@ export default function SearchRoom() {
     loading,
     onLoadMore: () => loadRooms(page + 1, true),
   });
+  console.log(approved)
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -90,7 +91,8 @@ export default function SearchRoom() {
         />
       )}
 
-     
+
+
 
       {loading &&  <MyLoader data={"Loding Rooms..."} />}
       {!loading && <RoomGrid rooms={rooms} applyFilters={applyFilters}/>}
