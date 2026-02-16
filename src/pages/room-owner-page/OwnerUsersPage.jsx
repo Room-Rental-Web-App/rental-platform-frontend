@@ -1,349 +1,287 @@
-import React from "react";
-import "../../css/premium.css";
+import { useEffect, useState, useRef } from "react";
+import CreateReport from "../../components/CreateReport";
+import "../../css/ownerUsersPage.css";
+import Api from "../../api/Api";
 import {
-  TrendingUp,
-  Shield,
-  Crown,
-  Home,
-  Lock,
-  Zap,
-  CheckCircle,
-  Loader,
+  Search,
   X,
-  Calendar,
-  Clock,
+  Loader,
+  Users,
+  Phone,
+  Mail,
+  AlertCircle,
+  UserX,
+  RefreshCw,
 } from "lucide-react";
-import RazorPayConfig from "../../components/RazorPayConfig";
-import usePremiumStatus from "../../customHook/usePremiumStatus";
-import {
-  premiumOwnerPlans,
-  premiumOwnerFeatures,
-} from "../../data/roomsDekhoData";
-import MyPlans from "../../components/MyPlans";
 
-export default function OwnerPremium() {
-  const { premium, planCode, endDate, refresh, loading } = usePremiumStatus();
+export default function OwnerUsersPage() {
+  const [users, setUsers] = useState([]);
+  const [reportUserId, setReportUserId] = useState(null);
+  const [emailFilter, setEmailFilter] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const formRef = useRef(null);
 
-  // Helper function to get room limit based on plan code
-  const getRoomLimit = (code) => {
-    if (code.includes("TRIAL")) return 3;
-    if (code.includes("1M")) return 6;
-    if (code.includes("6M")) return 15;
-    if (code.includes("12M")) return 40;
-    return 2; // Default for free
+  const currentUser = {
+    id: Number(localStorage.getItem("userId")),
+    email: localStorage.getItem("email"),
   };
 
-  // Helper function to format price with commas
-  const formatPrice = (amount) => {
-    return new Intl.NumberFormat("en-IN").format(amount);
+  // fetch users ONLY when explicitly called
+  const fetchUsers = (email = "") => {
+    setLoading(true);
+    setError("");
+
+    Api.get("/users/allUsers", {
+      params: { email: email || undefined, role: "ROLE_USER" },
+    })
+      .then((res) => {
+        setUsers(Array.isArray(res.data) ? res.data : []);
+      })
+      .catch((err) => {
+        console.error(err);
+        setError("Failed to load users. Please try again.");
+      })
+      .finally(() => setLoading(false));
   };
 
-  // Helper function to format date nicely
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-IN", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
+  // initial load (no filter)
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const handleFilter = () => {
+    if (emailFilter.trim()) {
+      fetchUsers(emailFilter.trim());
+    }
   };
 
-  // Helper function to calculate days remaining
-  const getDaysRemaining = (dateString) => {
-    const end = new Date(dateString);
-    const today = new Date();
-    const diffTime = end - today;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays > 0 ? diffDays : 0;
+  const handleClear = () => {
+    setEmailFilter("");
+    fetchUsers();
   };
 
-  // Helper function to get dynamic features
-  const getPlanFeatures = (plan) => {
-    const limit = getRoomLimit(plan.code);
-    return [
-      `Add up to ${limit} Room Listings`,
-      "Top position in search results",
-      plan.code.includes("6M") || plan.code.includes("12M")
-        ? "Featured owner badge"
-        : "Verified owner badge",
-      "Priority direct contact from tenants",
-      "Spam / fake lead protection",
-      plan.code.includes("12M")
-        ? "Dedicated relationship manager"
-        : "3–5x more enquiries",
-    ];
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleFilter();
+    }
   };
 
-  // Get badge color based on room limit
-  const getBadgeColor = (limit) => {
-    if (limit >= 40) return "gold";
-    if (limit >= 15) return "purple";
-    if (limit >= 6) return "blue";
-    return "orange";
+  // Handle modal form submission
+  const handleSubmitReport = () => {
+    const form = document.querySelector(".report-modal-body form");
+    if (form) {
+      // Try to find and click the hidden submit button
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.click();
+      } else {
+        // Fallback: dispatch submit event
+        form.dispatchEvent(
+          new Event("submit", { cancelable: true, bubbles: true }),
+        );
+      }
+    }
   };
 
-  if (loading) {
-    return (
-      <div className="premium-container owner-premium">
-        <div className="premium-loader">
-          <Loader className="spinner-large" size={48} />
-          <p>Verifying your premium status...</p>
-        </div>
-      </div>
-    );
-  }
+  // Filter out current user from display
+  const filteredUsers = users.filter((user) => user.id !== currentUser.id);
 
   return (
-    <div className="premium-container owner-premium">
-      {/* Premium Active Banner with Days Remaining */}
-      {premium && (
-        <div className="premium-active-banner">
-          <Crown size={20} />
-          <div className="banner-content">
-            <span>
-              You are a <strong>Premium Owner</strong>
-            </span>
-            <div className="banner-expiry">
-              <Calendar size={14} />
-              <span>Valid until {formatDate(endDate)}</span>
-              <span className="days-badge">
-                <Clock size={12} />
-                {getDaysRemaining(endDate)} days left
-              </span>
-            </div>
+    <div className="owner-users-page">
+      {/* Header Section */}
+      <div className="page-header">
+        <div className="header-content">
+          <Users size={32} className="header-icon" />
+          <div>
+            <h2>Users Directory</h2>
+            <p className="header-subtitle">
+              Manage and view all registered users
+            </p>
           </div>
         </div>
-      )}
-
-      {/* My Plans Component */}
-      <MyPlans />
-
-      {/* Comparison Table */}
-      <div className="compare-table">
-        <h2>Free vs Premium Owner</h2>
-        <div className="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Features</th>
-                <th>
-                  <div className="table-header-cell">
-                    <X size={16} className="icon-red" />
-                    Free Owner
-                  </div>
-                </th>
-                <th className="premium-col">
-                  <div className="table-header-cell">
-                    <Crown size={16} />
-                    Premium Owner
-                  </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Rooms Allowed</td>
-                <td>
-                  <div className="feature-text">
-                    <span>2 Rooms Only</span>
-                  </div>
-                </td>
-                <td className="premium-col">
-                  <div className="feature-text">
-                    <CheckCircle size={16} className="inline-icon" />
-                    <span>Up to 40 Rooms</span>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>Search Ranking</td>
-                <td>
-                  <div className="feature-text">
-                    <span>Last in results</span>
-                  </div>
-                </td>
-                <td className="premium-col">
-                  <div className="feature-text">
-                    <CheckCircle size={16} className="inline-icon" />
-                    <span>Top Results</span>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>Homepage Visibility</td>
-                <td>
-                  <div className="feature-text">
-                    <span>Hidden</span>
-                  </div>
-                </td>
-                <td className="premium-col">
-                  <div className="feature-text">
-                    <CheckCircle size={16} className="inline-icon" />
-                    <span>Featured Banner</span>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>Verified Badge</td>
-                <td>
-                  <div className="feature-text">
-                    <X size={16} className="icon-red" />
-                    <span>Not Available</span>
-                  </div>
-                </td>
-                <td className="premium-col">
-                  <div className="feature-text">
-                    <CheckCircle size={16} className="inline-icon" />
-                    <span>Yes</span>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Main Title Section */}
-      <div className="title-section">
-        <h1 className="main-title gradient-text">
-          Your Room Is Invisible Right Now
-        </h1>
-        <p className="sub-text">
-          Free listings get buried. Premium rooms get booked faster.
-        </p>
-      </div>
-
-      {/* Blocked Notice for Non-Premium Users */}
-      {!premium && (
-        <div className="blocked-box owner-block">
-          <Lock size={22} />
-          <div className="blocked-content">
-            <strong>
-              Your room is currently hidden under premium listings.
-            </strong>
-            <p>Upgrade now to appear at the top of search results!</p>
+        {!loading && filteredUsers.length > 0 && (
+          <div className="user-count-badge">
+            <Users size={16} />
+            <span>{filteredUsers.length} Users</span>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
-      {/* Pricing Cards */}
-      <div className="pricing-dual owner-price">
-        {premiumOwnerPlans.map((plan) => {
-          const isCurrent = planCode === plan.code;
-          const currentLimit = getRoomLimit(plan.code);
-          const features = getPlanFeatures(plan);
-          const badgeColor = getBadgeColor(currentLimit);
-
-          const hierarchy = [
-            "OWNER_TRIAL",
-            "OWNER_1M",
-            "OWNER_6M",
-            "OWNER_12M",
-          ];
-          const disable =
-            premium &&
-            hierarchy.indexOf(plan.code) < hierarchy.indexOf(planCode);
-
-          return (
-            <div
-              key={plan.code}
-              className={`pricing-box ${isCurrent ? "current premium-highlight" : ""} ${disable ? "disabled-plan" : ""}`}
+      {/* Filter Bar */}
+      <div className="filter-section">
+        <div className="search-container">
+          <Search size={20} className="search-icon" />
+          <input
+            type="text"
+            placeholder="Search users by email address..."
+            value={emailFilter}
+            onChange={(e) => setEmailFilter(e.target.value)}
+            onKeyPress={handleKeyPress}
+            className="email-filter"
+          />
+          {emailFilter && (
+            <button
+              className="clear-input-btn"
+              onClick={() => setEmailFilter("")}
+              title="Clear search"
             >
-              {/* Current Badge */}
-              {isCurrent && (
-                <div className="current-badge">
-                  <Crown size={12} /> Current Plan
-                </div>
-              )}
+              <X size={18} />
+            </button>
+          )}
+        </div>
 
-              {/* Most Popular Badge */}
-              {plan.code === "OWNER_1M" && !isCurrent && (
-                <div className="popular-badge">
-                  <TrendingUp size={12} /> Most Popular
-                </div>
-              )}
+        <div className="filter-actions">
+          <button
+            className="filter-btn"
+            onClick={handleFilter}
+            disabled={loading || !emailFilter.trim()}
+          >
+            <Search size={16} />
+            Search
+          </button>
+          <button
+            className="clear-btn"
+            onClick={handleClear}
+            disabled={loading}
+          >
+            <RefreshCw size={16} />
+            Reset
+          </button>
+        </div>
+      </div>
 
-              {/* Plan Title */}
-              <h2 className="plan-title">{plan.label}</h2>
+      {/* Loading State */}
+      {loading && (
+        <div className="loading-container">
+          <Loader className="spinner" size={40} />
+          <p className="loading-text">Loading users...</p>
+        </div>
+      )}
 
-              {/* Room Limit Badge */}
-              <div className={`limit-badge-card ${badgeColor}`}>
-                <Home size={14} />
-                <span>Allows {currentLimit} Rooms</span>
+      {/* Error State */}
+      {!loading && error && (
+        <div className="error-container">
+          <AlertCircle size={48} className="error-icon" />
+          <h3>Oops! Something went wrong</h3>
+          <p className="error-text">{error}</p>
+          <button className="retry-btn" onClick={() => fetchUsers()}>
+            <RefreshCw size={16} />
+            Try Again
+          </button>
+        </div>
+      )}
+
+      {/* Empty State - No Users Found */}
+      {!loading && !error && filteredUsers.length === 0 && (
+        <div className="empty-container">
+          <UserX size={64} className="empty-icon" />
+          <h3>No Users Found</h3>
+          <p className="empty-text">
+            {emailFilter
+              ? `No users found matching "${emailFilter}"`
+              : "No registered users in the system yet"}
+          </p>
+          {emailFilter && (
+            <button className="clear-filter-btn" onClick={handleClear}>
+              <X size={16} />
+              Clear Filter
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Users Grid */}
+      {!loading && !error && filteredUsers.length > 0 && (
+        <div className="users-grid">
+          {filteredUsers.map((user) => (
+            <div key={user.id} className="user-card">
+              {/* User Avatar */}
+              <div className="user-avatar">
+                <Users size={24} />
               </div>
 
-              {/* Price */}
-              <p className="price">
-                ₹{formatPrice(plan.amount)}{" "}
-                <span className="duration">/ {plan.duration}</span>
+              {/* User Info */}
+              <div className="user-info">
+                <div className="user-email">
+                  <Mail size={16} className="info-icon" />
+                  <strong>{user.email}</strong>
+                </div>
+                <div className="user-phone">
+                  <Phone size={16} className="info-icon" />
+                  <span>{user.phone || "Not provided"}</span>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="user-actions">
+                <button
+                  className="report-btn"
+                  onClick={() => setReportUserId(user.id)}
+                >
+                  <AlertCircle size={16} />
+                  Report User
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Report Modal */}
+      {reportUserId && (
+        <div
+          className="report-modal-overlay"
+          onClick={() => setReportUserId(null)}
+        >
+          <div
+            className="report-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="report-modal-header">
+              <h3>
+                <AlertCircle size={22} />
+                Report User
+              </h3>
+              <button
+                className="modal-close-btn"
+                onClick={() => setReportUserId(null)}
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            <div className="report-modal-body" ref={formRef}>
+              <p className="report-description">
+                Please provide details about why you're reporting this user. Our
+                team will review your report.
               </p>
 
-              {/* Features List */}
-              <ul className="plan-feature-list">
-                {features.map((f, index) => (
-                  <li key={index}>
-                    <CheckCircle size={14} className="check-icon" />
-                    <span>{f}</span>
-                  </li>
-                ))}
-              </ul>
-
-              {/* Action Button */}
-              {!disable ? (
-                <RazorPayConfig
-                  amountToPay={plan.amount}
-                  planCode={plan.code}
-                  onSuccess={refresh}
-                  value={
-                    isCurrent
-                      ? "Extend Plan"
-                      : premium
-                        ? "Upgrade Plan"
-                        : "Get Premium"
-                  }
-                />
-              ) : (
-                <button className="btn-disabled" disabled>
-                  <Shield size={16} />
-                  Active on Higher Plan
-                </button>
-              )}
-
-              {/* Disabled Notice */}
-              {disable && (
-                <div className="disabled-note">
-                  You're already on {planCode.replace("OWNER_", "")} plan
-                </div>
-              )}
+              <CreateReport
+                reporterId={currentUser.id}
+                reportType="USER"
+                targetId={reportUserId}
+                onSuccess={() => setReportUserId(null)}
+              />
             </div>
-          );
-        })}
-      </div>
 
-      {/* Trust Indicators */}
-      <div className="trust-section">
-        <div className="trust-item">
-          <Shield size={24} className="trust-icon" />
-          <div>
-            <strong>Secure Payment</strong>
-            <p>100% safe & encrypted transactions</p>
+            <div className="report-modal-footer">
+              <button className="modal-submit-btn" onClick={handleSubmitReport}>
+                <AlertCircle size={18} />
+                Submit Report
+              </button>
+
+              <button
+                className="modal-cancel-btn"
+                onClick={() => setReportUserId(null)}
+              >
+                <X size={18} />
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
-        <div className="trust-item">
-          <Zap size={24} className="trust-icon" />
-          <div>
-            <strong>Instant Activation</strong>
-            <p>Your plan activates immediately</p>
-          </div>
-        </div>
-        <div className="trust-item">
-          <TrendingUp size={24} className="trust-icon" />
-          <div>
-            <strong>3x More Leads</strong>
-            <p>Premium owners get verified inquiries</p>
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
