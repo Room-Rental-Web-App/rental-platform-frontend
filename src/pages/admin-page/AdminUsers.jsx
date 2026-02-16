@@ -3,11 +3,17 @@ import Api from "../../api/Api";
 import { Loader2, Search } from "lucide-react";
 import AadhaarModal from "../../models/AadhaarModal ";
 import "../../css/adminUsers.css";
+import MyLoader from "../../components/MyLoader";
 
 const AdminUsers = ({ role, endPoint }) => {
   const [users, setUsers] = useState([]);
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(true);
+  const displayRole = role
+    ?.replace(/^ROLE_/, "")
+    .toLowerCase()
+    .replace(/^\w/, (c) => c.toUpperCase());
+
 
   const [aadhaarUrl, setAadhaarUrl] = useState(null);
 
@@ -38,17 +44,17 @@ const AdminUsers = ({ role, endPoint }) => {
   return (
     <div className="admin-users">
       {/* Header */}
-<div className="page-header">
-  <div className="page-header-content">
-    <h2>
-      {role ? role.replace("ROLE_", "") : "All"} Users
-      <span className="header-count">{users.length}</span>
-    </h2>
-    <p className="page-subtitle">
-      Manage users, verification status, and identity documents
-    </p>
-  </div>
-</div>
+      <div className="page-header">
+        <div className="page-header-content">
+          <h2>
+            {role ? role.replace("ROLE_", "") : "All"} Users
+            <span className="header-count">{users.length}</span>
+          </h2>
+          <p className="page-subtitle">
+            Manage users, verification status, and identity documents
+          </p>
+        </div>
+      </div>
 
 
 
@@ -66,9 +72,9 @@ const AdminUsers = ({ role, endPoint }) => {
 
       {/* Loader */}
       {loading ? (
-        <div className="admin-loader">
-          <Loader2 className="animate-spin" /> Loading...
-        </div>
+        <>
+          <MyLoader data={`Loading ${displayRole}'s`} />
+        </>
       ) : (
         <div className="users-list">
           {users.length ? (
