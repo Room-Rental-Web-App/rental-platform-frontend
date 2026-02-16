@@ -5,6 +5,7 @@ import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
 import { Check, X, Eye, IndianRupee, MapPin, Loader2 } from "lucide-react";
 
 import "../../CSS/PendingRooms.css";
+import MyLoader from "../../components/MyLoader";
 
 const PendingRooms = () => {
   const [pendingRooms, setPendingRooms] = useState([]);
@@ -43,9 +44,12 @@ const PendingRooms = () => {
       alert(`Room ${action}ed successfully!`);
       fetchPendingRooms(); // Refresh the list
     } catch (err) {
+      console.log(err);
       alert("Action failed. Please try again.");
     }
   };
+
+  if (loading) return <MyLoader data={"Loading Rooms for Approvel... Please wait..."} />
 
   return (
     <div className="admin-layout">
