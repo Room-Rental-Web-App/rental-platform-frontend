@@ -7,6 +7,7 @@ import CreateReport from "../../components/CreateReport";
 
 import NotifiedWhenAvailable from "../../components/NotifiedWhenAvailable";
 import usePremiumStatus from "../../customHook/usePremiumStatus";
+import MyLoader from "../../components/MyLoader";
 
 function RoomDetailPage() {
   const { roomId } = useParams();
@@ -48,14 +49,7 @@ function RoomDetailPage() {
       });
   }, [roomId]);
 
-  if (loading) {
-    return (
-      <div className="loader-container">
-        <div className="room-loader"></div>
-        <p>Fetching property data... Please wait.</p>
-      </div>
-    );
-  }
+
   const handleCallOwner = () => {
     Api.patch(`/rooms/${roomId}/increment-contact`)
       .then(() => console.log("Interest recorded"))
@@ -63,6 +57,7 @@ function RoomDetailPage() {
   };
 
 
+  if (loading) return <MyLoader data={"Fetching property data... Please wait..."} />
   return (
     <div className="room-detail-container">
       {/* TOP SECTION: IMAGE GALLERY & MAIN INFO */}
@@ -186,8 +181,8 @@ function RoomDetailPage() {
                   📞 Contact Owner
                 </a>
               </div>
-            
-  )}
+
+            )}
 
           </div>
         </div>

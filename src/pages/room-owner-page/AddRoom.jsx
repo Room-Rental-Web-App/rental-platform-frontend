@@ -11,6 +11,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import "../../CSS/AddRoom.css";
+import MyLoader from "../../components/MyLoader"
 
 // Custom Hook and Components
 import usePremiumStatus from "../../customHook/usePremiumStatus";
@@ -115,17 +116,7 @@ const AddRoom = () => {
   };
 
   // Modern Loading View
-  if (loading) {
-    return (
-      <div className="loading-screen-full fade-in">
-        <div className="loading-content">
-          <Loader2 className="spinner-icon" size={56} />
-          <h3>Verifying Your Listing Limit</h3>
-          <p>Please wait while we check your subscription status...</p>
-        </div>
-      </div>
-    );
-  }
+     if (loading) return <MyLoader data={"Verifying Your Listing Limit... Please wait..."} />
 
   // Limit Check View
   if (canAddMoreRooms === false) {

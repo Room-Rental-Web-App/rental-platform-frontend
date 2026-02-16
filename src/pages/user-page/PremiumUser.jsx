@@ -19,6 +19,7 @@ import {
   premiumUserPlans,
 } from "../../data/roomsDekhoData";
 import MyPlans from "../../components/MyPlans";
+import MyLoader from "../../components/MyLoader";
 
 export default function PremiumUser() {
   const { premium, planCode, endDate, loading, refresh } = usePremiumStatus();
@@ -47,16 +48,8 @@ export default function PremiumUser() {
     return diffDays > 0 ? diffDays : 0;
   };
 
-  if (loading) {
-    return (
-      <div className="premium-container premium-user">
-        <div className="premium-loader">
-          <Loader className="spinner-large" size={48} />
-          <p>Verifying your premium status...</p>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return <MyLoader  data={"Verifying your premium status..."}/>
+
 
   return (
     <div className="premium-container premium-user">

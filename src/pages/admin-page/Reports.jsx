@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Api from "../../api/Api";
 import "../../css/adminReports.css";
+import MyLoader from "../../components/MyLoader";
 
 export default function AdminReportsPage() {
     const [reports, setReports] = useState([]);
@@ -37,6 +38,7 @@ export default function AdminReportsPage() {
             .catch(err => console.error(err));
     };
 
+    if (loading) return <MyLoader data={"Loading reports... Please wait..."} />
     return (
         <div className="admin-reports">
             <h2>Admin Reports</h2>
@@ -65,39 +67,39 @@ export default function AdminReportsPage() {
 
             <table>
                 <thead>
-                <tr>
-                    <th>Type</th>
-                    <th>Reporter</th>
-                    <th>Target</th>
-                    <th>Reason</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
+                    <tr>
+                        <th>Type</th>
+                        <th>Reporter</th>
+                        <th>Target</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
                 </thead>
 
                 <tbody>
-                {reports.map(r => (
-                    <tr key={`${r.reportType}-${r.reportId}`}>
-                        <td>{r.reportType}</td>
-                        <td>{r.reporterEmail}</td>
-                        <td>{r.targetInfo}</td>
-                        <td>{r.reason}</td>
-                        <td>{r.status}</td>
-                        <td>
-                            <select
-                                value={r.status}
-                                onChange={e =>
-                                    updateStatus(r.reportType, r.reportId, e.target.value)
-                                }
-                            >
-                                <option>PENDING</option>
-                                <option>REVIEWING</option>
-                                <option>RESOLVED</option>
-                                <option>REJECTED</option>
-                            </select>
-                        </td>
-                    </tr>
-                ))}
+                    {reports.map(r => (
+                        <tr key={`${r.reportType}-${r.reportId}`}>
+                            <td>{r.reportType}</td>
+                            <td>{r.reporterEmail}</td>
+                            <td>{r.targetInfo}</td>
+                            <td>{r.reason}</td>
+                            <td>{r.status}</td>
+                            <td>
+                                <select
+                                    value={r.status}
+                                    onChange={e =>
+                                        updateStatus(r.reportType, r.reportId, e.target.value)
+                                    }
+                                >
+                                    <option>PENDING</option>
+                                    <option>REVIEWING</option>
+                                    <option>RESOLVED</option>
+                                    <option>REJECTED</option>
+                                </select>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>

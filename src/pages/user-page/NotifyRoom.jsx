@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Api from '../../api/Api';
 import "../../css/notifyRoom.css"
 import { useNavigate } from 'react-router-dom';
+import MyLoader from '../../components/MyLoader';
 
 function NotifyRoom() {
   const userId = localStorage.getItem("userId");
   const [notifyRooms, setNotifyRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navTo = useNavigate();
 
   useEffect(() => {
@@ -16,6 +18,8 @@ function NotifyRoom() {
       })
       .catch(err => {
         console.error(err);
+      }).finally(() => {
+        setLoading(false)
       });
   }, [userId]);
 
@@ -33,37 +37,38 @@ function NotifyRoom() {
       });
   }
 
-function deleteRequest(notifyId) {
-  const confirmDelete = window.confirm("Are you sure you want to remove this notification?");
+  function deleteRequest(notifyId) {
+    const confirmDelete = window.confirm("Are you sure you want to remove this notification?");
 
-  if (!confirmDelete) return;
+    if (!confirmDelete) return;
 
-  Api.delete(`/room_availability?notifyId=${notifyId}`)
-    .then(() => {
-      setNotifyRooms(prev =>
-        prev.filter(nr => nr.id !== notifyId)
-      );
-      alert("Notify room successfully removed");
-    })
-    .catch(err => {
-      console.error(err);
-      alert("Failed to remove notification");
-    });
-}
+    Api.delete(`/room_availability?notifyId=${notifyId}`)
+      .then(() => {
+        setNotifyRooms(prev =>
+          prev.filter(nr => nr.id !== notifyId)
+        );
+        alert("Notify room successfully removed");
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Failed to remove notification");
+      });
+  }
 
 
+  if (loading) return <MyLoader data={"Loading Notify rooms... Please wait..."} />
 
   if (notifyRooms.length === 0) {
-    return <p>No notified rooms found</p>;           
+    return <p>No notified rooms found</p>;
   }
 
   return (
     <div className="notify-container">
       {notifyRooms.map(nr => (
         <div className="notifyRoom" key={nr.id} >
-            <button onClick={()=>deleteRequest(nr.id)}>Remove</button>
+          <button onClick={() => deleteRequest(nr.id)}>Remove</button>
           {nr.room?.imageUrls?.[0] && (
-            <img src={nr.room.imageUrls[0]} alt="room"  onClick={() => navTo(`/room/${nr.room.id}`)}/>
+            <img src={nr.room.imageUrls[0]} alt="room" onClick={() => navTo(`/room/${nr.room.id}`)} />
           )}
 
           <div className="notifyRoom-content">
@@ -76,7 +81,7 @@ function deleteRequest(notifyId) {
             </div>
 
             {nr.room?.isAvailable ? (
-              <button className="book-btn"  onClick={() => navTo(`/room/${nr.room.id}`)}>
+              <button className="book-btn" onClick={() => navTo(`/room/${nr.room.id}`)}>
                 Contact Owner
               </button>
             ) : (

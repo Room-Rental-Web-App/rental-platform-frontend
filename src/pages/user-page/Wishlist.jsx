@@ -4,10 +4,12 @@ import "../../css/wishlist.css";
 // IMPORT: Added the hook to talk to the Navbar
 import { useWishlist } from "../../context/WishlistContext";
 import { useNavigate } from "react-router-dom";
+import MyLoader from "../../components/MyLoader";
 
 function Wishlist() {
   const email = localStorage.getItem("email");
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navTo = useNavigate();
 
   // HOOK: Get the fetchCount function from Context
@@ -17,7 +19,8 @@ function Wishlist() {
     if (email) {
       Api.get(`/wishlist?email=${email}`)
         .then((res) => setItems(res.data))
-        .catch((err) => console.error("Wishlist load failed", err));
+        .catch((err) => console.error("Wishlist load failed", err))
+        .finally(() => setLoading(false));
     }
   }, [email]);
 
@@ -32,6 +35,8 @@ function Wishlist() {
       })
       .catch((err) => console.error("Delete failed", err));
   };
+  
+  if (loading) return <MyLoader data={"Loading Saved Rooms... Please wait..."} />
 
   return (
     <div className="wishlist-container">
@@ -55,7 +60,7 @@ function Wishlist() {
               <p className="loc">{item.room.city}</p>
               <p className="type">{item.room.roomType}</p>
               <h4>₹{item.room.price}</h4>
-              <span className="view-link" onClick={()=>navTo(`/room/${item.id}`)}>view detalils</span>
+              <span className="view-link" onClick={() => navTo(`/room/${item.id}`)}>view detalils</span>
               <button
                 className="remove-btn"
                 onClick={() => removeFromWishlist(item.room.id)}

@@ -7,6 +7,7 @@ import "../../css/search-room.css";
 import MapPicker from "../../components/MapPicker";
 import { useState, useEffect } from "react"; // useEffect add kiya
 import RoomGrid from "../../components/RoomGrid";
+import MyLoader from "../../components/MyLoader";
 
 export default function SearchRoom({ approved }) {
   const location = useLocation(); // URL track karne ke liye
@@ -92,8 +93,9 @@ export default function SearchRoom({ approved }) {
 
 
 
-      {loading && <div className="loader">Loading…</div>}
-      {!loading && <RoomGrid rooms={rooms} applyFilters={applyFilters} />}
+
+      {loading &&  <MyLoader data={"Loding Rooms..."} />}
+      {!loading && <RoomGrid rooms={rooms} applyFilters={applyFilters}/>}
       {!hasMore && rooms.length > 0 && (
         <div className="loader">No more rooms</div>
       )}

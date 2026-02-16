@@ -3,6 +3,7 @@ import Api from "../../api/Api";
 import "../../css/adminSupport.css";
 
 import { ISSUE_LABELS } from "../../data/roomsDekhoData"
+import MyLoader from "../../components/MyLoader";
 
 
 function AdminSupport() {
@@ -52,6 +53,8 @@ function AdminSupport() {
       console.error("Failed to update status", err);
     }
   };
+
+    if (loading) return <MyLoader data={"Loading Support Requests... Please wait..."} />
 
   return (
     <div className="admin-support-page">
