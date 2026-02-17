@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
   Shield,
@@ -12,94 +12,91 @@ import {
   LogOut,
   BarChart3,
   AlertCircle,
+  Menu,
+  X,
 } from "lucide-react";
 import logo from "../assets/logo.png";
 import ThemeToggle from "../components/ThemeToggle";
 import "../css/AdminSidebar.css";
 
 const AdminSidebar = () => {
-  const [theme, setTheme] = useState(
-    localStorage.getItem("theme") || "light"
-  );
-
-  // Sync theme with document root
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+  const [open, setOpen] = useState(false);
 
   const handleLogout = () => {
     if (!window.confirm("Are you sure you want to logout?")) return;
 
-    // Remove only auth-related data
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
     window.location.href = "/home";
   };
 
-  // Scalable navigation structure
   const navItems = [
     { to: "/admin/dashboard", icon: Gauge, label: "Dashboard" },
-    { to: "/admin/revenue-report", icon: Users, label: "Revenue Report" },
-    { to: "/admin/all-users", icon: Users, label: "All Users" },
-    { to: "/admin/all-owners", icon: UserCog, label: "All Owners" },
+    { to: "/admin/revenue-report", icon: BarChart3, label: "Revenue" },
+    { to: "/admin/all-users", icon: Users, label: "Users" },
+    { to: "/admin/all-owners", icon: UserCog, label: "Owners" },
     { to: "/admin/pending-users", icon: UserX, label: "Pending Users" },
     { to: "/admin/pending-owners", icon: UserPlus, label: "Pending Owners" },
-    { to: "/admin/search", icon: Building2, label: "All Rooms" },
+    { to: "/admin/search", icon: Building2, label: "Rooms" },
     { to: "/admin/pending-rooms", icon: ClipboardCheck, label: "Pending Rooms" },
-    { to: "/admin/high-interest", icon: AlertCircle, label: "High Interest Rooms", special: "error" },
-    { to: "/admin/reports", icon: BarChart3, label: "Reports" },
-    { to: "/admin/support", icon: Shield, label: "Support Requests" },
+    { to: "/admin/high-interest", icon: AlertCircle, label: "High Interest", special: true },
+    { to: "/admin/reports", icon: Shield, label: "Reports" },
+    { to: "/admin/support", icon: Shield, label: "Support" },
   ];
 
   return (
-    <div className="admin-sidebar">
-      {/* Header */}
-      <div className="admin-header">
-        <NavLink to="/home">
-          <img
-            src={logo}
-            alt="Logo"
-            className={`navbar-logo ${
-              theme === "dark" ? "dark-logo" : "light-logo"
-            }`}
-          />
-        </NavLink>
-      </div>
+    <>
+      {/* Mobile Toggle Button */}
+      <button
+        className="sidebar-toggle-btn"
+        onClick={() => setOpen((prev) => !prev)}
+      >
+        {open ? <X size={22} /> : <Menu size={22} />}
+      </button>
 
-      {/* Navigation */}
-      <nav className="side-nav">
-        {navItems.map(({ to, icon: Icon, label, special }) => (
-          <NavLink
-            key={to}
-            to={to}
-            className={({ isActive }) =>
-              isActive ? "nav-link active" : "nav-link"
-            }
-          >
-            <Icon
-              size={20}
-              className={special === "error" ? "icon-error" : ""}
-            />
-            {label}
+
+      {/* Overlay */}
+      {open && <div className="sidebar-overlay" onClick={() => setOpen(false)} />}
+
+      <aside className={`admin-sidebar ${open ? "open" : ""}`}>
+        {/* Close button (mobile) */}
+    
+
+        {/* Logo */}
+        <div className="admin-header">
+          <NavLink to="/home">
+            <img src={logo} alt="Logo" className="navbar-logo" />
           </NavLink>
-        ))}
-
-        {/* Theme Toggle */}
-        <div className="theme-toggle-wrapper">
-          <ThemeToggle setTheme={setTheme} theme={theme} />
         </div>
 
-        {/* Logout */}
-        <button className="logout-btn" onClick={handleLogout}>
-          <LogOut size={20} />
-          Logout
-        </button>
-      </nav>
-    </div>
+        {/* Navigation */}
+        <nav className="side-nav">
+          {navItems.map(({ to, icon: Icon, label, special }) => (
+            <NavLink
+              key={to}
+              to={to}
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+              onClick={() => setOpen(false)}
+            >
+              <Icon size={18} className={special ? "icon-error" : ""} />
+              <span>{label}</span>
+            </NavLink>
+          ))}
+
+          <div className="sidebar-bottom">
+            <ThemeToggle />
+            <button className="logout-btn" onClick={handleLogout}>
+              <LogOut size={18} />
+              <span>Logout</span>
+            </button>
+          </div>
+        </nav>
+      </aside>
+    </>
   );
 };
 
 export default AdminSidebar;
-  

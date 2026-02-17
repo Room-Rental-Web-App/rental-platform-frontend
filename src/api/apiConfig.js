@@ -24,8 +24,10 @@ export const API_ENDPOINTS = {
   ADMIN_ALL_OWNERS: `${BASE_URL}/admin/owners`,
   DELETE_USER: (id) => `${BASE_URL}/admin/users/${id}`,
   DELETE_ROOM_ADMIN: (id) => `${BASE_URL}/admin/rooms/${id}`,
+
   ADMIN_PENDING_OWNERS: `${BASE_URL}/admin/pending-owners`,
   ADMIN_PENDING_USERS: `${BASE_URL}/admin/pending-users`,
+  
   CITIES_COVERED: `${BASE_URL}/rooms/cities`,
   APPROVE_OWNER: (id) => `${BASE_URL}/admin/approve-owner/${id}`,
   REJECT_OWNER: (id) => `${BASE_URL}/admin/reject-owner/${id}`,

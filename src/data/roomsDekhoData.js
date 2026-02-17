@@ -175,3 +175,11 @@ export const ISSUE_LABELS = {
 
 
 
+export const getPriceFromPlan = (planCode) => {
+  if (!planCode) return 0;
+  if (planCode.includes("7D")) return 199;
+  if (planCode.includes("30D")) return 499;
+  if (planCode.includes("180D")) return 2499;
+  if (planCode.includes("365D")) return 4499;
+  return 0;
+};

@@ -1,25 +1,39 @@
+/* =========================================
+   ADMIN LAYOUT
+========================================= */
 
 .admin-layout {
   display: flex;
   min-height: 100vh;
-
 }
 
-/* Sidebar = 20% */
-.admin-layout > :first-child {
-  flex: 0 0 20%;
-}
-
-/* Content = 80% */
+/* Sidebar width must match sidebar.css */
 .admin-content {
-  flex: 0 0 80%;
+  flex: 1;
+  margin-left: 240px; /* match sidebar width */
+  padding: 24px;
+  background: var(--bg-primary);
+  min-height: 100vh;
+  transition: margin-left 0.3s ease;
 }
 
+/* =========================================
+   MOBILE FIX
+========================================= */
 
-.page-container{
-    margin-top: 1rem;
-    
+@media (max-width: 900px) {
+  .admin-content {
+    margin-left: 0;
+    padding: 16px;
+  }
 }
-.page-container .roomsdekho-homepage{
-    margin-top: -5rem;
+
+/* =========================================
+   USER LAYOUT
+========================================= */
+
+.page-container {
+  min-height: calc(100vh - 120px);
+  padding: 20px;
+  background: var(--bg-primary);
 }
