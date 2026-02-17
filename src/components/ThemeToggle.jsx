@@ -1,23 +1,12 @@
-import React, {useEffect } from 'react';
 import { Sun, Moon } from "lucide-react";
-import '../css/themeToggle.css';
+import { useTheme } from "../context/ThemeContext";
+import "../css/themeToggle.css";
 
-const ThemeToggle = ({theme, setTheme}) => {
-  // 1. Initialize state with 'light' or check localStorage
-
-  // 2. Effect: Update the HTML attribute and localStorage whenever 'theme' changes
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  // 3. The Toggle Function
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
-  };
+const ThemeToggle = () => {
+  const { theme, toggleTheme } = useTheme();
 
   return (
-  <button className="theme-toggle-btn" onClick={toggleTheme}>
+    <button className="theme-toggle-btn" onClick={toggleTheme}>
       {theme === "dark" ? (
         <>
           <Sun size={16} />

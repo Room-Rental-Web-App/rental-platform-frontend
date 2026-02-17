@@ -38,9 +38,7 @@ function RoomGrid({ rooms, applyFilters }) {
 
     try {
       const endpoint =
-        action === "approve"
-          ? API_ENDPOINTS.APPROVE_ROOM(id)
-          : API_ENDPOINTS.REJECT_ROOM(id);
+        action === "approve"? API_ENDPOINTS.APPROVE_ROOM(id): API_ENDPOINTS.REJECT_ROOM(id);
 
       await axios.put(endpoint, {}, { headers: getAuthHeaders() });
       alert(`Room ${action}ed successfully!`);

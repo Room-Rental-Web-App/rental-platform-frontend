@@ -29,6 +29,7 @@ function AdminSupport() {
       if (issueTypeParam) params.issueType = issueTypeParam;
 
       const res = await Api.get("/support/all", { params });
+      console.log(res.data)
       setTickets(res.data);
     } catch (err) {
       console.error("Failed to fetch support tickets", err);

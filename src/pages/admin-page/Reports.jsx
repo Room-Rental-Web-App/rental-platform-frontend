@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Api from "../../api/Api";
 import "../../css/adminReports.css";
 import MyLoader from "../../components/MyLoader";
@@ -10,7 +10,20 @@ export default function AdminReportsPage() {
     const [typeFilter, setTypeFilter] = useState("");
     const [statusFilter, setStatusFilter] = useState("");
 
-    const fetchReports = () => {
+    const resetFilters = () => {
+        setTypeFilter("");
+        setStatusFilter("");
+
+        setLoading(true);
+        Api.get("/admin/reports")
+            .then(res => {
+                setReports(res.data || []);
+            })
+            .catch(err => console.error("Failed to reset filters:", err))
+            .finally(() => setLoading(false));
+    };
+
+    const fetchReports = useCallback(() => {
         setLoading(true);
 
         Api.get("/admin/reports", {
@@ -19,26 +32,40 @@ export default function AdminReportsPage() {
                 status: statusFilter || undefined
             }
         })
-            .then(res => setReports(res.data || []))
-            .catch(err => console.error(err))
+            .then(res => {
+                setReports(res.data || []);
+            })
+            .catch(err => console.error("Failed to fetch reports:", err))
             .finally(() => setLoading(false));
-    };
+    }, [typeFilter, statusFilter]);
 
     useEffect(() => {
-        fetchReports(); // initial load
-    }, []);
+        fetchReports();
+    }, [fetchReports]);
 
-    const updateStatus = (reportType, reportId, status) => {
+    const updateStatus = (reportType, reportId, newStatus) => {
+        // Optimistic UI update
+        setReports(prev =>
+            prev.map(r =>
+                r.reportType === reportType && r.reportId === reportId
+                    ? { ...r, status: newStatus }
+                    : r
+            )
+        );
+
         Api.patch(`/admin/reports/${reportType}/${reportId}/status`, null, {
-            params: { status }
-        })
-            .then(() => {
-                fetchReports(); // 🔥 re-fetch from backend
-            })
-            .catch(err => console.error(err));
+            params: { status: newStatus }
+        }).catch(err => {
+            console.error("Failed to update status:", err);
+            // Optional: rollback logic if needed
+            fetchReports();
+        });
     };
 
-    if (loading) return <MyLoader data={"Loading reports... Please wait..."} />
+    if (loading) {
+        return <MyLoader data="Loading reports... Please wait..." />;
+    }
+
     return (
         <div className="admin-reports">
             <h2>Admin Reports</h2>
@@ -61,47 +88,69 @@ export default function AdminReportsPage() {
                 </select>
 
                 <button onClick={fetchReports}>Apply Filters</button>
+                <button onClick={resetFilters}>Reset Filters</button>
             </div>
 
-            {loading && <p>Loading...</p>}
+            {/* Report Cards */}
+            <div className="reports-container">
+                {reports.length === 0 ? (
+                    <div className="empty-state">
+                        No reports found.
+                    </div>
+                ) : (
+                    reports.map(r => (
+                        <div
+                            key={`${r.reportType}-${r.reportId}`}
+                            className="report-card"
+                        >
+                            <div className="report-header">
+                                <span className="report-type">
+                                    {r.reportType}
+                                </span>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Type</th>
-                        <th>Reporter</th>
-                        <th>Target</th>
-                        <th>Reason</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
+                                <span className={`status ${r.status.toLowerCase()}`}>
+                                    {r.status}
+                                </span>
+                            </div>
 
-                <tbody>
-                    {reports.map(r => (
-                        <tr key={`${r.reportType}-${r.reportId}`}>
-                            <td>{r.reportType}</td>
-                            <td>{r.reporterEmail}</td>
-                            <td>{r.targetInfo}</td>
-                            <td>{r.reason}</td>
-                            <td>{r.status}</td>
-                            <td>
+                            <div className="report-body">
+                                <div>
+                                    <label>Reporter</label>
+                                    <p>{r.reporterEmail}</p>
+                                </div>
+
+                                <div>
+                                    <label>Target</label>
+                                    <p>{r.targetInfo}</p>
+                                </div>
+
+                                <div>
+                                    <label>Reason</label>
+                                    <p className="reason-text">{r.reason}</p>
+                                </div>
+                            </div>
+
+                            <div className="report-footer">
                                 <select
                                     value={r.status}
                                     onChange={e =>
-                                        updateStatus(r.reportType, r.reportId, e.target.value)
+                                        updateStatus(
+                                            r.reportType,
+                                            r.reportId,
+                                            e.target.value
+                                        )
                                     }
                                 >
-                                    <option>PENDING</option>
-                                    <option>REVIEWING</option>
-                                    <option>RESOLVED</option>
-                                    <option>REJECTED</option>
+                                    <option value="PENDING">PENDING</option>
+                                    <option value="REVIEWING">REVIEWING</option>
+                                    <option value="RESOLVED">RESOLVED</option>
+                                    <option value="REJECTED">REJECTED</option>
                                 </select>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
         </div>
     );
 }
