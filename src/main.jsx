@@ -1,11 +1,13 @@
 // import { GoogleOAuthProvider } from "@react-oauth/google";
 import { createRoot } from 'react-dom/client'
-import "./css/variables.css"
-import "./css/util.css"
+import "./css/utils/theme.css"
 import App from './App.jsx'
-import { googleClientId } from "./data/env.js";
+// import { googleClientId } from "./data/env.js";
+import { ThemeProvider } from "./context/ThemeContext";
 createRoot(document.getElementById('root')).render(
     // <GoogleOAuthProvider clientId={googleClientId}>
+    <ThemeProvider>
         <App />
+    </ThemeProvider>
     // </GoogleOAuthProvider>
 )

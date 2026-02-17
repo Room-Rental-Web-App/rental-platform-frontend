@@ -1,125 +1,95 @@
 .revenue-container {
-  padding: 24px;
-  background: #f7f9fc;
+  padding: 30px;
+  background: #f8fafc;
   min-height: 100vh;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu;
 }
 
-/* Title */
-.revenue-container h2 {
-  margin-bottom: 20px;
-  font-size: 24px;
-  font-weight: 600;
-  color: #1f2937;
-}
-
-/* Filters section */
 .filters {
   display: flex;
-  flex-wrap: wrap;
   gap: 12px;
-  background: #ffffff;
-  padding: 16px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-  margin-bottom: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
 }
 
 .filters select,
-.filters input {
-  padding: 8px 10px;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  font-size: 14px;
-  min-width: 160px;
-}
-
-.filters select:focus,
-.filters input:focus {
-  outline: none;
-  border-color: #2563eb;
-}
-
-/* Apply button */
+.filters input,
 .filters button {
-  padding: 8px 18px;
-  background: #2563eb;
-  color: #ffffff;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.filters button:hover {
-  background: #1e40af;
-}
-
-/* Loading text */
-.revenue-container p {
-  margin: 12px 0;
-  color: #6b7280;
-}
-
-/* Total revenue */
-.revenue-container h3 {
-  margin: 16px 0;
-  font-size: 18px;
-  font-weight: 500;
-  color: #111827;
-}
-
-/* Table wrapper */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #ffffff;
+  padding: 8px 12px;
   border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  border: 1px solid #d1d5db;
 }
 
-/* Header */
-thead {
-  background: #f1f5f9;
+.apply-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
 
-th {
-  padding: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #374151;
-  text-align: left;
+.reset-btn {
+  background: #f3f4f6;
+  cursor: pointer;
 }
 
-/* Rows */
-td {
-  padding: 12px;
-  font-size: 14px;
-  color: #374151;
-  border-top: 1px solid #e5e7eb;
+.revenue-summary {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-/* Zebra striping */
-tbody tr:nth-child(even) {
-  background: #f9fafb;
+.revenue-summary h3 {
+  margin: 0;
+  color: #64748b;
 }
 
-/* Hover effect */
-tbody tr:hover {
-  background: #eef2ff;
+.revenue-summary p {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 8px;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .filters {
-    flex-direction: column;
-  }
+.revenue-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
 
-  .filters select,
-  .filters input,
-  .filters button {
-    width: 100%;
-  }
+.revenue-card {
+  background: white;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  transition: 0.25s ease;
+}
+
+.revenue-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.plan-badge {
+  background: #e0f2fe;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.amount {
+  font-weight: bold;
+}
+
+.loading-box,
+.empty-box {
+  background: white;
+  padding: 40px;
+  text-align: center;
+  border-radius: 12px;
 }

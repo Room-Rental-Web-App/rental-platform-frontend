@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import {
   Shield,
@@ -18,68 +18,83 @@ import ThemeToggle from "../components/ThemeToggle";
 import "../css/AdminSidebar.css";
 
 const AdminSidebar = () => {
-   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") || "light"
+  );
+
+  // Sync theme with document root
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
   const handleLogout = () => {
     if (!window.confirm("Are you sure you want to logout?")) return;
-    localStorage.clear();
+
+    // Remove only auth-related data
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
     window.location.href = "/home";
   };
 
+  // Scalable navigation structure
+  const navItems = [
+    { to: "/admin/dashboard", icon: Gauge, label: "Dashboard" },
+    { to: "/admin/revenue-report", icon: Users, label: "Revenue Report" },
+    { to: "/admin/all-users", icon: Users, label: "All Users" },
+    { to: "/admin/all-owners", icon: UserCog, label: "All Owners" },
+    { to: "/admin/pending-users", icon: UserX, label: "Pending Users" },
+    { to: "/admin/pending-owners", icon: UserPlus, label: "Pending Owners" },
+    { to: "/admin/search", icon: Building2, label: "All Rooms" },
+    { to: "/admin/pending-rooms", icon: ClipboardCheck, label: "Pending Rooms" },
+    { to: "/admin/high-interest", icon: AlertCircle, label: "High Interest Rooms", special: "error" },
+    { to: "/admin/reports", icon: BarChart3, label: "Reports" },
+    { to: "/admin/support", icon: Shield, label: "Support Requests" },
+  ];
+
   return (
     <div className="admin-sidebar">
-
+      {/* Header */}
       <div className="admin-header">
         <NavLink to="/home">
-            <img src={logo} alt="Logo"  className={`navbar-logo ${theme === "dark" ? "dark-logo" : "light-logo"}`}/>
-          </NavLink>
+          <img
+            src={logo}
+            alt="Logo"
+            className={`navbar-logo ${
+              theme === "dark" ? "dark-logo" : "light-logo"
+            }`}
+          />
+        </NavLink>
       </div>
 
-      <nav>
-        <NavLink to="/admin/dashboard">
-          <Gauge size={20} /> Dashboard
-        </NavLink>
+      {/* Navigation */}
+      <nav className="side-nav">
+        {navItems.map(({ to, icon: Icon, label, special }) => (
+          <NavLink
+            key={to}
+            to={to}
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            <Icon
+              size={20}
+              className={special === "error" ? "icon-error" : ""}
+            />
+            {label}
+          </NavLink>
+        ))}
 
-        <NavLink to="/admin/all-users">
-          <Users size={20} /> All Users
-        </NavLink>
+        {/* Theme Toggle */}
+        <div className="theme-toggle-wrapper">
+          <ThemeToggle setTheme={setTheme} theme={theme} />
+        </div>
 
-        <NavLink to="/admin/all-owners">
-          <UserCog size={20} /> All Owners
-        </NavLink>
-
-        <NavLink to="/admin/pending-users">
-          <UserX size={20} /> Pending Users
-        </NavLink>
-
-        <NavLink to="/admin/pending-owners">
-          <UserPlus size={20} /> Pending Owners
-        </NavLink>
-
-        <NavLink to="/admin/search">
-          <Building2 size={20} /> All Rooms
-        </NavLink>
-
-        <NavLink to="/admin/pending-rooms">
-          <ClipboardCheck size={20} /> Pending Rooms
-        </NavLink>
-
-        <NavLink to="/admin/high-interest">
-          <AlertCircle size={20} color="#ef4444" /> High Interest Rooms
-        </NavLink>
-
-        <NavLink to="/admin/reports">
-          <BarChart3 size={20} /> Reports
-        </NavLink>
-
-        <NavLink to="/admin/support">
-          <Shield size={20} /> Support Requests
-        </NavLink>
-
-       <ThemeToggle setTheme={setTheme} theme={theme} />
-
-        {/* Logout should NOT be NavLink */}
+        {/* Logout */}
         <button className="logout-btn" onClick={handleLogout}>
-          <LogOut size={20} /> Logout
+          <LogOut size={20} />
+          Logout
         </button>
       </nav>
     </div>
@@ -87,3 +102,4 @@ const AdminSidebar = () => {
 };
 
 export default AdminSidebar;
+  

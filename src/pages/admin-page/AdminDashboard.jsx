@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
 import {
@@ -7,10 +7,10 @@ import {
   UserCheck,
   Clock,
   Home,
-  AlertCircle
+  AlertCircle,
+  RefreshCw
 } from "lucide-react";
-import MyLoader from "../../components/MyLoader"
-import RevenueReport from "./RevenueReport"
+import MyLoader from "../../components/MyLoader";
 
 import "../../css/adminDashboard.css";
 
@@ -26,101 +26,98 @@ const AdminDashboard = () => {
   });
 
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  const fetchDashboardStats = useCallback(async () => {
+    setLoading(true);
+    setError(false);
+
+    try {
+      const headers = { headers: getAuthHeaders() };
+
+      const responses = await Promise.allSettled([
+        axios.get(API_ENDPOINTS.ADMIN_ALL_USERS, headers),
+        axios.get(API_ENDPOINTS.ADMIN_ALL_OWNERS, headers),
+        axios.get(API_ENDPOINTS.ADMIN_ALL_ROOMS, headers),
+        axios.get(API_ENDPOINTS.ADMIN_PENDING_OWNERS, headers),
+        axios.get(API_ENDPOINTS.ADMIN_PENDING_ROOMS, headers),
+        axios.get(API_ENDPOINTS.ADMIN_PENDING_USERS, headers),
+        axios.get(API_ENDPOINTS.CITIES_COVERED, headers),
+      ]);
+
+      const getCount = (res) =>
+        res.status === "fulfilled" ? res.value.data.length : 0;
+
+      setStats({
+        users: getCount(responses[0]),
+        owners: getCount(responses[1]),
+        rooms: getCount(responses[2]),
+        pendingOwners: getCount(responses[3]),
+        pendingRooms: getCount(responses[4]),
+        pendingUsers: getCount(responses[5]),
+        roomCities: getCount(responses[6]),
+      });
+
+    } catch (e) {
+      console.error(e);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     fetchDashboardStats();
-  }, []);
+  }, [fetchDashboardStats]);
 
- const fetchDashboardStats = async () => {
-  setLoading(true);
-  try {
-    const headers = { headers: getAuthHeaders() };
+  if (loading) return <MyLoader data="Loading Dashboard Details..." />;
 
-    const responses = await Promise.allSettled([
-      axios.get(API_ENDPOINTS.ADMIN_ALL_USERS, headers),
-      axios.get(API_ENDPOINTS.ADMIN_ALL_OWNERS, headers),
-      axios.get(API_ENDPOINTS.ADMIN_ALL_ROOMS, headers),
-      axios.get(API_ENDPOINTS.ADMIN_PENDING_OWNERS, headers),
-      axios.get(API_ENDPOINTS.ADMIN_PENDING_ROOMS, headers),
-      axios.get(API_ENDPOINTS.ADMIN_PENDING_USERS, headers),
-      axios.get(API_ENDPOINTS.CITIES_COVERED, headers),
-    ]);
-
-    const getCount = (res) =>
-      res.status === "fulfilled" ? res.value.data.length : 0;
-
-    setStats({
-      users: getCount(responses[0]),
-      owners: getCount(responses[1]),
-      rooms: getCount(responses[2]),
-      pendingOwners: getCount(responses[3]),
-      pendingRooms: getCount(responses[4]),
-      pendingUsers: getCount(responses[5]),
-      roomCities: getCount(responses[6]),
-    });
-  } catch (e) {
-    console.error(e);
-  } finally {
-    setLoading(false);
+  if (error) {
+    return (
+      <div className="dashboard-error">
+        Failed to load dashboard.
+        <button onClick={fetchDashboardStats}>Retry</button>
+      </div>
+    );
   }
-};
 
-
-  if (loading) return <MyLoader data={"Loading Dashboard Details"}/> 
-
+  const cards = [
+    { label: "Total Users", value: stats.users, icon: Users },
+    { label: "Total Owners", value: stats.owners, icon: UserCheck },
+    { label: "Total Rooms", value: stats.rooms, icon: Home },
+    { label: "Pending Owners", value: stats.pendingOwners, icon: Clock, pending: true },
+    { label: "Pending Rooms", value: stats.pendingRooms, icon: Building2, pending: true },
+    { label: "Pending Users", value: stats.pendingUsers, icon: AlertCircle, pending: true },
+    { label: "Cities Covered", value: stats.roomCities, icon: Building2 },
+  ];
 
   return (
     <div className="admin-dashboard">
-      <h2>Admin Overview</h2>
+      <div className="dashboard-header">
+        <h2>Admin Overview</h2>
+        <button className="refresh-btn" onClick={fetchDashboardStats}>
+          <RefreshCw size={16} />
+          Refresh
+        </button>
+      </div>
 
       <div className="dashboard-grid">
-        <div className="dash-card">
-          <Users size={26} />
-          <h3>Total Users</h3>
-          <p>{stats.users}</p>
-        </div>
-
-        <div className="dash-card">
-          <UserCheck size={26} />
-          <h3>Total Owners</h3>
-          <p>{stats.owners}</p>
-        </div>
-
-        <div className="dash-card">
-          <Home size={26} />
-          <h3>Total Rooms</h3>
-          <p>{stats.rooms}</p>
-        </div>
-
-        <div className="dash-card pending">
-          <Clock size={26} />
-          <h3>Pending Owners</h3>
-          <p>{stats.pendingOwners}</p>
-        </div>
-
-        <div className="dash-card pending">
-          <Building2 size={26} />
-          <h3>Pending Rooms</h3>
-          <p>{stats.pendingRooms}</p>
-        </div>
-
-        <div className="dash-card pending">
-          <AlertCircle size={26} />
-          <h3>Pending Users</h3>
-          <p>{stats.pendingUsers}</p>
-        </div>
-
-        <div className="dash-card">
-          <Building2 size={26} />
-          <h3>Cities Covered</h3>
-          <p>{stats.roomCities}</p>
-        </div>
-      </div>
-
-      <div className="dashboard-note">
-        All numbers are fetched live from your backend system.
-      </div>
-      <RevenueReport />
+        {cards.map((card, index) => {
+          const Icon = card.icon;
+          return (
+            <div
+              key={index}
+              className={`dash-card ${card.pending ? "pending" : ""}`}
+            >
+              <div className="card-top">
+                <Icon size={24} />
+                <span>{card.label}</span>
+              </div>
+              <div className="card-value">{card.value}</div>
+            </div>
+          );
+        })}
+      </div>     
     </div>
   );
 };

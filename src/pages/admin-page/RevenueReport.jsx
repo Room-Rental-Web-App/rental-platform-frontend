@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Api from "../../api/Api";
 import "../../css/revenueReport.css";
 
@@ -15,9 +15,6 @@ const getPriceFromPlan = (planCode) => {
   return 0;
 };
 
-/**
- * REAL calendar-based month difference
- */
 const getMonthDayDiff = (startDate, endDate) => {
   let start = new Date(startDate);
   const end = new Date(endDate);
@@ -26,7 +23,6 @@ const getMonthDayDiff = (startDate, endDate) => {
     (end.getFullYear() - start.getFullYear()) * 12 +
     (end.getMonth() - start.getMonth());
 
-  // Adjust if last month not fully completed
   if (
     end.getDate() < start.getDate() ||
     (end.getDate() === start.getDate() &&
@@ -35,11 +31,9 @@ const getMonthDayDiff = (startDate, endDate) => {
     months -= 1;
   }
 
-  // Move start forward by completed months
   start = new Date(start);
   start.setMonth(start.getMonth() + months);
 
-  // Remaining days (calendar-accurate)
   const MS_PER_DAY = 1000 * 60 * 60 * 24;
   const days = Math.floor((end - start) / MS_PER_DAY);
 
@@ -48,9 +42,6 @@ const getMonthDayDiff = (startDate, endDate) => {
     days: Math.max(days, 0)
   };
 };
-
-
-
 
 function RevenueReport() {
   const [filters, setFilters] = useState({
@@ -63,18 +54,13 @@ function RevenueReport() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetchRevenue();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const fetchRevenue = async () => {
+  const fetchRevenue = useCallback(async () => {
     setLoading(true);
     try {
       const res = await Api.get("/subscription/revenue", {
         params: {
           role: filters.role || null,
-          days: filters.planDuration || null, // backend param name kept
+          days: filters.planDuration || null,
           from: filters.from || null,
           to: filters.to || null
         }
@@ -87,6 +73,19 @@ function RevenueReport() {
     } finally {
       setLoading(false);
     }
+  }, [filters]);
+
+  useEffect(() => {
+    fetchRevenue();
+  }, [fetchRevenue]);
+
+  const resetFilters = () => {
+    setFilters({
+      role: "",
+      planDuration: "",
+      from: "",
+      to: ""
+    });
   };
 
   const totalRevenue = data.reduce(
@@ -98,6 +97,7 @@ function RevenueReport() {
     <div className="revenue-container">
       <h2>Subscription Revenue</h2>
 
+      {/* FILTERS */}
       <div className="filters">
         <select
           value={filters.role}
@@ -125,6 +125,7 @@ function RevenueReport() {
 
         <input
           type="datetime-local"
+          value={filters.from}
           onChange={(e) =>
             setFilters({ ...filters, from: e.target.value })
           }
@@ -132,58 +133,65 @@ function RevenueReport() {
 
         <input
           type="datetime-local"
+          value={filters.to}
           onChange={(e) =>
             setFilters({ ...filters, to: e.target.value })
           }
         />
 
-        <button onClick={fetchRevenue}>Apply</button>
+        <button className="apply-btn" onClick={fetchRevenue}>
+          Apply
+        </button>
+
+        <button className="reset-btn" onClick={resetFilters}>
+          Reset
+        </button>
       </div>
 
-      {loading && <p>Loading...</p>}
+      {/* SUMMARY */}
+      <div className="revenue-summary">
+        <h3>Total Revenue</h3>
+        <p>₹ {totalRevenue}</p>
+      </div>
 
-      <h3>Total Revenue: ₹{totalRevenue}</h3>
+      {/* DATA */}
+      {loading ? (
+        <div className="loading-box">Loading revenue data...</div>
+      ) : data.length === 0 ? (
+        <div className="empty-box">No revenue data found</div>
+      ) : (
+        <div className="revenue-grid">
+          {data.map((sub) => {
+            const diff = getMonthDayDiff(sub.startDate, sub.endDate);
+            return (
+              <div className="revenue-card" key={sub.id}>
+                <div className="card-header">
+                  <span className="plan-badge">{sub.planCode}</span>
+                  <span className="amount">
+                    ₹ {getPriceFromPlan(sub.planCode)}
+                  </span>
+                </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Plan</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Months</th>
-            <th>Amount (₹)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.length === 0 && !loading && (
-            <tr>
-              <td colSpan="7" style={{ textAlign: "center" }}>
-                No data found
-              </td>
-            </tr>
-          )}
-
-          {data.map((sub) => (
-            <tr key={sub.id}>
-              <td>{sub.email}</td>
-              <td>{sub.role}</td>
-              <td>{sub.planCode}</td>
-              <td>{new Date(sub.startDate).toLocaleString()}</td>
-              <td>{new Date(sub.endDate).toLocaleString()}</td>
-             <td>
-  {(() => {
-    const diff = getMonthDayDiff(sub.startDate, sub.endDate);
-    return `${diff.months}m ${diff.days}d`;
-  })()}
-</td>
-
-              <td>{getPriceFromPlan(sub.planCode)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                <div className="card-body">
+                  <p><strong>Email:</strong> {sub.email}</p>
+                  <p><strong>Role:</strong> {sub.role}</p>
+                  <p>
+                    <strong>Duration:</strong> {diff.months}m {diff.days}d
+                  </p>
+                  <p>
+                    <strong>Start:</strong>{" "}
+                    {new Date(sub.startDate).toLocaleString()}
+                  </p>
+                  <p>
+                    <strong>End:</strong>{" "}
+                    {new Date(sub.endDate).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

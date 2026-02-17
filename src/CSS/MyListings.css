@@ -1,21 +1,7 @@
 /* ==========================================================================
    GLOBAL THEME & VARIABLES
    ========================================================================== */
-:root {
-  --primary: #e99e34;
-  --primary-hover: #d18b28;
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --text-inverse: #ffffff;
-  --border-primary: #e2e8f0;
-  --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
-  --error: #ef4444;
-  --success: #10b981;
-  --warning: #f59e0b;
-}
+
 
 /* --- Global Animations --- */
 .fade-in { animation: fadeIn 0.4s ease-in-out; }
