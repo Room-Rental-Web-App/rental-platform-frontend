@@ -6,14 +6,7 @@ import "../../css/revenueReport.css";
  * TEMPORARY FRONTEND PRICING LOGIC
  * ❗ Real revenue must come from backend
  */
-const getPriceFromPlan = (planCode) => {
-  if (!planCode) return 0;
-  if (planCode.includes("7D")) return 199;
-  if (planCode.includes("30D")) return 499;
-  if (planCode.includes("180D")) return 2499;
-  if (planCode.includes("365D")) return 4499;
-  return 0;
-};
+import { getPriceFromPlan } from "../../data/roomsDekhoData";
 
 const getMonthDayDiff = (startDate, endDate) => {
   let start = new Date(startDate);
@@ -65,7 +58,7 @@ function RevenueReport() {
           to: filters.to || null,
         },
       });
-
+      console.log(res.data)
       setData(res.data || []);
     } catch (err) {
       console.error(err);
