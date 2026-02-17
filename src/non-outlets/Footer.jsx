@@ -89,13 +89,13 @@ function Footer() {
           <h3 className="footer-title">Contact Us</h3>
           <div className="footer-links">
             <span className="contact-item">
-              <Phone size={16} /> +91 98765 43210
+              <Phone size={16} /> +91 9301460346
             </span>
             <span className="contact-item">
-              <Mail size={16} /> info@roomsdekho.com
+              <Mail size={16} /> roomdekhobharat@gmail.com
             </span>
             <span className="contact-item">
-              <MapPin size={16} /> Mumbai, Maharashtra
+              <MapPin size={16} /> Bhopal , Madhya Pradesh, India
             </span>
           </div>
         </div>
