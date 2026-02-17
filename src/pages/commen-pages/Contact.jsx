@@ -1,16 +1,53 @@
 import React, { useEffect, useState } from "react";
 import emailjs from "emailjs-com";
-import { MessageSquare, Send, AlertCircle, Loader2 } from "lucide-react";
+import {
+  MessageSquare,
+  Send,
+  AlertCircle,
+  Loader2,
+  Ticket,
+  Clock,
+  ChevronDown,
+  ChevronUp,
+  InboxIcon,
+} from "lucide-react";
 import Api from "../../api/Api";
-import "../../css/contact.css";
-import { ISSUE_LABELS } from "../../data/roomsDekhoData"
+import "../../CSS/utils/theme.css";
+import "../../CSS/ContactUs.css";
+import { ISSUE_LABELS } from "../../data/roomsDekhoData";
 import { useNavigate } from "react-router-dom";
 import MyLoader from "../../components/MyLoader";
+
+const URGENCY_CONFIG = {
+  HIGH: { label: "High", color: "var(--error)" },
+  MEDIUM: { label: "Medium", color: "var(--warning)" },
+  LOW: { label: "Low", color: "var(--success)" },
+};
+
+const STATUS_CONFIG = {
+  open: { label: "Open", bg: "rgba(23,162,184,0.12)", color: "var(--info)" },
+  pending: {
+    label: "Pending",
+    bg: "rgba(255,183,77,0.12)",
+    color: "var(--warning)",
+  },
+  resolved: {
+    label: "Resolved",
+    bg: "rgba(76,175,80,0.12)",
+    color: "var(--success)",
+  },
+  closed: {
+    label: "Closed",
+    bg: "rgba(108,117,125,0.12)",
+    color: "var(--text-tertiary)",
+  },
+};
 
 function ContactForm() {
   const email = localStorage.getItem("email");
   const navTo = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [expandedTicket, setExpandedTicket] = useState(null);
 
   const [formData, setFormData] = useState({
     name: localStorage.getItem("fullName") || "",
@@ -25,18 +62,14 @@ function ContactForm() {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
 
-  /* ✅ FETCH MY SUPPORT REQUESTS */
   const getMySupportRequests = async () => {
     try {
-      setLoading(true)
-      const res = await Api.get(`/support/my`, {
-        params: { email },
-      });
+      setLoading(true);
+      const res = await Api.get(`/support/my`, { params: { email } });
       setSupportRequests(res.data);
     } catch (err) {
       console.error(err);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -51,8 +84,9 @@ function ContactForm() {
   };
 
   const handleSubmit = async (e) => {
-
-    if (confirm("You need to be logged in to contact support. Go to login page?")) {
+    if (
+      confirm("You need to be logged in to contact support. Go to login page?")
+    ) {
       navTo("/login");
     } else {
       e.preventDefault();
@@ -66,28 +100,21 @@ function ContactForm() {
     setLoading(true);
 
     try {
-      /* 1️⃣ SAVE TO BACKEND */
       await Api.post("/support/create", formData);
-
-      /* 2️⃣ EMAIL NOTIFICATION */
       await emailjs.send(
         "service_aub721b",
         "template_qerjj4y",
         formData,
-        "D8EKQaaZrMYkyP71k"
+        "D8EKQaaZrMYkyP71k",
       );
 
       setStatus("Support request submitted successfully.");
-
-      /* 3️⃣ RESET FORM (CORRECTLY) */
       setFormData((prev) => ({
         ...prev,
         issueType: "",
         urgency: "",
         message: "",
       }));
-
-      /* 4️⃣ REFRESH LIST */
       getMySupportRequests();
     } catch (err) {
       console.error(err);
@@ -96,132 +123,214 @@ function ContactForm() {
       setLoading(false);
     }
   };
-    if (loading) return <MyLoader data={"My Support Request loading... Please wait..."} />
+
+  if (loading)
+    return <MyLoader data={"My Support Request loading... Please wait..."} />;
+
   return (
-    <div className="contact-form-wrapper">
-      <div className="form-header">
-        <MessageSquare size={32} />
-        <h2>Contact Support</h2>
-        <p>We actually read these.</p>
-      </div>
+    <div className="contact-page">
+      {/* ===== HERO ===== */}
+      <section className="contact-hero">
+        <div className="contact-hero-badge">
+          <MessageSquare size={13} /> Support Center
+        </div>
+        <h1>
+          Contact <span className="contact-highlight">Support</span>
+        </h1>
+        <p>We actually read these. Most issues resolved within 24–48 hours.</p>
+      </section>
 
-      {/* MY SUPPORT REQUESTS */}
-      <div className="my-support-page">
-        <h2>My Support Requests</h2>
+      <div className="contact-body">
+        {/* ===== MY TICKETS ===== */}
+        <div className="contact-section">
+          <div className="section-heading">
+            <Ticket size={18} />
+            <h2>My Support Requests</h2>
+            <span className="section-badge">{supportRequests.length}</span>
+          </div>
 
-        {supportRequests.length === 0 ? (
-          <p className="no-requests">No support requests yet.</p>
-        ) : (
-          <div className="ticket-list">
-            {supportRequests.map((ticket) => (
-              <div className="ticket-item" key={ticket.id}>
-                <div className="ticket-top">
-                  <span className="ticket-issue">
-                    {ISSUE_LABELS[ticket.issueType]}
-                  </span>
-                  <span className={`ticket-status ${ticket.status}`}>
-                    {ticket.status}
-                  </span>
-                </div>
+          {supportRequests.length === 0 ? (
+            <div className="no-requests">
+              <InboxIcon size={36} />
+              <p>No support requests yet.</p>
+            </div>
+          ) : (
+            <div className="ticket-list">
+              {supportRequests.map((ticket) => {
+                const isOpen = expandedTicket === ticket.id;
+                const urgConf = URGENCY_CONFIG[ticket.urgency] || {};
+                const statConf = STATUS_CONFIG[ticket.status] || {};
 
-                <div className="ticket-meta">
-                  Submitted on{" "}
-                  {new Date(ticket.createdAt).toLocaleDateString()}
-                </div>
+                return (
+                  <div className="ticket-card" key={ticket.id}>
+                    <div
+                      className="ticket-card-header"
+                      onClick={() =>
+                        setExpandedTicket(isOpen ? null : ticket.id)
+                      }
+                    >
+                      <div className="ticket-card-left">
+                        <span className="ticket-issue-tag">
+                          {ISSUE_LABELS[ticket.issueType] || ticket.issueType}
+                        </span>
+                        <span
+                          className="ticket-status-badge"
+                          style={{
+                            background: statConf.bg,
+                            color: statConf.color,
+                          }}
+                        >
+                          {statConf.label || ticket.status}
+                        </span>
+                      </div>
+                      <div className="ticket-card-right">
+                        <span className="ticket-date">
+                          <Clock size={12} />
+                          {new Date(ticket.createdAt).toLocaleDateString()}
+                        </span>
+                        {isOpen ? (
+                          <ChevronUp size={16} />
+                        ) : (
+                          <ChevronDown size={16} />
+                        )}
+                      </div>
+                    </div>
 
-                <div className="ticket-message">
-                  {ticket.message}
-                </div>
+                    {isOpen && (
+                      <div className="ticket-card-body">
+                        <p className="ticket-message">{ticket.message}</p>
+                        <div
+                          className="ticket-urgency-chip"
+                          style={{
+                            color: urgConf.color,
+                            borderColor: urgConf.color,
+                          }}
+                        >
+                          Urgency: {urgConf.label || ticket.urgency}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
 
-                <div className={`ticket-urgency ${ticket.urgency}`}>
-                  Urgency: {ticket.urgency}
-                </div>
+        {/* ===== FORM ===== */}
+        <div className="contact-section">
+          <div className="section-heading">
+            <Send size={18} />
+            <h2>New Support Request</h2>
+          </div>
+
+          {error && (
+            <div className="contact-alert error">
+              <AlertCircle size={17} /> {error}
+            </div>
+          )}
+          {status && <div className="contact-alert success">✓ {status}</div>}
+
+          <form className="contact-form" onSubmit={handleSubmit}>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Full Name</label>
+                <input
+                  name="name"
+                  value={formData.name}
+                  readOnly
+                  className="readonly"
+                />
               </div>
-            ))}
-          </div>
-        )}
+              <div className="form-group">
+                <label>Email</label>
+                <input value={formData.email} readOnly className="readonly" />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>Phone *</label>
+                <input
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="Enter phone number"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Issue Type *</label>
+                <select
+                  name="issueType"
+                  value={formData.issueType}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select issue type</option>
+                  {Object.keys(ISSUE_LABELS).map((key) => (
+                    <option key={key} value={key}>
+                      {ISSUE_LABELS[key]}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Urgency *</label>
+              <div className="urgency-options">
+                {["HIGH", "MEDIUM", "LOW"].map((level) => (
+                  <label
+                    key={level}
+                    className={`urgency-chip ${formData.urgency === level ? "selected" : ""}`}
+                    style={
+                      formData.urgency === level
+                        ? {
+                            borderColor: URGENCY_CONFIG[level].color,
+                            color: URGENCY_CONFIG[level].color,
+                            background: `${URGENCY_CONFIG[level].color}18`,
+                          }
+                        : {}
+                    }
+                  >
+                    <input
+                      type="radio"
+                      name="urgency"
+                      value={level}
+                      checked={formData.urgency === level}
+                      onChange={handleChange}
+                      required
+                    />
+                    {URGENCY_CONFIG[level].label}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Describe Your Issue *</label>
+              <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="Describe your issue in detail..."
+                rows={5}
+                required
+              />
+            </div>
+
+            <button className="submit-btn" disabled={loading}>
+              {loading ? (
+                <Loader2 size={17} className="spin" />
+              ) : (
+                <Send size={17} />
+              )}
+              {loading ? "Submitting..." : "Submit Request"}
+            </button>
+          </form>
+        </div>
       </div>
-
-      {error && (
-        <div className="contact-error">
-          <AlertCircle size={18} /> {error}
-        </div>
-      )}
-
-      {status && <div className="contact-success">{status}</div>}
-
-      {/* SUPPORT FORM */}
-      <form className="contact-form" onSubmit={handleSubmit}>
-        <div className="form-row">
-          <div className="form-group">
-            <label>Full Name *</label>
-            <input name="name" value={formData.name} readOnly />
-          </div>
-
-          <div className="form-group">
-            <label>Email *</label>
-            <input value={formData.email} readOnly />
-          </div>
-        </div>
-
-        <div className="form-row">
-          <div className="form-group">
-            <label>Phone *</label>
-            <input
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Issue Type *</label>
-            <select
-              name="issueType"
-              value={formData.issueType}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select</option>
-              {Object.keys(ISSUE_LABELS).map((key) => (
-                <option key={key} value={key}>
-                  {ISSUE_LABELS[key]}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label>Urgency *</label>
-          <select
-            name="urgency"
-            value={formData.urgency}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select</option>
-            <option value="HIGH">High</option>
-            <option value="MEDIUM">Medium</option>
-            <option value="LOW">Low</option>
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label>Describe Issue *</label>
-          <textarea
-            name="message"
-            value={formData.message}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <button className="submit-button" disabled={loading}>
-          {loading ? <Loader2 className="spin" /> : <Send />} Submit
-        </button>
-      </form>
     </div>
   );
 }
