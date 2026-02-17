@@ -76,7 +76,7 @@ const AdminDashboard = () => {
     return (
       <div className="dashboard-error">
         Failed to load dashboard.
-        <button onClick={fetchDashboardStats}>Retry</button>
+        <button className="btn btn-outline btn-sm" onClick={fetchDashboardStats}>Retry</button>
       </div>
     );
   }
@@ -95,10 +95,13 @@ const AdminDashboard = () => {
     <div className="admin-dashboard">
       <div className="dashboard-header">
         <h2>Admin Overview</h2>
-        <button className="refresh-btn" onClick={fetchDashboardStats}>
-          <RefreshCw size={16} />
-          Refresh
-        </button>
+        <button
+  className="btn btn-ghost btn-sm"
+  onClick={fetchDashboardStats}
+>
+  <RefreshCw size={16} />
+</button>
+
       </div>
 
       <div className="dashboard-grid">
@@ -117,7 +120,7 @@ const AdminDashboard = () => {
             </div>
           );
         })}
-      </div>     
+      </div>
     </div>
   );
 };

@@ -1,0 +1,69 @@
+/* =========================================
+   THEME TOGGLE BUTTON
+========================================= */
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 14px;
+  border-radius: 999px;
+
+  border: 1px solid var(--border-primary);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.15s ease,
+    box-shadow 0.25s ease;
+}
+
+/* Hover */
+
+.theme-toggle-btn:hover {
+  background: var(--bg-tertiary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Active */
+
+.theme-toggle-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Icon Styling */
+
+.theme-toggle-btn svg {
+  transition: transform 0.3s ease;
+}
+
+/* Rotate icon slightly on hover */
+
+.theme-toggle-btn:hover svg {
+  transform: rotate(15deg);
+}
+
+/* Focus Accessibility */
+
+.theme-toggle-btn:focus-visible {
+  outline: 3px solid var(--primary-light);
+  outline-offset: 2px;
+}
+
+/* =========================================
+   OPTIONAL: Compact Version
+========================================= */
+
+.theme-toggle-btn.compact {
+  padding: 6px 10px;
+  font-size: 12px;
+}

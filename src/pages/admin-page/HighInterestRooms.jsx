@@ -1,69 +1,110 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Api from "../../api/Api";
 import { API_ENDPOINTS } from "../../api/apiConfig";
-import { AlertTriangle, CheckCircle, Phone, Mail, Home } from "lucide-react";
+import {
+  AlertTriangle,
+  CheckCircle,
+  Phone,
+  Mail,
+} from "lucide-react";
 import "../../CSS/HighInterestRooms.css";
 import MyLoader from "../../components/MyLoader";
 
 const HighInterestRooms = () => {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [actionLoadingId, setActionLoadingId] = useState(null);
+  const [error, setError] = useState(false);
+
   const adminEmail = localStorage.getItem("email");
 
-  useEffect(() => {
-    fetchHighInterestRooms();
-  }, []);
+  const fetchHighInterestRooms = useCallback(async () => {
+    setLoading(true);
+    setError(false);
 
-  const fetchHighInterestRooms = async () => {
     try {
-      const res = await Api.get(API_ENDPOINTS.ADMIN_HIGH_INTEREST);
-      setRooms(res.data);
+      const res = await Api.get(
+        API_ENDPOINTS.ADMIN_HIGH_INTEREST
+      );
+      setRooms(res.data || []);
     } catch (err) {
-      console.error("Error fetching high interest rooms", err);
+      console.error(
+        "Error fetching high interest rooms",
+        err
+      );
+      setError(true);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchHighInterestRooms();
+  }, [fetchHighInterestRooms]);
 
   const handleMarkAsBooked = async (roomId) => {
     if (
       !window.confirm(
-        "Bhai, kya aapne owner se confirm kar liya hai ki ye room book ho gaya hai?",
+        "Have you confirmed with the owner that this room is booked?"
       )
     )
       return;
 
     try {
-      // Admin email bhej rahe hain audit log ke liye
+      setActionLoadingId(roomId);
+
       await Api.patch(
-        `${API_ENDPOINTS.ADMIN_MARK_BOOKED(roomId)}?adminEmail=${adminEmail}`,
+        `${API_ENDPOINTS.ADMIN_MARK_BOOKED(
+          roomId
+        )}?adminEmail=${adminEmail}`
       );
-      alert("Room successfully marked as BOOKED!");
-      fetchHighInterestRooms(); // List refresh karne ke liye
+
+      // Optimistic update (remove room instantly)
+      setRooms((prev) =>
+        prev.filter((room) => room.id !== roomId)
+      );
     } catch (err) {
-       console.log(err)
-      alert("Error updating status. Please try again.");
+      console.error(err);
+      alert("Failed to update booking status.");
+    } finally {
+      setActionLoadingId(null);
     }
   };
 
+  if (loading)
+    return (
+      <MyLoader data="Loading high interest rooms..." />
+    );
 
-  if (loading) return <MyLoader data={"Loading Highest Interested Rooms... Please wait..."} />
+  if (error)
+    return (
+      <div className="error-box">
+        Failed to load data.
+        <button
+          className="btn btn-outline btn-sm"
+          onClick={fetchHighInterestRooms}
+        >
+          Retry
+        </button>
+      </div>
+    );
 
   return (
     <div className="admin-container">
       <div className="admin-header-box">
         <h2>
-          <AlertTriangle color="#ef4444" /> High Interest Listings
+          <AlertTriangle className="danger-icon" />
+          High Interest Listings
         </h2>
         <p>
-          Ye wo rooms hain jinhe 5+ logo ne contact kiya hai. Inka status check
-          karein.
+          These rooms have been contacted by 5+ users.
+          Review and update status if booked.
         </p>
       </div>
 
       {rooms.length === 0 ? (
         <div className="no-data">
-          Bhai, abhi koi flagged room nahi hai. Sab set hai! ✅
+          No flagged rooms at the moment.
         </div>
       ) : (
         <table className="admin-table">
@@ -86,27 +127,41 @@ const HighInterestRooms = () => {
                     </span>
                   </div>
                 </td>
+
                 <td>
                   <div className="view-count-badge">
-                    {room.contactViewCount} Premium Views
+                    {room.contactViewCount} Premium
+                    Views
                   </div>
                 </td>
+
                 <td>
                   <div className="contact-info">
                     <p>
-                      <Mail size={14} /> {room.ownerEmail}
+                      <Mail size={14} />
+                      {room.ownerEmail}
                     </p>
                     <p>
-                      <Phone size={14} /> {room.contactNumber}
+                      <Phone size={14} />
+                      {room.contactNumber}
                     </p>
                   </div>
                 </td>
+
                 <td>
                   <button
-                    className="btn-mark-booked"
-                    onClick={() => handleMarkAsBooked(room.id)}
+                    className="btn btn-success btn-sm"
+                    disabled={
+                      actionLoadingId === room.id
+                    }
+                    onClick={() =>
+                      handleMarkAsBooked(room.id)
+                    }
                   >
-                    <CheckCircle size={16} /> Mark as Booked
+                    <CheckCircle size={16} />
+                    {actionLoadingId === room.id
+                      ? "Updating..."
+                      : "Mark as Booked"}
                   </button>
                 </td>
               </tr>

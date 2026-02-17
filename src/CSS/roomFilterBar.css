@@ -1,0 +1,96 @@
+/* ===============================
+   FILTER BAR CONTAINER
+================================= */
+
+.filter-bar {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ===============================
+   INPUT GRID
+================================= */
+
+.filter-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+/* ===============================
+   INPUT + SELECT STYLING
+================================= */
+
+.filter-group input,
+.filter-group select {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-primary);
+
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 14px;
+
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Remove number arrows (optional cleaner UI) */
+.filter-group input[type="number"]::-webkit-outer-spin-button,
+.filter-group input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.filter-group input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Focus state */
+
+.filter-group input:focus,
+.filter-group select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--bg-overlay);
+}
+
+/* ===============================
+   ACTION BUTTONS
+================================= */
+
+.filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ===============================
+   RESPONSIVE BEHAVIOR
+================================= */
+
+@media (max-width: 768px) {
+  .filter-bar {
+    padding: 14px;
+  }
+
+  .filter-group {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-actions {
+    justify-content: stretch;
+  }
+
+  .filter-actions .btn {
+    width: 100%;
+  }
+}
