@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Api from "../../api/Api";
-import { Loader2, Search } from "lucide-react";
-import AadhaarModal from "../../models/AadhaarModal ";
+import { Search } from "lucide-react";
+import AadhaarModal from "../../models/AadhaarModal";
 import "../../css/adminUsers.css";
 import MyLoader from "../../components/MyLoader";
 
@@ -9,24 +9,16 @@ const AdminUsers = ({ role, endPoint }) => {
   const [users, setUsers] = useState([]);
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(true);
+  const [aadhaarUrl, setAadhaarUrl] = useState(null);
+
+  // Clean display role
   const displayRole = role
     ?.replace(/^ROLE_/, "")
     .toLowerCase()
     .replace(/^\w/, (c) => c.toUpperCase());
 
-
-  const [aadhaarUrl, setAadhaarUrl] = useState(null);
-
-  // Fetch users with debounce
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchUsers();
-    }, 400);
-
-    return () => clearTimeout(timer);
-  }, [email, role]);
-
-  const fetchUsers = async () => {
+  // Memoized fetch function
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
       const res = await Api.get(`/admin/${endPoint}`, {
@@ -39,7 +31,13 @@ const AdminUsers = ({ role, endPoint }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [role, email, endPoint]);
+
+  // Debounced fetch
+  useEffect(() => {
+    const timer = setTimeout(fetchUsers, 400);
+    return () => clearTimeout(timer);
+  }, [fetchUsers]);
 
   return (
     <div className="admin-users">
@@ -47,7 +45,7 @@ const AdminUsers = ({ role, endPoint }) => {
       <div className="page-header">
         <div className="page-header-content">
           <h2>
-            {role ? role.replace("ROLE_", "") : "All"} Users
+            {displayRole || "All"} Users
             <span className="header-count">{users.length}</span>
           </h2>
           <p className="page-subtitle">
@@ -55,9 +53,6 @@ const AdminUsers = ({ role, endPoint }) => {
           </p>
         </div>
       </div>
-
-
-
 
       {/* Search */}
       <div className="admin-search">
@@ -72,9 +67,7 @@ const AdminUsers = ({ role, endPoint }) => {
 
       {/* Loader */}
       {loading ? (
-        <>
-          <MyLoader data={`Loading ${displayRole}'s`} />
-        </>
+        <MyLoader data={`Loading ${displayRole || "Users"}...`} />
       ) : (
         <div className="users-list">
           {users.length ? (
@@ -91,8 +84,8 @@ const AdminUsers = ({ role, endPoint }) => {
                     <p className="email">{u.email}</p>
                   </div>
 
-                  <span className={`badge ${u.role}`}>
-                    {u.role.replace("ROLE_", "")}
+                  <span className={`badge ${u.role?.toLowerCase()}`}>
+                    {u.role?.replace("ROLE_", "")}
                   </span>
                 </div>
 

@@ -5,16 +5,17 @@ import useRoomSearch from "../../customHook/useRoomSearch";
 import RoomFilterBar from "../../components/RoomFilterBar";
 import "../../css/search-room.css";
 import MapPicker from "../../components/MapPicker";
-import { useState, useEffect } from "react"; // useEffect add kiya
+import { useState, useEffect } from "react";
 import RoomGrid from "../../components/RoomGrid";
 import MyLoader from "../../components/MyLoader";
 
 export default function SearchRoom({ approved }) {
-  const location = useLocation(); // URL track karne ke liye
+  const location = useLocation();
   const { isPremiumUser } = usePremiumStatus();
+
   const [openMap, setOpenMap] = useState(false);
   const [mapCenter, setMapCenter] = useState(null);
-  console.log(approved);
+
   const {
     rooms,
     draftFilters,
@@ -25,34 +26,52 @@ export default function SearchRoom({ approved }) {
     loading,
     page,
     setLocation,
-  } = useRoomSearch({ mode: "PUBLIC", approved: approved });
+  } = useRoomSearch({
+    mode: "PUBLIC",
+    approved: approved,
+  });
 
-  // --- NAYA LOGIC: URL se Type uthane ke liye ---
+  /* ==========================
+     URL TYPE SYNC FIXED
+  ========================== */
+
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const typeFromUrl = queryParams.get("type");
 
     if (typeFromUrl) {
-      // URL mein 'type' milte hi use filters mein set karo
-      setDraftFilters((prev) => ({ ...prev, roomType: typeFromUrl }));
+      setDraftFilters((prev) => {
+        const updatedFilters = {
+          ...prev,
+          roomType: typeFromUrl,
+        };
 
-      // Turant filters apply karwa do taaki backend hit ho jaye
-      // Note: roomType wahi hona chahiye jo aapke Backend/FilterBar mein use ho raha hai
-      applyFilters({ ...draftFilters, roomType: typeFromUrl });
+        applyFilters(updatedFilters); // always pass fresh object
+        return updatedFilters;
+      });
     }
-  }, [location.search]); // Jab bhi URL change ho, ye chale
-  // ----------------------------------------------
+  }, [location.search, applyFilters, setDraftFilters]);
+
+  /* ==========================
+     Infinite Scroll
+  ========================== */
 
   useInfiniteScroll({
     hasMore,
     loading,
     onLoadMore: () => loadRooms(page + 1, true),
   });
-  console.log(approved)
+
+  /* ==========================
+     Handlers
+  ========================== */
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setDraftFilters((prev) => ({ ...prev, [name]: value }));
+    setDraftFilters((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleUseLocation = () => {
@@ -66,7 +85,7 @@ export default function SearchRoom({ approved }) {
         });
         setOpenMap(true);
       },
-      () => alert("Enable location access"),
+      () => alert("Enable location access")
     );
   };
 
@@ -75,7 +94,7 @@ export default function SearchRoom({ approved }) {
       <RoomFilterBar
         filters={draftFilters}
         onChange={handleFilterChange}
-        onApply={applyFilters}
+        onApply={() => applyFilters(draftFilters)}
         onUseLocation={handleUseLocation}
         isPremiumUser={isPremiumUser}
       />
@@ -91,11 +110,15 @@ export default function SearchRoom({ approved }) {
         />
       )}
 
+      {loading && <MyLoader data="Loading Rooms..." />}
 
+      {!loading && (
+        <RoomGrid
+          rooms={rooms}
+          applyFilters={applyFilters}
+        />
+      )}
 
-
-      {loading &&  <MyLoader data={"Loding Rooms..."} />}
-      {!loading && <RoomGrid rooms={rooms} applyFilters={applyFilters}/>}
       {!hasMore && rooms.length > 0 && (
         <div className="loader">No more rooms</div>
       )}

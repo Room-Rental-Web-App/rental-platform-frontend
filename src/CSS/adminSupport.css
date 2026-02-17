@@ -1,85 +1,210 @@
+/* =========================================
+   PAGE CONTAINER
+========================================= */
+
 .admin-support-page {
-  max-width: 1100px;
-  margin: 20px auto;
-  padding: 16px;
+  padding: 24px;
 }
 
 .admin-support-page h1 {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 700;
 }
 
+/* =========================================
+   FILTER BAR
+========================================= */
+
 .filter-bar {
-  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 22px;
+  padding: 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
 }
 
 .filter-bar select {
-  padding: 6px 10px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-primary);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 14px;
 }
+
+.filter-bar select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.clear-btn {
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-primary);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.clear-btn:hover {
+  background: var(--bg-overlay);
+}
+
+/* =========================================
+   TICKET LIST
+========================================= */
 
 .admin-ticket-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 18px;
 }
 
+/* =========================================
+   TICKET CARD
+========================================= */
+
 .admin-ticket-card {
-  border: 1px solid #ddd;
-  padding: 14px;
-  border-radius: 6px;
-  background: #fff;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
+.admin-ticket-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* =========================================
+   HEADER
+========================================= */
 
 .card-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 8px;
+  align-items: center;
 }
+
+/* =========================================
+   STATUS BADGES
+========================================= */
 
 .status {
   font-size: 12px;
-  padding: 3px 10px;
-  border-radius: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
 }
 
 .status.OPEN {
-  background: #fff3cd;
-  color: #856404;
+  background: rgba(255, 193, 7, 0.15);
+  color: var(--warning);
 }
 
 .status.IN_PROGRESS {
-  background: #cce5ff;
-  color: #004085;
+  background: rgba(0, 123, 255, 0.15);
+  color: #007bff;
 }
 
 .status.RESOLVED {
-  background: #d4edda;
-  color: #155724;
+  background: rgba(40, 167, 69, 0.15);
+  color: var(--success);
 }
 
+/* =========================================
+   URGENCY BADGES
+========================================= */
+
 .urgency {
-  font-weight: bold;
-  margin: 6px 0;
+  font-weight: 600;
+  font-size: 13px;
 }
 
 .urgency.HIGH {
-  color: #dc3545;
+  color: var(--error);
 }
 
 .urgency.MEDIUM {
-  color: #fd7e14;
+  color: var(--warning);
 }
 
 .urgency.LOW {
-  color: #28a745;
+  color: var(--success);
 }
 
+/* =========================================
+   MESSAGE BOX
+========================================= */
+
 .message-box {
-  background: #f8f9fa;
-  padding: 8px;
-  border-radius: 4px;
-  margin: 8px 0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  font-size: 14px;
+  line-height: 1.4;
+
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.actions {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .actions select {
-  padding: 4px 8px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-primary);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.actions select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.admin-support-page p {
+  color: var(--text-secondary);
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+  .admin-ticket-list {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-bar {
+    flex-direction: column;
+  }
+
+  .clear-btn {
+    width: 100%;
+  }
 }

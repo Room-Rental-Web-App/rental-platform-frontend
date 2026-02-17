@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import Api from "../../api/Api";
 import "../../css/revenueReport.css";
 
@@ -39,7 +39,7 @@ const getMonthDayDiff = (startDate, endDate) => {
 
   return {
     months: Math.max(months, 0),
-    days: Math.max(days, 0)
+    days: Math.max(days, 0),
   };
 };
 
@@ -48,7 +48,7 @@ function RevenueReport() {
     role: "",
     planDuration: "",
     from: "",
-    to: ""
+    to: "",
   });
 
   const [data, setData] = useState([]);
@@ -62,8 +62,8 @@ function RevenueReport() {
           role: filters.role || null,
           days: filters.planDuration || null,
           from: filters.from || null,
-          to: filters.to || null
-        }
+          to: filters.to || null,
+        },
       });
 
       setData(res.data || []);
@@ -75,23 +75,34 @@ function RevenueReport() {
     }
   }, [filters]);
 
+  // Initial load only
   useEffect(() => {
     fetchRevenue();
-  }, [fetchRevenue]);
+  }, []);
 
   const resetFilters = () => {
     setFilters({
       role: "",
       planDuration: "",
       from: "",
-      to: ""
+      to: "",
     });
   };
 
-  const totalRevenue = data.reduce(
-    (sum, sub) => sum + getPriceFromPlan(sub.planCode),
-    0
-  );
+  // Memoized revenue calculation
+  const totalRevenue = useMemo(() => {
+    return data.reduce(
+      (sum, sub) => sum + getPriceFromPlan(sub.planCode),
+      0
+    );
+  }, [data]);
+
+  const formattedRevenue = useMemo(() => {
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+    }).format(totalRevenue);
+  }, [totalRevenue]);
 
   return (
     <div className="revenue-container">
@@ -139,19 +150,25 @@ function RevenueReport() {
           }
         />
 
-        <button className="apply-btn" onClick={fetchRevenue}>
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={fetchRevenue}
+        >
           Apply
         </button>
 
-        <button className="reset-btn" onClick={resetFilters}>
+        <button
+          className="btn btn-outline btn-sm"
+          onClick={resetFilters}
+        >
           Reset
         </button>
       </div>
 
       {/* SUMMARY */}
       <div className="revenue-summary">
-        <h3>Total Revenue</h3>
-        <p>₹ {totalRevenue}</p>
+        <span>Total Revenue</span>
+        <h2>{formattedRevenue}</h2>
       </div>
 
       {/* DATA */}
@@ -163,25 +180,39 @@ function RevenueReport() {
         <div className="revenue-grid">
           {data.map((sub) => {
             const diff = getMonthDayDiff(sub.startDate, sub.endDate);
+
             return (
               <div className="revenue-card" key={sub.id}>
                 <div className="card-header">
-                  <span className="plan-badge">{sub.planCode}</span>
+                  <span className="plan-badge">
+                    {sub.planCode}
+                  </span>
                   <span className="amount">
-                    ₹ {getPriceFromPlan(sub.planCode)}
+                    {new Intl.NumberFormat("en-IN", {
+                      style: "currency",
+                      currency: "INR",
+                    }).format(
+                      getPriceFromPlan(sub.planCode)
+                    )}
                   </span>
                 </div>
 
                 <div className="card-body">
-                  <p><strong>Email:</strong> {sub.email}</p>
-                  <p><strong>Role:</strong> {sub.role}</p>
+                  <div className="meta">
+                    <span>{sub.email}</span>
+                    <span>{sub.role}</span>
+                  </div>
+
                   <p>
-                    <strong>Duration:</strong> {diff.months}m {diff.days}d
+                    <strong>Duration:</strong>{" "}
+                    {diff.months}m {diff.days}d
                   </p>
+
                   <p>
                     <strong>Start:</strong>{" "}
                     {new Date(sub.startDate).toLocaleString()}
                   </p>
+
                   <p>
                     <strong>End:</strong>{" "}
                     {new Date(sub.endDate).toLocaleString()}
