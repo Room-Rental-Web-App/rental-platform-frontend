@@ -34,10 +34,10 @@ function Footer() {
             <a href="https://twitter.com" className="social-icon">
               <Twitter size={20} />
             </a>
-            <a href="https://instagram.com" className="social-icon">
+            <a href="https://www.instagram.com/?next=" className="social-icon">
               <Instagram size={20} />
             </a>
-            <a href="https://linkedin.com" className="social-icon">
+            <a href="https://www.linkedin.com/feed/" className="social-icon">
               <Linkedin size={20} />
             </a>
           </div>
