@@ -1,192 +1,296 @@
-/* ===========================
-   USER CARD
-=========================== */
+/* ============================= */
+/* LIST */
+/* ============================= */
 
-.user-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-
-  padding: 16px 18px;
-  border-radius: 14px;
-
-  background: var(--bg-card, #ffffff);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-}
-
-.user-card:hover {
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-  transform: translateY(-2px);
-}
-
-/* ===========================
-   LEFT SECTION
-=========================== */
-
-.user-left {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-
+.uc-list {
   display: grid;
-  place-items: center;
-
-  font-size: 18px;
-  font-weight: 600;
-
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
-  color: #fff;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
 }
 
-/* ===========================
-   DETAILS
-=========================== */
 
-.details {
+/* ============================= */
+/* CARD */
+/* ============================= */
+
+.uc-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.uc-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+
+/* ============================= */
+/* HEADER */
+/* ============================= */
+
+.uc-header {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
-.name {
+.uc-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: var(--text-inverse);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.uc-main h4 {
   font-size: 15px;
   font-weight: 600;
+  color: var(--text-primary);
 }
 
-.email,
-.phone {
-  font-size: 13px;
-  opacity: 0.75;
+.uc-email {
+  font-size: 12px;
+  color: var(--text-tertiary);
 }
 
-/* ===========================
-   BADGES
-=========================== */
 
-.badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 6px;
-}
+/* ============================= */
+/* ROLE BADGE */
+/* ============================= */
 
-.badge {
-  font-size: 11px;
+.uc-role {
+  margin-left: auto;
   padding: 4px 10px;
-  border-radius: 999px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  background-color: var(--bg-overlay);
+  color: var(--primary);
+}
+
+
+/* ============================= */
+/* BODY */
+/* ============================= */
+
+.uc-body {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.uc-info span {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.uc-info p {
+  font-size: 13px;
+  color: var(--text-primary);
   font-weight: 500;
-  white-space: nowrap;
 }
 
-/* Role */
-.badge.role {
-  background: #eef2ff;
-  color: #3730a3;
+
+/* ============================= */
+/* STATUS COLORS */
+/* ============================= */
+
+.uc-status-active {
+  color: var(--success);
+  font-weight: 600;
 }
 
-/* Status */
-.badge.status.approved {
-  background: #dcfce7;
-  color: #166534;
+.uc-status-pending {
+  color: var(--warning);
+  font-weight: 600;
 }
 
-.badge.status.pending {
-  background: #fef3c7;
-  color: #92400e;
+.uc-status-rejected {
+  color: var(--error);
+  font-weight: 600;
 }
 
-.badge.status.rejected {
-  background: #fee2e2;
-  color: #991b1b;
+
+/* ============================= */
+/* FOOTER */
+/* ============================= */
+
+.uc-footer {
+  border-top: 1px solid var(--border-primary);
+  padding-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-/* Verification */
-.badge.verified {
-  background: #e0f2fe;
-  color: #075985;
+.uc-footer-label {
+  font-size: 12px;
+  color: var(--text-tertiary);
 }
 
-.badge.unverified {
-  background: #fef2f2;
-  color: #991b1b;
+.uc-aadhar-preview {
+  width: 60px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--border-primary);
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
-/* Disabled */
-.badge.disabled {
-  background: #e5e7eb;
-  color: #374151;
+.uc-aadhar-preview:hover {
+  transform: scale(1.05);
 }
 
-/* ===========================
-   ACTIONS
-=========================== */
+.uc-muted {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
 
-.user-actions {
+
+/* ============================= */
+/* EMPTY STATE */
+/* ============================= */
+
+.uc-no-data {
+  padding: 40px;
+  text-align: center;
+  background-color: var(--bg-secondary);
+  border-radius: 14px;
+  border: 1px solid var(--border-primary);
+  color: var(--text-tertiary);
+}
+
+
+/* ============================= */
+/* ACTION BUTTONS */
+/* ============================= */
+
+.uc-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.uc-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.uc-btn-success {
+  background-color: var(--success);
+  color: #fff;
+  border-color: var(--success);
+}
+
+.uc-btn-success:hover {
+  opacity: 0.9;
+}
+
+.uc-btn-danger {
+  background-color: var(--error);
+  color: #fff;
+  border-color: var(--error);
+}
+
+.uc-btn-danger:hover {
+  opacity: 0.9;
+}
+
+.uc-btn-secondary {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-primary);
+}
+
+.uc-btn-secondary:hover {
+  background-color: var(--bg-overlay);
+}
+
+/* ============================= */
+/* MODERATION BUTTONS */
+/* ============================= */
+
+.uc-actions {
   display: flex;
   flex-direction: column;
+  gap: 8px;
   align-items: flex-end;
+}
+
+.uc-moderation-actions {
+  display: flex;
   gap: 8px;
 }
 
-/* View Aadhaar */
-.view-btn {
-  font-size: 12px;
+/* Base */
+.uc-btn {
   padding: 6px 12px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-
-  background: #eef2ff;
-  color: #3730a3;
-
-  transition: background 0.2s ease;
-}
-
-.view-btn:hover {
-  background: #e0e7ff;
-}
-
-/* Delete (Danger) */
-.delete-btn {
   font-size: 12px;
-  padding: 6px 12px;
-  border-radius: 8px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid transparent;
   cursor: pointer;
-
-  background: transparent;
-  border: 1px solid #ef4444;
-  color: #ef4444;
-
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
-.delete-btn:hover {
-  background: #fee2e2;
+/* Approve */
+.uc-btn-success {
+  background-color: var(--success);
+  color: #fff;
+  border-color: var(--success);
 }
 
-/* ===========================
-   RESPONSIVE
-=========================== */
-
-@media (max-width: 640px) {
-  .user-card {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .user-actions {
-    width: 100%;
-    flex-direction: row;
-    justify-content: flex-end;
-  }
+.uc-btn-success:hover {
+  opacity: 0.9;
 }
+
+/* Reject */
+.uc-btn-warning {
+  background-color: var(--warning);
+  color: #000;
+  border-color: var(--warning);
+}
+
+.uc-btn-warning:hover {
+  opacity: 0.9;
+}
+
+/* Block */
+.uc-btn-danger {
+  background-color: var(--error);
+  color: #fff;
+  border-color: var(--error);
+}
+
+.uc-btn-danger:hover {
+  opacity: 0.9;
+}
+
+/* Unblock */
+.uc-btn-secondary {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-primary);
+}
+
+.uc-btn-secondary:hover {
+  background-color: var(--bg-overlay);
+}
+

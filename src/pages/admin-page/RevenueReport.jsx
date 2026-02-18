@@ -1,41 +1,8 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import Api from "../../api/Api";
 import "../../css/revenueReport.css";
-
-/**
- * TEMPORARY FRONTEND PRICING LOGIC
- * ❗ Real revenue must come from backend
- */
-import { getPriceFromPlan } from "../../data/roomsDekhoData";
 import MyLoader from "../../components/MyLoader";
-
-const getMonthDayDiff = (startDate, endDate) => {
-  let start = new Date(startDate);
-  const end = new Date(endDate);
-
-  let months =
-    (end.getFullYear() - start.getFullYear()) * 12 +
-    (end.getMonth() - start.getMonth());
-
-  if (
-    end.getDate() < start.getDate() ||
-    (end.getDate() === start.getDate() &&
-      end.getTime() < start.getTime())
-  ) {
-    months -= 1;
-  }
-
-  start = new Date(start);
-  start.setMonth(start.getMonth() + months);
-
-  const MS_PER_DAY = 1000 * 60 * 60 * 24;
-  const days = Math.floor((end - start) / MS_PER_DAY);
-
-  return {
-    months: Math.max(months, 0),
-    days: Math.max(days, 0),
-  };
-};
+import { getMonthDayDiff } from "../../customHook/getMonthDifferent";
 
 function RevenueReport() {
   const [filters, setFilters] = useState({
@@ -48,6 +15,13 @@ function RevenueReport() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const currencyFormatter = useMemo(() => {
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+    });
+  }, []);
+
   const fetchRevenue = useCallback(async () => {
     setLoading(true);
     try {
@@ -59,7 +33,7 @@ function RevenueReport() {
           to: filters.to || null,
         },
       });
-      console.log(res.data)
+
       setData(res.data || []);
     } catch (err) {
       console.error(err);
@@ -69,7 +43,6 @@ function RevenueReport() {
     }
   }, [filters]);
 
-  // Initial load only
   useEffect(() => {
     fetchRevenue();
   }, []);
@@ -83,27 +56,22 @@ function RevenueReport() {
     });
   };
 
-  // Memoized revenue calculation
   const totalRevenue = useMemo(() => {
     return data.reduce(
-      (sum, sub) => sum + getPriceFromPlan(sub.planCode),
+      (sum, sub) => sum + (sub.amountPaid || 0),
       0
     );
   }, [data]);
 
   const formattedRevenue = useMemo(() => {
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-    }).format(totalRevenue);
-  }, [totalRevenue]);
+    return currencyFormatter.format(totalRevenue);
+  }, [totalRevenue, currencyFormatter]);
 
   return (
-    <div className="revenue-container">
-      <h2>Subscription Revenue</h2>
+    <div className="rev-container">
+      <h2 className="rev-title">Subscription Revenue</h2>
 
-      {/* FILTERS */}
-      <div className="filters">
+      <div className="rev-filters">
         <select
           value={filters.role}
           onChange={(e) =>
@@ -145,54 +113,52 @@ function RevenueReport() {
         />
 
         <button
-          className="btn btn-primary btn-sm"
+          className="rev-btn rev-btn-primary"
           onClick={fetchRevenue}
         >
           Apply
         </button>
 
         <button
-          className="btn btn-outline btn-sm"
+          className="rev-btn rev-btn-outline"
           onClick={resetFilters}
         >
           Reset
         </button>
       </div>
 
-      {/* SUMMARY */}
-      <div className="revenue-summary">
+      <div className="rev-summary">
         <span>Total Revenue</span>
         <h2>{formattedRevenue}</h2>
       </div>
 
-      {/* DATA */}
       {loading ? (
         <MyLoader data={"Loading revenue data..."} />
       ) : data.length === 0 ? (
-        <div className="empty-box">No revenue data found</div>
+        <div className="rev-empty">No revenue data found</div>
       ) : (
-        <div className="revenue-grid">
+        <div className="rev-grid">
           {data.map((sub) => {
-            const diff = getMonthDayDiff(sub.startDate, sub.endDate);
+            const diff = getMonthDayDiff(
+              sub.startDate,
+              sub.endDate
+            );
 
             return (
-              <div className="revenue-card" key={sub.id}>
-                <div className="card-header">
-                  <span className="plan-badge">
+              <div className="rev-card" key={sub.id}>
+                <div className="rev-card-header">
+                  <span className="rev-plan-badge">
                     {sub.planCode}
                   </span>
-                  <span className="amount">
-                    {new Intl.NumberFormat("en-IN", {
-                      style: "currency",
-                      currency: "INR",
-                    }).format(
-                      getPriceFromPlan(sub.planCode)
+                  <span className="rev-amount">
+                    {currencyFormatter.format(
+                      sub.amountPaid || 0
                     )}
                   </span>
                 </div>
 
-                <div className="card-body">
-                  <div className="meta">
+                <div className="rev-card-body">
+                  <div className="rev-meta">
                     <span>{sub.email}</span>
                     <span>{sub.role}</span>
                   </div>
@@ -204,12 +170,21 @@ function RevenueReport() {
 
                   <p>
                     <strong>Start:</strong>{" "}
-                    {new Date(sub.startDate).toLocaleString()}
+                    {new Date(
+                      sub.startDate
+                    ).toLocaleString()}
                   </p>
 
                   <p>
                     <strong>End:</strong>{" "}
-                    {new Date(sub.endDate).toLocaleString()}
+                    {new Date(
+                      sub.endDate
+                    ).toLocaleString()}
+                  </p>
+
+                  <p>
+                    <strong>Status:</strong>{" "}
+                    {sub.active ? "Active" : "Expired"}
                   </p>
                 </div>
               </div>

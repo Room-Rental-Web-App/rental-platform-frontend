@@ -4,6 +4,7 @@ import { Search } from "lucide-react";
 import AadhaarModal from "../../models/AadhaarModal";
 import "../../css/adminUsers.css";
 import MyLoader from "../../components/MyLoader";
+import UserCard from "../../components/UserCard";
 
 const AdminUsers = ({ role, endPoint }) => {
   const [users, setUsers] = useState([]);
@@ -69,72 +70,7 @@ const AdminUsers = ({ role, endPoint }) => {
       {loading ? (
         <MyLoader data={`Loading ${displayRole || "Users"}...`} />
       ) : (
-        <div className="users-list">
-          {users.length ? (
-            users.map((u) => (
-              <div className="user-card" key={u.id}>
-                {/* Header */}
-                <div className="user-card-header">
-                  <div className="user-avatar">
-                    {u.email?.charAt(0).toUpperCase()}
-                  </div>
-
-                  <div className="user-main">
-                    <h4>{u.fullName || "Unnamed User"}</h4>
-                    <p className="email">{u.email}</p>
-                  </div>
-
-                  <span className={`badge ${u.role?.toLowerCase()}`}>
-                    {u.role?.replace("ROLE_", "")}
-                  </span>
-                </div>
-
-                {/* Body */}
-                <div className="user-card-body">
-                  <div className="info">
-                    <span>Phone</span>
-                    <p>{u.phone || "N/A"}</p>
-                  </div>
-
-                  <div className="info">
-                    <span>Status</span>
-                    <p className={`status ${u.status?.toLowerCase()}`}>
-                      {u.status}
-                    </p>
-                  </div>
-
-                  <div className="info">
-                    <span>Enabled</span>
-                    <p>{u.enabled ? "Yes" : "No"}</p>
-                  </div>
-
-                  <div className="info">
-                    <span>Verified</span>
-                    <p>{u.verifiedUser ? "Yes" : "No"}</p>
-                  </div>
-                </div>
-
-                {/* Aadhaar */}
-                <div className="user-card-footer">
-                  <span>Aadhaar Card</span>
-
-                  {u.aadharUrl ? (
-                    <img
-                      src={u.aadharUrl}
-                      alt="Aadhaar"
-                      className="aadhar-preview clickable"
-                      onClick={() => setAadhaarUrl(u.aadharUrl)}
-                    />
-                  ) : (
-                    <p className="muted">Not Uploaded</p>
-                  )}
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="no-data">No users found.</div>
-          )}
-        </div>
+        <UserCard users={users} setAadhaarUrl={setAadhaarUrl} fetchUsers={fetchUsers} />
       )}
 
       {/* Aadhaar Modal */}
