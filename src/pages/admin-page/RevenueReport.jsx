@@ -7,6 +7,7 @@ import "../../css/revenueReport.css";
  * ❗ Real revenue must come from backend
  */
 import { getPriceFromPlan } from "../../data/roomsDekhoData";
+import MyLoader from "../../components/MyLoader";
 
 const getMonthDayDiff = (startDate, endDate) => {
   let start = new Date(startDate);
@@ -166,7 +167,7 @@ function RevenueReport() {
 
       {/* DATA */}
       {loading ? (
-        <div className="loading-box">Loading revenue data...</div>
+        <MyLoader data={"Loading revenue data..."} />
       ) : data.length === 0 ? (
         <div className="empty-box">No revenue data found</div>
       ) : (

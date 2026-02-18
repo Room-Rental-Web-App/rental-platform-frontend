@@ -43,19 +43,16 @@ function RoomGrid({ rooms, applyFilters }) {
   ============================== */
 
   const handleApproval = async (id, action) => {
-    const confirmMessage = `Are you sure you want to ${
-      action === "approve" ? "Approve" : "Reject"
-    } this listing?`;
+    const confirmMessage = `Are you sure you want to ${action === "approve" ? "Approve" : "Reject"
+      } this listing?`;
 
     if (!window.confirm(confirmMessage)) return;
 
     try {
-      const endpoint =
-        action === "approve"
-          ? API_ENDPOINTS.APPROVE_ROOM(id)
-          : API_ENDPOINTS.REJECT_ROOM(id);
+      const endpoint = action === "approve" ? API_ENDPOINTS.APPROVE_ROOM(id) : API_ENDPOINTS.REJECT_ROOM(id);
 
-      await axios.put(endpoint, {}, { headers: getAuthHeaders() });
+      const res = await axios.put(endpoint, {}, { headers: getAuthHeaders() });
+      console.log(res)
 
       applyFilters(); // FIXED: reload list properly
     } catch (err) {
@@ -145,11 +142,10 @@ function RoomGrid({ rooms, applyFilters }) {
               <p>Owner: {room.ownerEmail}</p>
 
               <span
-                className={`status ${
-                  room.isApprovedByAdmin
-                    ? "approved"
-                    : "pending"
-                }`}
+                className={`status ${room.isApprovedByAdmin
+                  ? "approved"
+                  : "pending"
+                  }`}
               >
                 {room.isApprovedByAdmin
                   ? "Approved"
@@ -158,22 +154,11 @@ function RoomGrid({ rooms, applyFilters }) {
             </div>
 
             <div className="action-buttons">
-              <button
-                className="btn btn-primary btn-sm"
-                onClick={() =>
-                  handleApproval(room.id, "approve")
-                }
-              >
-                <Check size={16} />
-                Approve
-              </button>
-
-              <button
-                className="btn btn-danger btn-sm"
-                onClick={() =>
-                  handleApproval(room.id, "reject")
-                }
-              >
+              {!room.isApprovedByAdmin ?
+                <button className="btn btn-primary btn-sm" onClick={() => handleApproval(room.id, "approve")}>
+                  <Check size={16} /> Approve</button> : ""
+              }
+              <button className="btn btn-danger btn-sm" onClick={() => handleApproval(room.id, "reject")}>
                 <X size={16} />
                 Reject
               </button>

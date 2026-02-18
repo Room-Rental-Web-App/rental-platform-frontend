@@ -48,8 +48,6 @@ function RazorPayConfig({ amountToPay, value, planCode, onSuccess }) {
 
             if (verifyRes.status === 200) {
               alert("Congratulations! Payment Successful.");
-
-              
               if (onSuccess) {
                 onSuccess();
               }
