@@ -85,7 +85,7 @@ const PrivacyPolicy = () => {
     {
       id: "faq-3",
       q: "How can I delete my personal data?",
-      a: "You may request verification, correction, or erasure of your Personal Data by contacting our Grievance Officer at privacy@roomsdekho.com.",
+      a: "You may request verification, correction, or erasure of your Personal Data by contacting our Grievance Officer at roomdekhobharat@gmail.com.",
     },
     {
       id: "faq-4",
@@ -260,18 +260,19 @@ const PrivacyPolicy = () => {
           </p>
           <div className="officer-details">
             <p>
-              <strong>Officer Name:</strong> Apurv Sud
+              <strong>Officer Name:</strong> Aditya Sahu
             </p>
             <p>
-              <strong>Company:</strong> RoomsDekho India Limited
+              <strong>Developed By:</strong> Vishwash Gour, Nikhil Patel
             </p>
+
             <p>
-              <strong>Address:</strong> B-8, Sector 132, Noida, India
+              <strong>Address:</strong> Bhopal - 462016, Madhya Pradesh, India
             </p>
             <p>
               <strong>Email:</strong>{" "}
               <strong style={{ color: "var(--primary)" }}>
-                privacy@roomsdekho.com
+                roomdekhobharat@gmail.com
               </strong>
             </p>
           </div>

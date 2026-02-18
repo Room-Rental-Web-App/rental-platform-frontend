@@ -127,7 +127,7 @@ const RefundPolicy = () => {
           If you believe you are eligible for a refund, contact our support team
           at{" "}
           <strong style={{ color: "var(--primary)" }}>
-            support@roomsdekho.com
+            roomdekhobharat@gmail.com
           </strong>{" "}
           within <strong>48 hours</strong> of the transaction. Approved refunds
           will be processed within <strong>5–7 working days</strong>.

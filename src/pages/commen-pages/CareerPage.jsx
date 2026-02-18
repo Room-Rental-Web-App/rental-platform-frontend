@@ -217,8 +217,8 @@ const CareerPage = () => {
               Send your resume and a short intro explaining why you want to work
               on a room-rental product — not just <em>"I need a job"</em>.
             </p>
-            <a href="mailto:careers@roomsdekho.com" className="apply-email">
-              careers@roomsdekho.com
+            <a href="mailto:roomdekhobharat@gmail.com" className="apply-email">
+              roomdekhobharat@gmail.com
             </a>
           </div>
         </div>

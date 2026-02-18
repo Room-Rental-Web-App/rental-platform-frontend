@@ -66,7 +66,7 @@ const TermsAndService = () => {
     {
       id: "faq-1",
       q: "What happens if someone charges brokerage on RoomsDekho?",
-      a: "RoomsDekho is a zero brokerage platform. If anyone demands brokerage fees, report it to our support team immediately at support@roomsdekho.com.",
+      a: "RoomsDekho is a zero brokerage platform. If anyone demands brokerage fees, report it to our support team immediately at roomdekhobharat@gmail.com.",
     },
     {
       id: "faq-2",
