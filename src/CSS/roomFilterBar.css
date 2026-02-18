@@ -1,96 +1,100 @@
-/* ===============================
-   FILTER BAR CONTAINER
-================================= */
+/* =========================================
+   SIDEBAR WRAPPER
+========================================= */
 
-.filter-bar {
-  background-color: var(--bg-secondary);
+.filter-wrapper {
+  width: 270px;
+  min-width: 270px;
+
+  background: var(--bg-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: var(--radius-md);
-  padding: 16px;
-  margin-bottom: 20px;
+  border-radius: 16px;
+
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
 
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 24px;
+
+  position: sticky;
+  top: 20px;
+  height: fit-content;
 }
 
-/* ===============================
-   INPUT GRID
-================================= */
+/* =========================================
+   TITLE
+========================================= */
 
-.filter-group {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
-}
-
-/* ===============================
-   INPUT + SELECT STYLING
-================================= */
-
-.filter-group input,
-.filter-group select {
-  width: 100%;
-  padding: 9px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-primary);
-
-  background-color: var(--bg-primary);
+.filter-title {
+  font-size: 18px;
+  font-weight: 600;
   color: var(--text-primary);
-  font-size: 14px;
-
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Remove number arrows (optional cleaner UI) */
-.filter-group input[type="number"]::-webkit-outer-spin-button,
-.filter-group input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+/* =========================================
+   SECTION
+========================================= */
+
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.filter-group input[type="number"] {
-  -moz-appearance: textfield;
+.section-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
 }
 
-/* Focus state */
+/* =========================================
+   INPUTS
+========================================= */
 
-.filter-group input:focus,
-.filter-group select:focus {
-  outline: none;
+.filter-wrapper input,
+.filter-wrapper select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-secondary);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 13px;
+
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filter-wrapper input:focus,
+.filter-wrapper select:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 2px var(--bg-overlay);
+  outline: none;
 }
 
-/* ===============================
+/* =========================================
    ACTION BUTTONS
-================================= */
+========================================= */
 
 .filter-actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 10px;
 }
 
-/* ===============================
-   RESPONSIVE BEHAVIOR
-================================= */
+.filter-actions .btn {
+  width: 100%;
+}
 
-@media (max-width: 768px) {
-  .filter-bar {
-    padding: 14px;
-  }
+/* =========================================
+   RESPONSIVE (Mobile Drawer Compatibility)
+========================================= */
 
-  .filter-group {
-    grid-template-columns: 1fr;
-  }
-
-  .filter-actions {
-    justify-content: stretch;
-  }
-
-  .filter-actions .btn {
+@media (max-width: 992px) {
+  .filter-wrapper {
     width: 100%;
+    position: relative;
+    top: 0;
   }
 }
+
+

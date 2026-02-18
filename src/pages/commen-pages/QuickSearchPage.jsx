@@ -16,12 +16,14 @@ function QuickSearchPage() {
     Api.get("/rooms/filter", {
       params: {
         search: searchInput || null,
+        approved:true,
         page: null,
         size: 15,
       },
     })
       .then((res) => {
         setRooms(res.data.content || []);
+        console.log(res)
       })
       .catch((err) => {
         console.error("Quick search failed", err);
