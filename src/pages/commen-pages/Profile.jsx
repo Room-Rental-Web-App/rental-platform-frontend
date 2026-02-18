@@ -9,8 +9,7 @@ import {
   Edit3,
   Lock,
   RefreshCw,
-  Bookmark,
-  Calendar,
+
   LogOut,
 } from "lucide-react";
 
@@ -28,15 +27,6 @@ const Profile = () => {
 
   // UI States (Inhe add karna zaroori tha)
   const [editMode, setEditMode] = useState(false);
-  const [showPasswordSection, setShowPasswordSection] = useState(false);
-  const [showResetSection, setShowResetSection] = useState(false);
-  const [resetEmail, setResetEmail] = useState("");
-
-  const [passwordData, setPasswordData] = useState({
-    oldPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
 
   useEffect(() => {
     const storedUser = {
@@ -50,7 +40,7 @@ const Profile = () => {
   }, []);
 
   const handleChange = (e) => {
-    const{ name, value } = e.target;
+    const { name, value } = e.target;
     setUser({ ...user, [name]: value });
   };
 
@@ -71,15 +61,6 @@ const Profile = () => {
       });
     setEditMode(false);
     alert("Profile updated successfully!");
-  };
-
-  const handlePasswordSubmit = () => {
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-    alert("Password changed successfully!");
-    setShowPasswordSection(false);
   };
 
   const handleLogout = () => {
@@ -106,16 +87,6 @@ const Profile = () => {
           <div className="sidebar-info">
             <h3>{user.fullName}</h3>
             <p>{user.email}</p>
-          </div>
-          <div className="profile-stats">
-            <div className="stat-box">
-              <Bookmark size={18} />
-              <span>12 Saved</span>
-            </div>
-            <div className="stat-box">
-              <Calendar size={18} />
-              <span>3 Bookings</span>
-            </div>
           </div>
           <div className="sidebar-footer">
             <button className="logout-btn" onClick={handleLogout}>
@@ -195,83 +166,11 @@ const Profile = () => {
           <div className="details-card security-card">
             <h3>Security & Account</h3>
             <div className="action-row">
-              <button
-                className="sec-action-btn"
-                onClick={() => {
-                  setShowPasswordSection(!showPasswordSection);
-                  setShowResetSection(false);
-                }}
-              >
-                <Lock size={16} /> Change Password
-              </button>
-              <button
-                className="sec-action-btn"
-                onClick={() => {
-                  setShowResetSection(!showResetSection);
-                  setShowPasswordSection(false);
-                }}
-              >
-                <RefreshCw size={16} /> Reset Password
+              <button className="sec-action-btn" onClick={()=>navigate("/forgot-password")}><Lock size={16} /> Change Password</button>
+              <button className="sec-action-btn" onClick={()=>navigate("/reset-password")}><RefreshCw size={16} /> Reset Password
               </button>
             </div>
 
-            {showPasswordSection && (
-              <div className="expandable-form">
-                <input
-                  type="password"
-                  placeholder="Old Password"
-                  onChange={(e) =>
-                    setPasswordData({
-                      ...passwordData,
-                      oldPassword: e.target.value,
-                    })
-                  }
-                />
-                <input
-                  type="password"
-                  placeholder="New Password"
-                  onChange={(e) =>
-                    setPasswordData({
-                      ...passwordData,
-                      newPassword: e.target.value,
-                    })
-                  }
-                />
-                <input
-                  type="password"
-                  placeholder="Confirm Password"
-                  onChange={(e) =>
-                    setPasswordData({
-                      ...passwordData,
-                      confirmPassword: e.target.value,
-                    })
-                  }
-                />
-                <button
-                  className="main-save-btn"
-                  onClick={handlePasswordSubmit}
-                >
-                  Update Password
-                </button>
-              </div>
-            )}
-
-            {showResetSection && (
-              <div className="expandable-form">
-                <input
-                  type="email"
-                  placeholder="Enter Registered Email"
-                  value={resetEmail}
-                  onChange={(e) => setResetEmail(e.target.value)}
-                />
-                <button
-                  className="main-save-btn"
-                  onClick={() => alert("Link Sent!")}
-                >
-                  Send Reset Link
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>

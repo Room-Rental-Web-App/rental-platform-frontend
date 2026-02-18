@@ -33,13 +33,12 @@ import AdminUsers from "../pages/admin-page/AdminUsers";
 {/* Public */ }
 const PublicRoutes = [
   <Route path="/" element={<HomePage />} />,
+  <Route path="/home" element={<HomePage />} />,
   <Route path="/auth" element={<Auth />} />, // Yahan /login ko /auth kar de
   <Route path="/login" element={<Auth />} />,
   <Route path="/verify-otp" element={<OtpVerify />} />,
   <Route path="/forgot-password" element={<ForgotPassword />} />,
   <Route path="/reset-password" element={<ResetPassword />} />,
-  <Route path="/home" element={<HomePage />} />,
-  <Route path="/" element={<HomePage />} />,
   <Route path="/search" element={<SearchRoom approved={true} />} />,
   <Route path="/room/:roomId" element={<RoomDetailPage />} />,
   <Route path="/quick-search/:searchInput" element={<QuickSearchPage />} />,

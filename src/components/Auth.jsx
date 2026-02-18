@@ -193,9 +193,6 @@ export default function Auth() {
                       <span onClick={() => nav("/forgot-password")}>
                         Forgot Password?
                       </span>
-                      <span onClick={() => nav("/reset-password")}>
-                        Reset Password?
-                      </span>
                     </div>
                   </>
                 ) : (
