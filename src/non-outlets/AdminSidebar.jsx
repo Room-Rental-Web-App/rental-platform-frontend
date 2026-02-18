@@ -65,7 +65,7 @@ const AdminSidebar = () => {
 
         {/* Logo */}
         <div className="admin-header">
-          <NavLink to="/home">
+          <NavLink to="/admin/dashboard">
             <img src={logo} alt="Logo" className="navbar-logo" />
           </NavLink>
         </div>
