@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import Api from "../api/Api";
+import { useLocation } from "react-router-dom";
 
-export default function useRoomSearch({ mode = "PUBLIC", approved=true } = {}) {
+export default function useRoomSearch({ mode = "PUBLIC", approved = true } = {}) {
     const [rooms, setRooms] = useState([]);
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
     const [userLocation, setUserLocation] = useState(null);
 
+    const location = useLocation();
 
     const [draftFilters, setDraftFilters] = useState({
         city: "",
@@ -59,7 +61,7 @@ export default function useRoomSearch({ mode = "PUBLIC", approved=true } = {}) {
 
     useEffect(() => {
         loadRooms(0, false);
-    }, [appliedFilters, userLocation]);
+    }, [appliedFilters, userLocation, location]);
 
     return {
         rooms,

@@ -25,6 +25,8 @@
     border-color 0.2s ease,
     transform 0.08s ease,
     box-shadow 0.2s ease;
+    border-radius: 5px;
+    border: 1px solid gray    ;
 }
 
 /* =========================
