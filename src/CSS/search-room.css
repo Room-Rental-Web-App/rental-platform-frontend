@@ -1,213 +1,177 @@
-/* Main Page */
-.search-room-page {
-  max-width: 1200px;
-  margin: 20px auto;
-  padding: 0 20px;
+/* =========================================
+   PAGE WRAPPER
+========================================= */
+
+.search-page {
+  padding: 24px;
+  background: var(--bg-primary);
+   container-type: inline-size;
+  min-height: 100vh;
+  
 }
 
-/* Filter Bar */
-.filter-bar {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 10px;
+/* =========================================
+   LAYOUT
+========================================= */
 
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-primary);
-  border-radius: 12px;
-
-  padding: 14px;
-  margin-bottom: 20px;
-
-  box-shadow: var(--shadow-sm);
-}
-
-/* Inputs */
-.filter-bar input,
-.filter-bar select {
-  padding: 10px 12px;
-
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-
-  border: 1px solid var(--border-primary);
-  border-radius: 8px;
-
-  font-size: 14px;
-  transition: all 0.3s ease;
-}
-
-.filter-bar input:focus,
-.filter-bar select:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--bg-overlay);
-}
-
-/* Buttons */
-.filter-bar button {
+.search-layout {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-
-  padding: 10px 12px;
-
-  background-color: var(--primary);
-  color: var(--text-inverse);
-
-  border: none;
-  border-radius: 8px;
-
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  font-size: 14px;
+  gap: 30px;
+  align-items: flex-start;
 }
 
-.filter-bar button:hover {
-  background-color: var(--primary-hover);
-  box-shadow: var(--shadow-sm);
-}
+/* =========================================
+   DESKTOP FILTER
+========================================= */
 
-/* Rooms Grid */
-.rooms-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
-}
-
-/* Room Card */
-.room-card {
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-primary);
-  border-radius: 12px;
-
-  overflow: hidden;
-  position: relative;
-
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-sm);
-}
-
-.room-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--primary);
-}
-
-/* Image */
-.room-card img {
-  width: 100%;
-  height: 170px;
-  object-fit: cover;
-  background-color: var(--bg-tertiary);
-}
-
-/* Wishlist Button */
-.wishlist-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-primary);
-  border-radius: 50%;
-
-  width: 34px;
-  height: 34px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.wishlist-btn:hover {
-  background-color: var(--bg-tertiary);
-}
-
-.wishlist-btn.active {
-  border-color: var(--error);
-}
-
-/* Card Content */
-.card-content {
-  padding: 14px;
-}
-
-.card-content h3 {
-  color: var(--text-primary);
-  font-size: 16px;
-  margin-bottom: 6px;
-}
-
-.card-content p {
-  color: var(--text-secondary);
-  font-size: 14px;
-
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* Price */
-.price {
+.desktop-filter {
   display: block;
-  margin-top: 6px;
-
-  color: var(--primary);
-  font-weight: 700;
-  font-size: 16px;
 }
 
-/* Room Type */
-.room-type {
-  display: inline-block;
-  margin-top: 6px;
+/* =========================================
+   CONTENT AREA
+========================================= */
 
-  background-color: var(--bg-tertiary);
-  color: var(--text-secondary);
+.search-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: 100vh;
+  overflow-y: scroll;
 
-  padding: 4px 8px;
-  border-radius: 8px;
-
-  font-size: 13px;
+  /* Hide scrollbar for Chrome, Edge, Safari */
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* IE and Edge */
 }
 
-/* View Details Link */
-.card-content a {
-  display: inline-flex;
+.search-content::-webkit-scrollbar {
+  display: none;                /* Chrome, Safari */
+}
+
+
+/* =========================================
+   RESULTS HEADER
+========================================= */
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 6px;
+}
 
-  margin-top: 10px;
+.results-header h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
 
-  color: var(--primary);
+.result-count {
   font-size: 14px;
-  text-decoration: none;
+  color: var(--text-secondary);
 }
 
-.card-content a:hover {
-  text-decoration: underline;
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.empty-state {
+  padding: 40px;
+  text-align: center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 14px;
+  color: var(--text-secondary);
 }
 
-/* Loader */
+/* =========================================
+   END MESSAGE
+========================================= */
+
 .loader {
   text-align: center;
-  padding: 20px;
-  color: var(--text-secondary);
+  padding: 16px;
+  font-size: 13px;
+  color: var(--text-tertiary);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .filter-bar {
-    grid-template-columns: 1fr;
+/* =========================================
+   MOBILE FILTER BUTTON
+========================================= */
+
+.mobile-filter-btn-wrapper {
+  display: flex;
+  justify-content: right;
+}
+
+.mobile-filter-btn {
+  display: none;
+  margin-bottom: 16px;
+
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* =========================================
+   MOBILE DRAWER
+========================================= */
+
+.mobile-filter-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.mobile-filter-drawer {
+  width: 85%;
+  max-width: 320px;
+  background: var(--bg-primary);
+  height: 100%;
+  padding: 20px;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: slideIn 0.5s ease-in-out;
+  border-radius: 20px 0 0 20px;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
   }
 
-  .rooms-grid {
-    grid-template-columns: 1fr;
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@container (max-width: 992px) {
+
+  .search-layout {
+    flex-direction: column;
+  }
+
+  .desktop-filter {
+    display: none;
+  }
+
+  .mobile-filter-btn {
+    display: inline-block;
+  }
+
+  .search-page {
+    padding: 16px;
   }
 }

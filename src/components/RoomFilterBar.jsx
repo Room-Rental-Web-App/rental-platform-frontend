@@ -1,5 +1,4 @@
-import { Search, Locate } from "lucide-react";
-import "../css/roomFilterBar.css"
+import "../css/roomFilterBar.css";
 
 export default function RoomFilterBar({
   filters,
@@ -8,9 +7,40 @@ export default function RoomFilterBar({
   onUseLocation,
   isPremiumUser,
 }) {
+
+  const handleReset = () => {
+    const emptyFilters = {
+      city: "",
+      pincode: "",
+      roomType: "",
+      minPrice: "",
+      maxPrice: "",
+      radiusKm: "",
+    };
+
+    Object.keys(emptyFilters).forEach((key) => {
+      const fakeEvent = {
+        target: {
+          name: key,
+          value: "",
+        },
+      };
+      onChange(fakeEvent);
+    });
+
+    onApply();
+  };
+
   return (
-    <div className="filter-bar">
-      <div className="filter-group">
+    <div className="filter-wrapper">
+
+
+      <h3 className="filter-title">Filters</h3>
+
+      {/* LOCATION */}
+      <div className="filter-section">
+        <span className="section-label">Location</span>
+
         <input
           name="city"
           placeholder="City"
@@ -25,6 +55,27 @@ export default function RoomFilterBar({
           onChange={onChange}
         />
 
+        <input
+          type="number"
+          name="radiusKm"
+          placeholder="Radius (km)"
+          value={filters.radiusKm || ""}
+          onChange={onChange}
+        />
+
+        <button
+          className="btn btn-outline btn-sm"
+          onClick={onUseLocation}
+          disabled={!isPremiumUser}
+        >
+          Use My Location
+        </button>
+      </div>
+
+      {/* ROOM TYPE */}
+      <div className="filter-section">
+        <span className="section-label">Room Type</span>
+
         <select
           name="roomType"
           value={filters.roomType || ""}
@@ -36,6 +87,11 @@ export default function RoomFilterBar({
           <option value="PG">PG</option>
           <option value="Flat">Flat</option>
         </select>
+      </div>
+
+      {/* PRICE */}
+      <div className="filter-section">
+        <span className="section-label">Price Range</span>
 
         <input
           type="number"
@@ -52,39 +108,25 @@ export default function RoomFilterBar({
           value={filters.maxPrice || ""}
           onChange={onChange}
         />
-
-        <input
-          type="number"
-          name="radiusKm"
-          placeholder="Radius (km)"
-          value={filters.radiusKm || ""}
-          onChange={onChange}
-        />
       </div>
 
+      {/* ACTIONS */}
       <div className="filter-actions">
-        <button
-          className="btn btn-outline btn-sm"
-          onClick={onUseLocation}
-          disabled={!isPremiumUser}
-          title={
-            !isPremiumUser
-              ? "Premium required to use location"
-              : ""
-          }
-        >
-          <Locate size={16} />
-          Use Location
-        </button>
-
         <button
           className="btn btn-primary btn-sm"
           onClick={onApply}
         >
-          <Search size={16} />
-          Apply
+          Apply Filters
+        </button>
+
+        <button
+          className="btn btn-ghost btn-sm"
+          onClick={handleReset}
+        >
+          Reset
         </button>
       </div>
+
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useWishlist } from "../context/WishlistContext";
 import Api from "../api/Api";
-import "../css/room-greed.css";
+import "../css/room-grid.css";
 import {
   MapPin,
   ArrowRight,

@@ -1,81 +1,179 @@
-.map-search {
-  position: relative;
-  margin-bottom: 10px;
-}
-
-.map-search input {
-  width: 100%;
-  padding: 10px;
-  font-size: 14px;
-}
-
-.suggestions {
-  position: absolute;
-  top: 40px;
-  width: 100%;
-  background: white;
-  border: 1px solid #ddd;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 1000;
-}
-
-.suggestions li {
-  padding: 8px 10px;
-  cursor: pointer;
-}
-
-.suggestions li:hover {
-  background: #f2f2f2;
-}
-
+/* =========================================
+   OVERLAY
+========================================= */
 
 .map-overlay {
   position: fixed;
   inset: 0;
+  z-index: 1000;
+
   background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  backdrop-filter: blur(4px);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  padding: 20px;
 }
+
+/* =========================================
+   MAP MODAL CONTAINER
+========================================= */
 
 .map-container {
-  background: #fff;
-  width: 90%;
-  max-width: 600px;
-  height: 550px;
+  width: 100%;
+  max-width: 900px;
+  height: 600px;
+
+  background: var(--bg-primary);
+  border-radius: 16px;
+  border: 1px solid var(--border-primary);
+  box-shadow: var(--shadow-lg);
+
   display: flex;
   flex-direction: column;
-  border-radius: 8px;
   overflow: hidden;
+
+  animation: scaleIn 0.2s ease;
 }
 
-/* SEARCH stays on top */
+@keyframes scaleIn {
+  from {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   SEARCH BAR
+========================================= */
+
 .map-search {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+  position: relative;
+  padding: 14px;
+  border-bottom: 1px solid var(--border-primary);
+  background: var(--bg-secondary);
 }
 
-/* MAP takes remaining space */
+.map-search input {
+  width: 100%;
+  padding: 10px 14px;
+
+  border-radius: 8px;
+  border: 1px solid var(--border-secondary);
+
+  font-size: 14px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+
+  outline: none;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.map-search input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--bg-overlay);
+}
+
+/* =========================================
+   SEARCH SUGGESTIONS
+========================================= */
+
+.suggestions {
+  position: absolute;
+  top: 60px;
+  left: 14px;
+  right: 14px;
+
+  max-height: 200px;
+  overflow-y: auto;
+
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+  box-shadow: var(--shadow-md);
+
+  list-style: none;
+  padding: 6px 0;
+  margin: 0;
+
+  z-index: 10;
+}
+
+.suggestions li {
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.suggestions li:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* =========================================
+   LEAFLET MAP
+========================================= */
+
 .leaflet-container {
   flex: 1;
+  width: 100%;
 }
 
-/* BUTTONS always visible */
+/* =========================================
+   ACTION BUTTONS
+========================================= */
+
 .map-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  padding: 10px;
-  border-top: 1px solid #ddd;
-  background: #fff;
+  gap: 12px;
+
+  padding: 14px;
+  border-top: 1px solid var(--border-primary);
+  background: var(--bg-secondary);
 }
 
-.confirm-btn {
-  background: #007bff;
-  color: white;
-  padding: 8px 14px;
-  border: none;
+.map-actions button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
+  border: 1px solid transparent;
+
+  transition: background 0.2s ease,
+              color 0.2s ease,
+              transform 0.1s ease;
+}
+
+/* Cancel Button */
+
+.map-actions button:first-child {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-secondary);
+}
+
+.map-actions button:first-child:hover {
+  background: var(--border-secondary);
+}
+
+/* Confirm Button */
+
+.confirm-btn {
+  background: var(--primary);
+  color: #fff;
+}
+
+.confirm-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
 }
