@@ -1,5 +1,5 @@
 import { Loader } from "lucide-react";
-import "../css/my-loader.css"
+import "../CSS/my-loader.css"
 
 function MyLoader({data}) {
     return (

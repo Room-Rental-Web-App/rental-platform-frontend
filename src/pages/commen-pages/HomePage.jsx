@@ -1,5 +1,5 @@
 import React from "react";
-import "../../css/home.css"; // Overall Home Page CSS
+import "../../CSS/home.css"; // Overall Home Page CSS
 
 // Components for different sections
 import HeroSection from "../../components/HeroSection";

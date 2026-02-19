@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import Api from "../../api/Api";
-import "../../css/revenueReport.css";
+import "../../CSS/revenueReport.css";
 import MyLoader from "../../components/MyLoader";
 import { getMonthDayDiff } from "../../customHook/getMonthDifferent";
 

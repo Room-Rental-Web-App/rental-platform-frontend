@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Api from "../api/Api";
-import "../css/RazorPayConfig.css";
+import "../CSS/RazorPayConfig.css";
 
 // Props mein 'onSuccess' aur 'planCode' add kiya hai
 function RazorPayConfig({ amountToPay, value, planCode, onSuccess }) {

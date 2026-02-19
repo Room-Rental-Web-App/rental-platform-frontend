@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Api from "../api/Api";
-import "../css/Auth.css";
+import "../CSS/Auth.css";
 import { Mail, Lock, AlertCircle } from "lucide-react";
 
 export default function ForgotPassword() {

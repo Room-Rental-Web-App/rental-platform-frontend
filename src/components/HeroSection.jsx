@@ -1,4 +1,4 @@
-import "../css/hero.css";
+import "../CSS/hero.css";
 import QuickSearchInput from "./QuickSearchInput";
 
 

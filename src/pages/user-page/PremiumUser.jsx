@@ -1,5 +1,5 @@
 import React from "react";
-import "../../css/premium.css";
+import "../../CSS/premium.css";
 import {
   Lock,
   Zap,

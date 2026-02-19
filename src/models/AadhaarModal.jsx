@@ -1,5 +1,5 @@
 import { X, Eye, EyeOff, AlertTriangle } from "lucide-react";
-import "../css/aadhar-model.css";
+import "../CSS/aadhar-model.css";
 import { useEffect, useState } from "react";
 
 const AadhaarModal = ({ url, onClose }) => {

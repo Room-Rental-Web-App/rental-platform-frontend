@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Search } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import "../css/quickSearchInput.css";
+import "../CSS/quickSearchInput.css";
 
 
 function QuickSearchInput() {

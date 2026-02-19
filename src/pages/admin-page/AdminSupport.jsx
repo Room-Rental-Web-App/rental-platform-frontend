@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Api from "../../api/Api";
-import "../../css/adminSupport.css";
+import "../../CSS/adminSupport.css";
 
 import { ISSUE_LABELS } from "../../data/roomsDekhoData"
 import MyLoader from "../../components/MyLoader";

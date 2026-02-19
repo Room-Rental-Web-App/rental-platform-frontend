@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import Api from "../../api/Api";
 import { Search } from "lucide-react";
 import AadhaarModal from "../../models/AadhaarModal";
-import "../../css/adminUsers.css";
+import "../../CSS/adminUsers.css";
 import MyLoader from "../../components/MyLoader";
 import UserCard from "../../components/UserCard";
 

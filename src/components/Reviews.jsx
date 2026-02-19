@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Api from "../api/Api";
 import { Star } from "lucide-react";
-import "../css/reviews.css";
+import "../CSS/reviews.css";
 
 function Reviews({ roomId }) {
   const [reviews, setReviews] = useState([]);

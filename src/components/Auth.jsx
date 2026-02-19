@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_ENDPOINTS } from "../api/apiConfig";
-import "../css/Auth.css";
+import "../CSS/Auth.css";
 import { Lock, Mail, Phone, Upload, AlertCircle, Loader2 } from "lucide-react";
 
 export default function Auth() {

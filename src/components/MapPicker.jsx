@@ -2,7 +2,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-lea
 import { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import "../css/map-picker.css";
+import "../CSS/map-picker.css";
 
 // Fix marker icons
 delete L.Icon.Default.prototype._getIconUrl;

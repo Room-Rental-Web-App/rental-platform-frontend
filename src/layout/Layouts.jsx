@@ -3,7 +3,7 @@ import Navbar from "../non-outlets/Navbar";
 import Footer from "../non-outlets/Footer";
 import AdminSidebar from "../non-outlets/AdminSidebar";
 import { useEffect, useState } from "react";
-import "../css/layout.css";
+import "../CSS/layout.css";
 
 export default function UserLayout() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

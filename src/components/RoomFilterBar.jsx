@@ -1,4 +1,4 @@
-import "../css/roomFilterBar.css";
+import "../CSS/roomFilterBar.css";
 
 export default function RoomFilterBar({
   filters,

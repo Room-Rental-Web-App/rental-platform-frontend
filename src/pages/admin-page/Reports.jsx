@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import Api from "../../api/Api";
-import "../../css/adminReports.css";
+import "../../CSS/adminReports.css";
 import MyLoader from "../../components/MyLoader";
 
 export default function AdminReportsPage() {

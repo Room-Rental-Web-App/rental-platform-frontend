@@ -1,6 +1,6 @@
 import React from "react";
 import { Target, Eye, ShieldCheck, Zap, HeartHandshake } from "lucide-react";
-import "../../css/AboutUs.css";
+import "../../CSS/AboutUs.css";
 
 const AboutUs = () => {
   return (

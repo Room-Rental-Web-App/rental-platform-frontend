@@ -7,7 +7,7 @@ import MapPicker from "../../components/MapPicker";
 import { useState, useEffect } from "react";
 import RoomGrid from "../../components/RoomGrid";
 import MyLoader from "../../components/MyLoader";
-import "../../css/search-room.css";
+import "../../CSS/search-room.css";
 
 export default function SearchRoom({ approved }) {
   const location = useLocation();

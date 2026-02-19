@@ -29,7 +29,7 @@ import {
   Legend,
 } from "recharts";
 import MyLoader from "../../components/MyLoader";
-import "../../css/adminDashboard.css";
+import "../../CSS/adminDashboard.css";
 import Api from "../../api/Api";
 
 const COLORS = ["#FF6B35", "#4CAF50", "#29B6F6", "#FFB74D", "#8E44AD"];

@@ -3,7 +3,7 @@ import useInfiniteScroll from "../../customHook/useInfiniteScroll";
 import usePremiumStatus from "../../customHook/usePremiumStatus";
 import useRoomSearch from "../../customHook/useRoomSearch";
 import RoomFilterBar from "../../components/RoomFilterBar";
-import "../../css/search-room.css";
+import "../../CSS/search-room.css";
 import MapPicker from "../../components/MapPicker";
 import { useState, useEffect } from "react"; // useEffect add kiya
 import RoomGrid from "../../components/RoomGrid";

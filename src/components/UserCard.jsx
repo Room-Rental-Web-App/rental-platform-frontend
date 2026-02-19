@@ -1,5 +1,5 @@
 import React from "react";
-import "../css/userCard.css";
+import "../CSS/userCard.css";
 import Api from "../api/Api";
 
 

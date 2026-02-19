@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import CategorySection from "./CategorySection";
 import FeaturedProperties from "./FeaturedProperties";
 import { API_ENDPOINTS } from "../api/apiConfig";
-import "../../css/home.css";
+import "../../CSS/home.css";
 
 function HomeSec() {
   const navigate = useNavigate();

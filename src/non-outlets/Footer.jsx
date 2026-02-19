@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom"; // React Router Link import kiya
-import "../css/footer.css";
+import "../CSS/footer.css";
 import {
   Facebook,
   Home,

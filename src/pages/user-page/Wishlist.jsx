@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Api from "../../api/Api";
-import "../../css/wishlist.css";
+import "../../CSS/wishlist.css";
 // IMPORT: Added the hook to talk to the Navbar
 import { useWishlist } from "../../context/WishlistContext";
 import { useNavigate } from "react-router-dom";

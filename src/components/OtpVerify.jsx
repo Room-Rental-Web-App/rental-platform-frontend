@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { API_ENDPOINTS } from "../api/apiConfig";
 import { useNavigate, useLocation } from "react-router-dom";
-import "../css/Auth.css";
+import "../CSS/Auth.css";
 import { ShieldCheck, AlertCircle } from "lucide-react";
 
 export default function OtpVerify() {

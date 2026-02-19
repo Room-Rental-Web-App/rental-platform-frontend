@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Api from '../../api/Api';
-import "../../css/notifyRoom.css"
+import "../../CSS/notifyRoom.css"
 import { useNavigate } from 'react-router-dom';
 import MyLoader from '../../components/MyLoader';
 

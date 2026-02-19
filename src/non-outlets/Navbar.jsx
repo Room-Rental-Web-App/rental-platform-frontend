@@ -24,7 +24,7 @@ import { useWishlist } from "../context/WishlistContext";
 // Hook import kiya status check karne ke liye
 import usePremiumStatus from "../customHook/usePremiumStatus";
 
-import "../css/Navbar.css";
+import "../CSS/Navbar.css";
 import logo from "../assets/logo.png";
 
 const Navbar = ({ isLoggedIn, onLogout, isPremiumUser }) => {
