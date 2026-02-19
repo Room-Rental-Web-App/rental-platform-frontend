@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import logo from "../assets/logo.png";
 import ThemeToggle from "../components/ThemeToggle";
-import "../CSS/AdminSidebar.css";
+import "../CSS/adminSidebar.css";
 
 const AdminSidebar = () => {
   const [open, setOpen] = useState(false);

@@ -10,7 +10,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import "../../CSS/utils/theme.css";
-import "../../CSS/Faqs.css";
+import "../../CSS/faqs.css";
 
 const faqData = [
   {
