@@ -3,7 +3,7 @@ import { MapPin, Bed, LayoutGrid, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_ENDPOINTS } from "../api/apiConfig"; //
-import "../CSS/featuredProperties.css";
+import "../CSS/FeaturedProperties.css";
 const FeaturedProperties = () => {
   const navigate = useNavigate();
   const [properties, setProperties] = useState([]);
