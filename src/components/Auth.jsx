@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_ENDPOINTS } from "../api/apiConfig";
+import Api from "../api/Api";
 import "../CSS/Auth.css";
 import { Lock, Mail, Phone, Upload, AlertCircle, Loader2 } from "lucide-react";
 
@@ -10,6 +11,7 @@ export default function Auth() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [aadharFile, setAadharFile] = useState(null);
+  const [otp, setOtp] = useState("");
 
   const [form, setForm] = useState({
     email: "",
@@ -45,8 +47,19 @@ export default function Auth() {
       });
       handleSuccessfulLogin(r.data);
     } catch (err) {
-      console.log(err)
-      setError("Invalid email or password");
+      setError(err.response.data || "Invalid email or password");
+      if (err.response.data === "Account not verified. Please verify OTP first.") {
+        Api.post(`/auth/send-otp/${form.email}`)
+          .then(res => { 
+            setOtp(res.data) 
+            nav("/verify-otp", { state: { email: form.email } });
+
+          })
+          .catch(err =>{
+            console.log(err)
+            alert("Something wend wrong please try again latter")
+          })
+      }
     } finally {
       setLoading(false);
     }
@@ -69,7 +82,7 @@ export default function Auth() {
       });
       nav("/verify-otp", { state: { email: form.email } });
     } catch (err) {
-        console.log(err)
+      console.log(err)
       setError(err.response?.data || "Registration failed. Try again.");
     } finally {
       setLoading(false);
