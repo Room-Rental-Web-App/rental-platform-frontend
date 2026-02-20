@@ -8,6 +8,7 @@ import {
   RoomOwnerRoutes
 } from "./routes/AppRoutes";
 import Layout from "./layout/Layouts";
+import Homepage from "./pages/commen-pages/HomePage";
 
 function App() {
   const role = localStorage.getItem("role"); // ROLE_OWNER | ROLE_USER |  ROLE_ADMIN | null
@@ -18,9 +19,9 @@ function App() {
       <WishlistProvider>
         <Routes>
           <Route element={<Layout />}>
-          
-            {FooterRoutes}
+            <Route path="/" element={role === "ROLE_ADMIN" ? <Navigate to="/admin/dashboard" /> : <Homepage />} />
             {PublicRoutes}
+            {role !== "ROLE_ADMIN" && FooterRoutes}
             {role === "ROLE_USER" && UserRoutes}
             {role === "ROLE_OWNER" && RoomOwnerRoutes}
             {role === "ROLE_ADMIN" && AdminRoutes}
