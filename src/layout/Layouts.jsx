@@ -31,9 +31,10 @@ export default function UserLayout() {
     setIsLoggedIn(false);
     setRole(null);
     setIsPremium(false);
-
-    window.location.href = "/home";
+    window.location.href = "/";
   };
+
+  
 
   /* =============================
      ADMIN LAYOUT
@@ -42,7 +43,7 @@ export default function UserLayout() {
   if (role === "ROLE_ADMIN") {
     return (
       <div className="admin-layout">
-        <AdminSidebar />
+        <AdminSidebar onLogout={handleLogout} />
         <main className="admin-content">
           <Outlet />
         </main>

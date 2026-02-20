@@ -32,8 +32,6 @@ import QuickSearchPage from "../pages/commen-pages/QuickSearchPage";
 import AdminUsers from "../pages/admin-page/AdminUsers";
 {/* Public */ }
 const PublicRoutes = [
-  <Route path="/" element={<HomePage />} />,
-  <Route path="/home" element={<HomePage />} />,
   <Route path="/auth" element={<Auth />} />, // Yahan /login ko /auth kar de
   <Route path="/login" element={<Auth />} />,
   <Route path="/verify-otp" element={<OtpVerify />} />,
@@ -78,7 +76,6 @@ const RoomOwnerRoutes = [
 {/* Admin */ }
 const AdminRoutes = [
   <Route path="/admin/dashboard" element={<AdminDashboard />} />,
-
 
   <Route path="/admin/pending-rooms" element={<SearchRoom approved={false} />} />,
   <Route path="/admin/search" element={<SearchRoom />} />,

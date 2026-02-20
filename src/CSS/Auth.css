@@ -113,3 +113,11 @@
     .auth-container-card { border-radius: 0; box-shadow: none; margin: 0; }
     .form-side { padding: 40px 24px; }
 }
+
+.file-label {
+color: rebeccapurple;
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-size: 14px;
+}

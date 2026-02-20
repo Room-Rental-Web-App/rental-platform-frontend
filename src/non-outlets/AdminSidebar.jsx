@@ -19,17 +19,10 @@ import logo from "../assets/logo.png";
 import ThemeToggle from "../components/ThemeToggle";
 import "../CSS/AdminSidebar.css";
 
-const AdminSidebar = () => {
+const AdminSidebar = ({onLogout}) => {
   const [open, setOpen] = useState(false);
 
-  const handleLogout = () => {
-    if (!window.confirm("Are you sure you want to logout?")) return;
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-
-    window.location.href = "/home";
-  };
 
   const navItems = [
     { to: "/admin/dashboard", icon: Gauge, label: "Dashboard" },
@@ -88,7 +81,7 @@ const AdminSidebar = () => {
 
           <div className="sidebar-bottom">
             <ThemeToggle />
-            <button className="logout-btn" onClick={handleLogout}>
+            <button className="logout-btn" onClick={onLogout}>
               <LogOut size={18} />
               <span>Logout</span>
             </button>

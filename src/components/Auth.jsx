@@ -45,6 +45,7 @@ export default function Auth() {
       });
       handleSuccessfulLogin(r.data);
     } catch (err) {
+      console.log(err)
       setError("Invalid email or password");
     } finally {
       setLoading(false);
@@ -68,6 +69,7 @@ export default function Auth() {
       });
       nav("/verify-otp", { state: { email: form.email } });
     } catch (err) {
+        console.log(err)
       setError(err.response?.data || "Registration failed. Try again.");
     } finally {
       setLoading(false);
@@ -155,15 +157,23 @@ export default function Auth() {
                       required
                     />
                   </div>
-                  <div className="input-group">
-                    <Upload size={18} className="field-icon" />
-                    <input
-                      type="file"
-                      onChange={handleFileChange}
-                      required
-                      style={{ paddingLeft: "46px" }}
-                    />
-                  </div>
+                  {form.role === "ROLE_OWNER" && (
+                    <div className="input-group">
+                      <label className="file-label">
+                        Upload Profile Image
+                      </label>
+
+                      <div className="file-wrapper">
+                        <Upload size={18} className="field-icon" />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileChange}
+                          required
+                        />
+                      </div>
+                    </div>
+                  )}
                 </>
               )}
 
