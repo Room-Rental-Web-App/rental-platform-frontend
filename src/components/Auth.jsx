@@ -5,7 +5,7 @@ import { API_ENDPOINTS } from "../api/apiConfig";
 import Api from "../api/Api";
 import "../CSS/Auth.css";
 import { Lock, Mail, Phone, Upload, AlertCircle, Loader2 } from "lucide-react";
-import MyLoader from "../components/MyLoader"
+
 
 export default function Auth() {
   const [mode, setMode] = useState("login");
@@ -49,13 +49,12 @@ export default function Auth() {
       });
       handleSuccessfulLogin(r.data);
     } catch (err) {
-      setError(err.response.data);
+      setError(err.response.data + "wait...");
 
       if (err.response.data === "Account not verified. Please verify OTP first.") {
         setLoading(true);
-        setError("");
-        setLoadingData("otp send");
-        Api.post(`/auth/send-otp/${form.email}`)
+        setLoadingData("otp sending");
+        await Api.post(`/auth/send-otp/${form.email}`)
           .then(res => {
             console.log(res);
             nav("/verify-otp", { state: { email: form.email } });
@@ -64,7 +63,7 @@ export default function Auth() {
             console.log(err)
             alert("Something wend wrong please try again latter")
           })
-          .finally(()=>setLoading(false))
+          .finally(() => setLoading(false))
       }
     } finally {
       setLoading(false);
@@ -96,7 +95,7 @@ export default function Auth() {
     }
   };
 
-  if (loading) return <MyLoader data={loadingData} />
+
   return (
     <div className="auth-card-wrapper">
       <div className="auth-container-card">
@@ -194,7 +193,7 @@ export default function Auth() {
               )}
 
               <button className="login-btn" disabled={loading}>
-                {mode === "login" ? ("Login") : ("Register Now")}
+                {loading ? <><Loader2 className="spinner"/> {loadingData}...</>: mode === "login" ? ("Login") : ("Register Now")}
               </button>
 
               <div className="toggle-container">
