@@ -4,7 +4,7 @@ import { Home, Users, Building2, Landmark } from "lucide-react";
 
 const categories = [
   { name: "Single Room", icon: Home, type: "Single Room" }, // Backend value 'ROOM' rakhi hai
-  { name: "Shared PG", icon: Users, type: "PG" },
+  // { name: "Shared PG", icon: Users, type: "PG" },
   { name: "Apartment", icon: Building2, type: "FLAT" },
   { name: "Independent", icon: Landmark, type: "HOUSE" },
 ];
