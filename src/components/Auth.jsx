@@ -5,13 +5,14 @@ import { API_ENDPOINTS } from "../api/apiConfig";
 import Api from "../api/Api";
 import "../CSS/Auth.css";
 import { Lock, Mail, Phone, Upload, AlertCircle, Loader2 } from "lucide-react";
+import MyLoader from "../components/MyLoader"
 
 export default function Auth() {
   const [mode, setMode] = useState("login");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [aadharFile, setAadharFile] = useState(null);
-  const [otp, setOtp] = useState("");
+  const [loadingData, setLoadingData] = useState("");
 
   const [form, setForm] = useState({
     email: "",
@@ -40,6 +41,7 @@ export default function Auth() {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setLoadingData("please wait for logging")
     try {
       const r = await axios.post(API_ENDPOINTS.LOGIN_REQUEST, {
         email: form.email,
@@ -47,18 +49,22 @@ export default function Auth() {
       });
       handleSuccessfulLogin(r.data);
     } catch (err) {
-      setError(err.response.data || "Invalid email or password");
-      if (err.response.data === "Account not verified. Please verify OTP first.") {
-        Api.post(`/auth/send-otp/${form.email}`)
-          .then(res => { 
-            setOtp(res.data) 
-            nav("/verify-otp", { state: { email: form.email } });
+      setError(err.response.data);
 
+      if (err.response.data === "Account not verified. Please verify OTP first.") {
+        setLoading(true);
+        setError("");
+        setLoadingData("otp send");
+        Api.post(`/auth/send-otp/${form.email}`)
+          .then(res => {
+            console.log(res);
+            nav("/verify-otp", { state: { email: form.email } });
           })
-          .catch(err =>{
+          .catch(err => {
             console.log(err)
             alert("Something wend wrong please try again latter")
           })
+          .finally(()=>setLoading(false))
       }
     } finally {
       setLoading(false);
@@ -67,6 +73,7 @@ export default function Auth() {
 
   const register = async (e) => {
     e.preventDefault();
+    setLoadingData("wait for registration")
     setLoading(true);
     setError("");
     try {
@@ -89,6 +96,7 @@ export default function Auth() {
     }
   };
 
+  if (loading) return <MyLoader data={loadingData} />
   return (
     <div className="auth-card-wrapper">
       <div className="auth-container-card">
@@ -178,12 +186,7 @@ export default function Auth() {
 
                       <div className="file-wrapper">
                         <Upload size={18} className="field-icon" />
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleFileChange}
-                          required
-                        />
+                        <input type="file" accept="image/*" onChange={handleFileChange} required />
                       </div>
                     </div>
                   )}
@@ -191,16 +194,7 @@ export default function Auth() {
               )}
 
               <button className="login-btn" disabled={loading}>
-                {loading ? (
-                  <>
-                    <Loader2 size={20} className="spinner" />
-                    <span>Processing...</span>
-                  </>
-                ) : mode === "login" ? (
-                  "Login"
-                ) : (
-                  "Register Now"
-                )}
+                {mode === "login" ? ("Login") : ("Register Now")}
               </button>
 
               <div className="toggle-container">
