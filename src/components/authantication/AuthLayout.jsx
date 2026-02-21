@@ -1,5 +1,5 @@
 import React from "react";
-import "../../css/Auth.css";
+import "../../CSS/Auth.css";
 
 export default function AuthLayout({ children, title, subtitle }) {
   return (
