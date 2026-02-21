@@ -9,6 +9,7 @@ import {
 } from "./routes/AppRoutes";
 import Layout from "./layout/Layouts";
 import Homepage from "./pages/commen-pages/HomePage";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   const role = localStorage.getItem("role"); // ROLE_OWNER | ROLE_USER |  ROLE_ADMIN | null
@@ -17,6 +18,7 @@ function App() {
   return (
     <Router>
       <WishlistProvider>
+           <ScrollToTop />
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={role === "ROLE_ADMIN" ? <Navigate to="/admin/dashboard" /> : <Homepage />} />

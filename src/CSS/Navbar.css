@@ -3,7 +3,7 @@
 ========================= */
 .navbar {
   position: sticky;
-  top: 14px;
+  top: 5px;
   z-index: 1000;
   height: 64px;
   max-width: 1200px;
@@ -13,7 +13,7 @@
   align-items: center;
   justify-content: space-between;
   background: var(--bg-primary);
-  border-radius: 999px;
+  border-radius: 10px;
   box-shadow: var(--shadow-md);
 }
 

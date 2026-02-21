@@ -4,21 +4,14 @@
 ===================================================== */
 
 .hero {
-  position: relative;
-  min-height: 100vh;
+  /* position: relative; */
+  min-height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 6rem 2rem;
 
   /* Background Image + Dark Overlay */
-  background:
-    linear-gradient(
-      rgba(0, 0, 0, 0.315),
-      rgba(0, 0, 0, 0.556)
-    ),
-    url("https://i.pinimg.com/1200x/95/d5/47/95d547a6ecfbc0e891996c2f18d33555.jpg")
-    no-repeat center / cover;
 
   overflow: hidden;
 }
@@ -28,15 +21,13 @@
 .hero::before {
   content: "";
   position: absolute;
-  width: 600px;
-  height: 600px;
-  background: var(--primary);
-  opacity: 0.15;
-  border-radius: 50%;
-  top: -200px;
-  right: -200px;
-  filter: blur(140px);
-  z-index: 0;
+  width: 100%;
+  height: 93%;
+  position: absolute;
+  top: -1rem;
+  
+  background:url("https://i.pinimg.com/1200x/95/d5/47/95d547a6ecfbc0e891996c2f18d33555.jpg") no-repeat center / cover;
+  opacity: 1;
 }
 
 /* Layout Container */
@@ -52,13 +43,14 @@
   flex-wrap: wrap;
 }
 
-.hero-content > :first-child {
+.hero-content> :first-child {
   flex: 0 0 45%;
 }
 
-.hero-content > :nth-child(2) {
+.hero-content> :nth-child(2) {
   flex: 0 0 55%;
 }
+
 /* ================= LEFT SIDE ================= */
 
 .hero-info {
@@ -132,7 +124,7 @@
 
 /* ================= RIGHT SIDE (SEARCH CARD) ================= */
 
-.hero-content > div:last-child {
+.hero-content>div:last-child {
   flex: 1;
   min-width: 320px;
   border-radius: 18px;
@@ -146,6 +138,7 @@
     opacity: 0;
     transform: translateY(40px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -157,6 +150,7 @@
     opacity: 0;
     transform: translateX(50px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -189,7 +183,7 @@
     justify-content: center;
   }
 
-  .hero-content > div:last-child {
+  .hero-content>div:last-child {
     width: 100%;
   }
 }

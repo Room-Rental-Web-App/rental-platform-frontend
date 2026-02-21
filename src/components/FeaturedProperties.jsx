@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_ENDPOINTS } from "../api/apiConfig"; //
 import "../CSS/FeaturedProperties.css";
+import MyLoader from "./MyLoader";
 const FeaturedProperties = () => {
   const navigate = useNavigate();
   const [properties, setProperties] = useState([]);
@@ -23,7 +24,7 @@ const FeaturedProperties = () => {
     fetchFeatured();
   }, []);
 
-  if (loading) return <div className="loader-small">Loading...</div>;
+  if (loading) return <MyLoader data={"Loading featured rooms "} />;
 
   return (
     <div className="compact-properties-wrapper">
