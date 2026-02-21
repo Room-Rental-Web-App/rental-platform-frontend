@@ -67,7 +67,7 @@ const Navbar = ({ isLoggedIn, onLogout, isPremiumUser }) => {
 
     return (
       <>
-        <Link className="nav-link" to="/home" onClick={onClick}>
+        <Link className="nav-link" to="/" onClick={onClick}>
           {isMobile && <Home />} Home
         </Link>
 
@@ -131,7 +131,7 @@ const Navbar = ({ isLoggedIn, onLogout, isPremiumUser }) => {
       {/* NAVBAR */}
       <nav className="navbar">
         <div className="nav-left">
-          <Link to="/home">
+          <Link to="/">
             <img
               src={logo}
               alt="Logo"

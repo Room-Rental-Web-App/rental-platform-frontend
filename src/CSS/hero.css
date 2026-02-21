@@ -1,92 +1,228 @@
-/* ================= HERO SECTION ================= */
+/* =====================================================
+   RoomsDekho - Premium Hero Section
+   Background Image + Overlay + Responsive
+===================================================== */
 
 .hero {
-  /* position: relative; */
-  min-height: 80vh;
+  position: relative;
+  min-height: 100vh;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
-  font-family: var(--font-base);
+  padding: 6rem 2rem;
+
+  /* Background Image + Dark Overlay */
+  background:
+    linear-gradient(
+      rgba(0, 0, 0, 0.315),
+      rgba(0, 0, 0, 0.556)
+    ),
+    url("https://i.pinimg.com/1200x/95/d5/47/95d547a6ecfbc0e891996c2f18d33555.jpg")
+    no-repeat center / cover;
+
   overflow: hidden;
-  background-color: var(--bg-primary);
 }
 
-/* Background + Overlay */
+/* Optional Subtle Glow Accent */
+
 .hero::before {
   content: "";
   position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(to bottom,
-      var(--bg-overlay),
-      rgba(0, 0, 0, 0.448)),
-    url("https://i.pinimg.com/1200x/95/d5/47/95d547a6ecfbc0e891996c2f18d33555.jpg") no-repeat center / cover;
-
+  width: 600px;
+  height: 600px;
+  background: var(--primary);
+  opacity: 0.15;
+  border-radius: 50%;
+  top: -200px;
+  right: -200px;
+  filter: blur(140px);
   z-index: 0;
 }
 
-/* Content Wrapper */
-.hero-info {
+/* Layout Container */
+
+.hero-content {
   position: relative;
   z-index: 1;
-  max-width: 720px;
-  animation: fadeInDown 0.8s ease-out;
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
 }
 
-/* Title */
+.hero-content > :first-child {
+  flex: 0 0 45%;
+}
+
+.hero-content > :nth-child(2) {
+  flex: 0 0 55%;
+}
+/* ================= LEFT SIDE ================= */
+
+.hero-info {
+  flex: 1;
+  min-width: 320px;
+  animation: fadeInUp 0.8s ease forwards;
+}
+
 .hero-title {
-  font-size: 5vw;
+  font-size: 3.4rem;
   font-weight: 800;
-  color: var(--text-inverse);
   line-height: 1.15;
-  margin-bottom: 2rem;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
 }
 
-/* Highlight Word */
 .highlight {
   color: var(--primary);
-  border-bottom: 4px solid var(--accent);
 }
 
-/* Description */
 .hero-desc {
-  font-size: 1.15rem;
-  color: var(--text-inverse);
-  line-height: 1.8;
-  margin-bottom: 3rem;
-  border-left: 3px solid var(--border-secondary);
-  padding-left: 1.5rem;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2.5rem;
+  max-width: 520px;
+  line-height: 1.7;
 }
 
-/* ================= ANIMATION ================= */
+/* CTA Buttons */
 
-@keyframes fadeInDown {
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.primary-cta {
+  padding: 14px 28px;
+  background: var(--primary);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.primary-cta:hover {
+  background: var(--primary-hover);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.secondary-cta {
+  padding: 14px 28px;
+  background: transparent;
+  color: #ffffff;
+  border: 1.5px solid #ffffff;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.secondary-cta:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-3px);
+}
+
+/* ================= RIGHT SIDE (SEARCH CARD) ================= */
+
+.hero-content > div:last-child {
+  flex: 1;
+  min-width: 320px;
+  border-radius: 18px;
+  animation: fadeInRight 1s ease forwards;
+}
+
+/* ================= ANIMATIONS ================= */
+
+@keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(40px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* ================= RESPONSIVE ================= */
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 
-@media (max-width: 768px) {
-  .hero-info {
+/* ================= RESPONSIVENESS ================= */
+
+@media (max-width: 1100px) {
+  .hero-title {
+    font-size: 2.8rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .hero-content {
+    flex-direction: column;
     text-align: center;
   }
 
-  .hero-title {
-    font-size: 2rem;
+  .hero-info {
+    align-items: center;
   }
 
   .hero-desc {
-    border-left: none;
-    padding-left: 0;
+    margin: 0 auto 2rem auto;
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+
+  .hero-content > div:last-child {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 4rem 1.5rem;
+  }
+
+  .hero-title {
+    font-size: 2.3rem;
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 3rem 1rem;
+  }
+
+  .hero-title {
+    font-size: 1.9rem;
+  }
+
+  .primary-cta,
+  .secondary-cta {
+    width: 100%;
+  }
+
+  .hero-actions {
+    flex-direction: column;
   }
 }

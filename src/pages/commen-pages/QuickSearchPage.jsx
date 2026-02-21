@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import QuickSearchInput from "../../components/QuickSearchInput";
+// import QuickSearchInput from "../../components/QuickSearchInput";
 import RoomGrid from "../../components/RoomGrid";
 import Api from "../../api/Api";
 import MyLoader from "../../components/MyLoader";
@@ -40,7 +40,7 @@ function QuickSearchPage() {
 
   return (
     <div>
-      <QuickSearchInput />
+      {/* <QuickSearchInput /> */}
 
       {loading ? (
         <MyLoader data={"Quick searching... Please wait..."} />

@@ -166,11 +166,22 @@ const Profile = () => {
           <div className="details-card security-card">
             <h3>Security & Account</h3>
             <div className="action-row">
-              <button className="sec-action-btn" onClick={()=>navigate("/forgot-password")}><Lock size={16} /> Change Password</button>
-              <button className="sec-action-btn" onClick={()=>navigate("/reset-password")}><RefreshCw size={16} /> Reset Password
+              <button
+                className="sec-action-btn"
+                onClick={() => navigate("/reset-password")}
+              >
+                <Lock size={16} />
+                Change Password
+              </button>
+
+              <button
+                className="sec-action-btn"
+                onClick={() => navigate("/forgot-password")}
+              >
+                <RefreshCw size={16} />
+                Forgot Password
               </button>
             </div>
-
           </div>
         </div>
       </div>
