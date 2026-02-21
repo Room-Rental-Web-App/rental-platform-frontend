@@ -1,4 +1,4 @@
-import "../css/hero.css";
+import "../CSS/hero.css";
 import { useNavigate } from "react-router-dom";
 import QuickSearchInput from "./QuickSearchInput";
 
