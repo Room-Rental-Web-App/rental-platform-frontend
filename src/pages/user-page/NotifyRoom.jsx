@@ -11,17 +11,22 @@ function NotifyRoom() {
   const navTo = useNavigate();
 
   useEffect(() => {
-    Api.get(`/room_availability/find_by_userId/${userId}`)
-      .then(res => {
-        setNotifyRooms(res.data);
-        console.log(res.data)
-      })
-      .catch(err => {
-        console.error(err);
-      }).finally(() => {
-        setLoading(false)
-      });
+    fetchNotifyRooms()
   }, [userId]);
+
+  function fetchNotifyRooms() {
+    Api.get(`/room_availability/find_by_userId/${userId}`)
+    .then(res => {
+      setNotifyRooms(res.data);
+      console.log(res.data)
+      console.log(res.data)
+    })
+    .catch(err => {
+      console.error(err);
+    }).finally(() => {
+      setLoading(false)
+    });
+  }
 
   function updatenotify(notifyId, status) {
     const confirmAction = window.confirm(status ? "Do you want to enable notification?" : "Do you want to cancel notification?");
@@ -31,6 +36,7 @@ function NotifyRoom() {
       .then(res => {
         const updated = res.data;
         setNotifyRooms(prev => prev.map(nr => nr.id === updated.id ? { ...nr, notified: updated.notified } : nr));
+        fetchNotifyRooms()
       })
       .catch(err => {
         console.error(err);
@@ -48,6 +54,7 @@ function NotifyRoom() {
           prev.filter(nr => nr.id !== notifyId)
         );
         alert("Notify room successfully removed");
+        fetchNotifyRooms();
       })
       .catch(err => {
         console.error(err);
