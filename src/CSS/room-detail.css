@@ -1,367 +1,591 @@
-/* room-detail.css */
-.room-detail-container {
-  max-width: 1200px;
-  margin: 30px auto;
-  padding: 0 20px;
+/* ============================================================
+   RoomsDekho — Room Detail  |  Housing.com-inspired
+   Fonts: Nunito (display) + DM Sans (body)
+   Theme variables come from global stylesheet
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
+/* ─── Reset ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ─── Page Shell ─────────────────────────────────────────── */
+.rd-page {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg-secondary);
+  min-height: 100vh;
+  color: var(--text-primary);
+  padding-bottom: 80px;
 }
 
-.room-main-content {
-  display: flex;
-  gap: 40px;
-  align-items: flex-start;
-}
-
-/* LEFT SIDE - GALLERY */
-.room-left-side {
-  flex: 1.4;
-  max-width: 600px;
-}
-
-.main-image-wrapper {
+/* ─── GALLERY BAR ────────────────────────────────────────── */
+.rd-gallery-bar {
+  background: #0f0f0f;
   width: 100%;
-  height: 400px; /* Medium size as requested */
-  border-radius: 12px;
-  overflow: hidden;
-  background: #f4f4f4;
-  margin-bottom: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 0;
 }
 
-.main-room-img {
+.rd-gallery-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* Main image */
+.rd-main-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 21 / 9;
+  overflow: hidden;
+  background: #1a1a1a;
+}
+
+.rd-main-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  display: block;
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 0.45s ease, transform 0.55s ease;
 }
 
-.thumbnail-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  gap: 10px;
+.rd-main-img-wrap.img-ready .rd-main-img {
+  opacity: 1;
+  transform: scale(1);
 }
 
-.thumbnail-img {
-  width: 100%;
-  height: 70px;
-  object-fit: cover;
-  border-radius: 8px;
+.rd-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 45%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+  pointer-events: none;
+}
+
+/* Status Badge on hero */
+.rd-img-badge {
+  position: absolute;
+  top: 20px;
+  left: 22px;
+  z-index: 2;
+}
+
+.badge-available,
+.badge-booked {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(8px);
+}
+
+.badge-available {
+  background: rgba(40, 167, 69, 0.22);
+  border: 1px solid rgba(40, 167, 69, 0.5);
+  color: #6ce97a;
+}
+
+.badge-booked {
+  background: rgba(220, 53, 69, 0.22);
+  border: 1px solid rgba(220, 53, 69, 0.5);
+  color: #f77;
+}
+
+/* Thumbnail strip */
+.rd-thumb-strip {
+  display: flex;
+  gap: 6px;
+  padding: 8px 0 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) #222;
+  background: #0f0f0f;
+}
+
+.rd-thumb-strip::-webkit-scrollbar { height: 3px; }
+.rd-thumb-strip::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+.rd-thumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 110px;
+  height: 72px;
+  border-radius: 0;
+  border: none;
+  padding: 0;
   cursor: pointer;
-  border: 2px solid transparent;
-  transition: 0.2s;
+  overflow: hidden;
+  background: #222;
+  outline: none;
+  transition: opacity 0.2s;
+  opacity: 0.55;
 }
 
-.thumbnail-img:hover {
+.rd-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.rd-thumb:hover { opacity: 0.85; }
+.rd-thumb:hover img { transform: scale(1.07); }
+
+.rd-thumb--active {
+  opacity: 1;
+  box-shadow: inset 0 -3px 0 var(--primary);
+}
+
+.rd-thumb-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* ─── CONTENT GRID ───────────────────────────────────────── */
+.rd-content-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  max-width: 1280px;
+  margin: 28px auto 0;
+  padding: 0 24px;
+  align-items: start;
+}
+
+/* ─── CARDS ──────────────────────────────────────────────── */
+.rd-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 16px;
+  padding: 26px 28px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 20px;
+  transition: box-shadow 0.25s;
+}
+
+.rd-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* Section title inside card */
+.rd-section-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  letter-spacing: -0.2px;
+}
+
+/* ─── HEADER CARD ────────────────────────────────────────── */
+.rd-header-card {
+  padding: 28px;
+}
+
+.rd-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.rd-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  line-height: 1.25;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+
+.rd-location {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+.rd-location svg {
+  flex-shrink: 0;
+  color: var(--primary);
+}
+
+.rd-price-block {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.rd-price {
+  font-family: 'Nunito', sans-serif;
+  font-size: 2.1rem;
+  font-weight: 900;
+  color: var(--primary);
+  letter-spacing: -1.5px;
+  display: block;
+  line-height: 1;
+}
+
+.rd-price-unit {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+/* Pills row */
+.rd-pills {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rd-pill {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 100px;
+  flex: 1;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.rd-pill:hover {
+  background: var(--bg-overlay);
+  border-color: rgba(255, 107, 53, 0.3);
+}
+
+.rd-pill-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-tertiary);
+}
+
+.rd-pill-val {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.text-success { color: var(--success) !important; }
+.text-error   { color: var(--error) !important; }
+
+/* ─── DESCRIPTION ────────────────────────────────────────── */
+.rd-description {
+  font-size: 0.925rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+/* ─── AMENITIES ──────────────────────────────────────────── */
+.rd-amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.rd-amenity {
+  background: var(--bg-overlay);
+  color: var(--primary);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+  border-radius: 30px;
+  padding: 6px 16px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: default;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+
+.rd-amenity:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: transparent;
   transform: translateY(-2px);
 }
 
-.active-thumb {
-  border-color: #6366f1;
-  opacity: 0.7;
+/* ─── RIGHT STICKY PANEL ─────────────────────────────────── */
+.rd-right {
+  position: relative;
 }
 
-/* RIGHT SIDE - STICKY */
-.room-right-side {
-  flex: 1;
+.rd-sticky-panel {
   position: sticky;
-  top: 80px;
-}
-
-.room-title { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
-.room-location { color: #666; margin-bottom: 20px; }
-.room-price-tag { font-size: 1.8rem; color: #2ecc71; margin-bottom: 20px; }
-.room-price-tag span { font-size: 1rem; color: #888; }
-
-.info-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  background: #f9f9f9;
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-}
-
-.amenity-badge {
-  background: #eef2ff;
-  color: #4f46e5;
-  padding: 5px 12px;
-  border-radius: 15px;
-  font-size: 0.85rem;
-  margin: 4px;
-  display: inline-block;
-}
-
-/* OWNER CARD */
-.owner-side-card {
-  padding: 20px;
-  background: white;
-  border: 1px solid #eee;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-}
-
-.call-now-btn {
-  display: block;
-  text-align: center;
-  background: #25d366;
-  color: white;
-  padding: 12px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .room-main-content { flex-direction: column; }
-  .room-right-side { position: static; width: 100%; }
-}
-/* --- BOTTOM SECTION (REVIEWS & REPORTS) --- */
-
-.room-bottom-section {
-  margin-top: 50px;
-  padding-top: 30px;
-  border-top: 2px solid #f0f0f0;
-}
-
-/* Review Section Styling */
-.reviews-container {
-  background: #ffffff;
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-  margin-bottom: 40px;
-}
-
-.reviews-container h2 {
-  font-size: 1.6rem;
-  margin-bottom: 20px;
-  color: #333;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Report Box Styling */
-.report-box {
-  background: #fff5f5; /* Light red background for attention */
-  border: 1px dashed #feb2b2;
-  padding: 25px;
-  border-radius: 15px;
-  margin-bottom: 50px;
-}
-
-.report-box h3 {
-  color: #c53030;
-  margin-bottom: 15px;
-  font-size: 1.3rem;
-}
-
-.report-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  max-width: 500px;
-}
-
-.report-controls select {
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  font-size: 1rem;
-  background: white;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.report-controls select:focus {
-  border-color: #6366f1;
-  outline: none;
-}
-
-/* Divider line */
-.divider {
-  border: 0;
-  height: 1px;
-  background: #eee;
-  margin: 40px 0;
-}
-
-/* Mobile responsive for bottom section */
-@media (max-width: 768px) {
-  .report-controls {
-    max-width: 100%;
-  }
-}
-/* room-detail.css */
-.room-detail-container {
-  max-width: 1250px;
-  margin: 30px auto;
-  padding: 0 20px;
-}
-
-.room-main-content {
-  display: flex;
-  gap: 40px;
-  margin-bottom: 50px;
-}
-
-/* --- UPPER LEFT: GALLERY --- */
-.room-left-side { flex: 1.5; max-width: 700px; }
-.main-image-wrapper {
-  width: 100%;
-  height: 450px;
-  border-radius: 15px;
+  top: 88px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
   overflow: hidden;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-  margin-bottom: 15px;
-}
-.main-room-img { width: 100%; height: 100%; object-fit: cover; }
-.thumbnail-grid { display: flex; gap: 10px; flex-wrap: wrap; }
-.thumbnail-img {
-  width: 80px; height: 60px; object-fit: cover;
-  border-radius: 8px; cursor: pointer; border: 2px solid transparent;
-}
-.active-thumb { border-color: #4f46e5; }
-
-/* --- UPPER RIGHT: DETAILS --- */
-.room-right-side { flex: 1; position: sticky; top: 90px; }
-.room-title { font-size: 2.2rem; font-weight: 800; color: #1a1a1a; }
-.room-price-tag { color: #10b981; font-size: 1.8rem; margin: 15px 0; }
-.info-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-  background: #f9fafb; padding: 15px; border-radius: 12px;
-}
-.amenity-badge {
-  background: #e0e7ff; color: #4338ca; padding: 5px 12px;
-  border-radius: 20px; font-size: 0.85rem; margin: 4px; display: inline-block;
-}
-.owner-side-card {
-  margin-top: 25px; padding: 20px; border: 1px solid #e5e7eb;
-  border-radius: 15px; background: white;
-}
-.call-now-btn {
-  display: block; text-align: center; background: #22c55e;
-  color: white; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 600;
 }
 
-/* --- BOTTOM SECTION SPLIT --- */
-.room-bottom-split {
-  display: flex;
-  gap: 50px;
-  padding-top: 40px;
-  border-top: 1px solid #e5e7eb;
-}
-.bottom-left { flex: 1.5; }
-.bottom-right { flex: 1; position: sticky; top: 100px; }
-
-.report-box {
-  background: #fff5f5; border: 1px solid #fee2e2;
-  padding: 25px; border-radius: 15px;
-}
-.report-box h3 { color: #b91c1c; margin-bottom: 10px; }
-.report-subtext { font-size: 0.9rem; color: #7f1d1d; margin-bottom: 15px; }
-.report-controls select {
-  width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #fca5a5; margin-bottom: 15px;
+.rd-panel-section {
+  padding: 22px 24px;
 }
 
-.divider { margin: 40px 0; border: 0; border-top: 1px solid #eee; }
-
-/* RESPONSIVE */
-@media (max-width: 1024px) {
-  .room-main-content, .room-bottom-split { flex-direction: column; }
-  .room-right-side, .bottom-right { position: static; width: 100%; }
-}
-/* Centering the Loader */
-.loader-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 80vh; /* Screen ke beech mein dikhane ke liye */
-  width: 100%;
-}
-
-/* Modern Spinner */
-.room-loader {
-  width: 50px;
-  height: 50px;
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #6366f1; /* Indigo color to match your theme */
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 15px;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.loader-container p {
-  color: #666;
-  font-weight: 500;
-  font-family: 'Inter', sans-serif;
-}
-
-.room-address-box {
-  margin-top: 1.5rem;
-  padding: 1.25rem 1.5rem;
-
-  background: #ffffff;
-  border-radius: 14px;
-  border: 1px solid #eee;
-
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.25s ease;
-}
-
-.room-address-box:hover {
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
-}
-
-.address-label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #777;
-  margin-bottom: 0.6rem;
+.rd-panel-label {
+  font-size: 0.72rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.9px;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
 }
 
-.address-full {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #222;
-  line-height: 1.6;
+.rd-panel-address {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
 }
 
-.address-locked {
+.rd-address-blur {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 6px;
 }
 
-.address-partial {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #333;
-}
-
-.upgrade-hint {
-  font-size: 0.85rem;
+.rd-upgrade-chip {
+  display: inline-block;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: #e63946;
+  color: var(--primary);
+  background: var(--bg-overlay);
+  border: 1px solid rgba(255,107,53,0.2);
+  border-radius: 20px;
+  padding: 3px 12px;
   cursor: pointer;
   width: fit-content;
+  transition: background 0.2s;
 }
 
-.upgrade-hint:hover {
-  text-decoration: underline;
+.rd-upgrade-chip:hover { background: var(--primary); color: #fff; }
+
+.rd-panel-divider {
+  height: 1px;
+  background: var(--border-primary);
+  margin: 0;
 }
 
-.address-loading {
-  padding: 1rem;
-  font-size: 0.9rem;
-  color: #777;
+/* ─── OWNER CARD (premium) ───────────────────────────────── */
+.rd-owner-card {
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.rd-owner-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.rd-owner-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  color: #fff;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.35);
+}
+
+.rd-owner-name {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.rd-owner-email {
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+.rd-contact-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  background: var(--primary);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 12px;
+  padding: 14px 20px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.1px;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.38);
+}
+
+.rd-contact-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(255, 107, 53, 0.48);
+}
+
+.rd-contact-note {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin-top: -4px;
+}
+
+/* ─── LOCKED CARD (non-premium) ──────────────────────────── */
+.rd-locked-card {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  background: linear-gradient(160deg, var(--bg-secondary) 0%, var(--bg-overlay) 100%);
+}
+
+.rd-lock-circle {
+  width: 60px;
+  height: 60px;
+  background: var(--bg-tertiary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  border: 1.5px solid var(--border-secondary);
+}
+
+.rd-locked-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.rd-locked-desc {
+  font-size: 0.83rem;
+  color: var(--text-tertiary);
+  line-height: 1.55;
+  max-width: 230px;
+}
+
+.rd-upgrade-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 11px 26px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 14px rgba(255, 107, 53, 0.35);
+}
+
+.rd-upgrade-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.45);
+}
+
+/* ─── REPORT SECTION ─────────────────────────────────────── */
+.rd-report-section {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rd-select {
+  width: 100%;
+  padding: 11px 40px 11px 14px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border-secondary);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.rd-select:focus {
+  border-color: var(--primary);
+}
+
+.rd-error-text {
+  font-size: 0.82rem;
+  color: var(--error);
+  background: rgba(220, 53, 69, 0.08);
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .rd-content-grid {
+    grid-template-columns: 1fr;
+  }
+  .rd-sticky-panel {
+    position: static;
+  }
+  .rd-main-img-wrap {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (max-width: 640px) {
+  .rd-page { padding-bottom: 50px; }
+  .rd-content-grid { padding: 0 12px; gap: 16px; margin-top: 16px; }
+  .rd-card { padding: 18px 16px; }
+  .rd-header-top { flex-direction: column; gap: 8px; }
+  .rd-price-block { text-align: left; }
+  .rd-price { font-size: 1.8rem; }
+  .rd-title { font-size: 1.25rem; }
+  .rd-pills { gap: 8px; }
+  .rd-pill { min-width: 80px; padding: 8px 12px; }
+  .rd-thumb { width: 80px; height: 54px; }
+  .rd-main-img-wrap { aspect-ratio: 4 / 3; }
+  .rd-panel-section,
+  .rd-owner-card,
+  .rd-locked-card,
+  .rd-report-section { padding: 18px 16px; }
 }
