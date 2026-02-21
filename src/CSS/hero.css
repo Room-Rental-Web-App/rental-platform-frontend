@@ -1,25 +1,33 @@
+/* ================= HERO SECTION ================= */
+
 .hero {
-  position: relative;
-  min-height: 90vh;
+  /* position: relative; */
+  min-height: 80vh;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   padding: 2rem;
   font-family: var(--font-base);
-  background: url("https://i.pinimg.com/1200x/95/d5/47/95d547a6ecfbc0e891996c2f18d33555.jpg")
-    no-repeat center / cover;
   overflow: hidden;
+  background-color: var(--bg-primary);
 }
 
+/* Background + Overlay */
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  background:
+    linear-gradient(to bottom,
+      var(--bg-overlay),
+      rgba(0, 0, 0, 0.448)),
+    url("https://i.pinimg.com/1200x/95/d5/47/95d547a6ecfbc0e891996c2f18d33555.jpg") no-repeat center / cover;
+
   z-index: 0;
 }
 
+/* Content Wrapper */
 .hero-info {
   position: relative;
   z-index: 1;
@@ -27,44 +35,54 @@
   animation: fadeInDown 0.8s ease-out;
 }
 
+/* Title */
 .hero-title {
-  font-size: clamp(2.5rem, 5vw, 3.8rem);
+  font-size: 5vw;
   font-weight: 800;
-  color: #fff;
+  color: var(--text-inverse);
   line-height: 1.15;
   margin-bottom: 2rem;
 }
 
+/* Highlight Word */
 .highlight {
   color: var(--primary);
-  border-bottom: 4px solid var(--gold);
+  border-bottom: 4px solid var(--accent);
 }
 
+/* Description */
 .hero-desc {
   font-size: 1.15rem;
-  color: #eee;
+  color: var(--text-inverse);
   line-height: 1.8;
   margin-bottom: 3rem;
-  border-left: 3px solid rgba(255, 255, 255, 0.4);
+  border-left: 3px solid var(--border-secondary);
   padding-left: 1.5rem;
 }
 
-/* Animation */
+/* ================= ANIMATION ================= */
+
 @keyframes fadeInDown {
   from {
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Responsive */
+/* ================= RESPONSIVE ================= */
+
 @media (max-width: 768px) {
   .hero-info {
     text-align: center;
+  }
+
+  .hero-title {
+    font-size: 2rem;
   }
 
   .hero-desc {
