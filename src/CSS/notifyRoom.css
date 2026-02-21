@@ -1,115 +1,191 @@
+/* ============================= */
+/* Container */
+/* ============================= */
+
 .notify-container {
-  max-width: 1200px;
-  margin: 30px auto;
-  padding: 10px;
+  min-height: 100vh;
+  padding: 40px 6%;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
+  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  transition: 0.3s ease;
 }
 
-/* PERFECT SQUARE */
+/* ============================= */
+/* Card */
+/* ============================= */
+
 .notifyRoom {
-  background: #fff;
-  border: 2px solid #eee;
-  border-radius: 8px;
-  aspect-ratio: 1 / 1;
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border-primary);
+  box-shadow: var(--shadow-md);
+  transition: 0.3s ease;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  transition: border 0.2s ease, transform 0.2s ease;
+  position: relative;
+  max-height: fit-content;
 }
 
 .notifyRoom:hover {
-  border-color: #1976d2;
-  transform: translateY(-2px);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
 }
 
-/* image takes top half */
+/* ============================= */
+/* Image */
+/* ============================= */
+
 .notifyRoom img {
   width: 100%;
-  height: 45%;
+  height: 220px;
   object-fit: cover;
+  cursor: pointer;
+  transition: 0.3s ease;
 }
 
-/* content fills rest */
-.notifyRoom-content {
-  flex: 1;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.notifyRoom img:hover {
+  opacity: 0.9;
 }
 
-.notifyRoom p {
-  margin: 4px 0;
+/* ============================= */
+/* Remove Button */
+/* ============================= */
+
+.notifyRoom > button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--error);
+  color: var(--text-inverse);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
   font-size: 13px;
-  color: #333;
+  transition: 0.2s ease;
 }
+
+.notifyRoom > button:hover {
+  opacity: 0.9;
+  transform: scale(0.95);
+}
+
+/* ============================= */
+/* Content */
+/* ============================= */
+
+.notifyRoom-content {
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.notifyRoom-content p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.notifyRoom-content strong {
+  font-size: 17px;
+  color: var(--text-primary);
+}
+
+.notifyRoom-content p:nth-child(2) {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* ============================= */
+/* Availability Status */
+/* ============================= */
 
 .notify-status {
   font-weight: 600;
   font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  width: fit-content;
 }
 
 .available {
-  color: #2e7d32;
+  background: rgba(76, 175, 80, 0.15);
+  color: var(--success);
 }
 
 .not-available {
-  color: #c62828;
+  background: rgba(239, 83, 80, 0.15);
+  color: var(--error);
 }
 
-.notifyRoom button {
-  margin-top: 6px;
-  padding: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-}
+/* ============================= */
+/* Buttons */
+/* ============================= */
 
-.notify-on {
-  background: #1976d2;
-  color: white;
-}
-
+.book-btn,
+.notify-on,
 .notify-off {
-  background: #e53935;
-  color: white;
-}
-
-.notify-on:hover {
-  background: #115293;
-}
-
-.notify-off:hover {
-  background: #b71c1c;
-}
-.book-btn {
-  width: 100%;
-  padding: 10px;
-  background: #2e7d32;          /* strong green = action */
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 9px 14px;
+  border-radius: 8px;
   border: none;
-  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease;
+  transition: 0.2s ease;
+  min-width: 120px;
+}
+
+/* Contact Owner */
+.book-btn {
+  background: var(--primary);
+  color: var(--text-inverse);
 }
 
 .book-btn:hover {
-  background: #1b5e20;
-  transform: translateY(-1px);
+  background: var(--primary-hover);
 }
 
-.book-btn:active {
-  transform: scale(0.98);
+/* Notify On */
+.notify-on {
+  background: var(--primary);
+  color: var(--text-inverse);
 }
 
-.book-btn:disabled {
-  background: #bdbdbd;
-  cursor: not-allowed;
-  transform: none;
+.notify-on:hover {
+  background: var(--primary-hover);
+}
+
+/* Notify Off */
+.notify-off {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-secondary);
+}
+
+.notify-off:hover {
+  background: var(--bg-overlay);
+}
+
+/* ============================= */
+/* Responsive */
+/* ============================= */
+
+@media (max-width: 768px) {
+  .notify-container {
+    padding: 30px 4%;
+  }
+
+  .notifyRoom img {
+    height: 180px;
+  }
+
+  .notifyRoom-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

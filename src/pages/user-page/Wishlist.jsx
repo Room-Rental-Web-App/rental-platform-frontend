@@ -5,6 +5,7 @@ import "../../CSS/wishlist.css";
 import { useWishlist } from "../../context/WishlistContext";
 import { useNavigate } from "react-router-dom";
 import MyLoader from "../../components/MyLoader";
+import { ArrowRight, ArrowRightToLine } from "lucide-react";
 
 function Wishlist() {
   const email = localStorage.getItem("email");
@@ -60,7 +61,7 @@ function Wishlist() {
               <p className="loc">{item.room.city}</p>
               <p className="type">{item.room.roomType}</p>
               <h4>₹{item.room.price}</h4>
-              <span className="view-link" onClick={() => navTo(`/room/${item.id}`)}>view detalils</span>
+              <span className="view-link" onClick={() => navTo(`/room/${item.id}`)}>View detalils<ArrowRight size={15} /> </span>
               <button
                 className="remove-btn"
                 onClick={() => removeFromWishlist(item.room.id)}
