@@ -39,7 +39,7 @@ export default function useRoomSearch({ mode = "PUBLIC", approved = true } = {})
                     userLng: mode === "PUBLIC" ? userLocation?.lng : null,
 
                     page: pageNo,
-                    size: 15,
+                    size: 4,
                 },
             });
 
