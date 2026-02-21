@@ -1,60 +1,120 @@
-/* =========================
-   QUICK SEARCH COMPONENT
-========================= */
+/* ================= WRAPPER CONTAINER ================= */
 
-.search-wrapper {
-  min-width: 60vw;
-  display: flex;
-  gap: 4px;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  z-index: 2;
+.search-wrapper-container {
+  position: relative;
+  width: 10%;
+  max-width: 520px;
+  box-sizing: border-box;
 }
 
+/* ================= SEARCH BAR ================= */
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: #ffffff00;
+  border-radius: 40px;
+  padding: 6px 10px;
+  box-shadow: var(--shadow-md);
+  box-sizing: border-box;
+}
+
+/* Prevent overflow */
 .search-input {
   flex: 1;
+  min-width: 0; /* IMPORTANT FIX */
   border: none;
-  padding: 1rem 2rem;
-  font-size: 1rem;
   outline: none;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  background: transparent;
 }
 
 .search-input::placeholder {
-  color: #888;
+  color: var(--text-tertiary);
 }
+
+/* ================= BUTTON ================= */
 
 .hero-search-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-
+  gap: 6px;
+  padding: 8px 16px;
   background: var(--primary);
   color: #fff;
   border: none;
-  padding: 0 2rem;
-  font-weight: 700;
+  border-radius: 30px;
+  font-weight: 600;
   cursor: pointer;
-  border-radius: 10px;
-}
-
-.hero-search-btn svg {
-  stroke-width: 2.2;
+  white-space: nowrap; /* prevents shrink */
+  transition: 0.25s ease;
 }
 
 .hero-search-btn:hover {
   background: var(--primary-hover);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* ================= DROPDOWN ================= */
+
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  background: var(--bg-primary);
+  border-radius: 14px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-primary);
+  z-index: 999;
+  max-height: 300px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* Dropdown Items */
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: var(--bg-tertiary);
+  color: var(--primary);
+}
+
+.dropdown-loading,
+.dropdown-empty {
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* ================= MOBILE FIX ================= */
+
+@media (max-width: 480px) {
+
   .search-wrapper {
     flex-direction: column;
-    width: 100%;
+    gap: 10px;
+    border-radius: 16px;
+    padding: 12px;
   }
 
   .hero-search-btn {
-    padding: 1rem;
+    width: 100%;
     justify-content: center;
+  }
+
+  .search-dropdown {
+    position: relative;
+    margin-top: 10px;
   }
 }

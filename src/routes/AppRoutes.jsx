@@ -1,16 +1,16 @@
 import { Navigate, Route } from "react-router-dom";
 
-import Auth from "../components/Auth";
-import OtpVerify from "../components/OtpVerify";
-import ForgotPassword from "../components/ForgotPassword";
-import ResetPassword from "../components/ResetPassword";
+
+import OtpVerify from "../components/authantication/OtpVerify";
+import ForgotPassword from "../components/authantication/ForgotPassword";
+import ResetPassword from "../components/authantication/ResetPassword";
 import SearchRoom from "../pages/user-page/SearchRoom";
 import RoomDetailPage from "../pages/user-page/RoomDetailPage";
 import Profile from "../pages/commen-pages/Profile";
 import TermsAndService from "../pages/commen-pages/TermsAndService";
 import PrivacyPolicy from "../pages/commen-pages/PrivacyPolicy";
 import RefundPolicy from "../pages/commen-pages/RefundPolicy";
-import HomePage from "../pages/commen-pages/HomePage"
+
 import About from "../pages/commen-pages/AboutUs"
 import Reports from "../pages/admin-page/Reports"
 import BlogPage from "../pages/commen-pages/BlogPage";
@@ -30,14 +30,20 @@ import Wishlist from "../pages/user-page/Wishlist";
 import Contact from "../pages/commen-pages/Contact"
 import QuickSearchPage from "../pages/commen-pages/QuickSearchPage";
 import AdminUsers from "../pages/admin-page/AdminUsers";
+import Login from "../components/authantication/Login";
+import Register from "../components/authantication/Register";
 {/* Public */ }
 const PublicRoutes = [
-  <Route path="/auth" element={<Auth />} />, // Yahan /login ko /auth kar de
-  <Route path="/login" element={<Auth />} />,
+  <Route path="/login" element={<Login />} />,
+  <Route path="/register" element={<Register />} />,
+  <Route path="/auth" element={<Navigate to="/login" />} />,
+
   <Route path="/verify-otp" element={<OtpVerify />} />,
   <Route path="/forgot-password" element={<ForgotPassword />} />,
   <Route path="/reset-password" element={<ResetPassword />} />,
+
   <Route path="/search" element={<SearchRoom approved={true} />} />,
+  <Route path="/search//:searchInput" element={<SearchRoom approved={true} />} />,
   <Route path="/room/:roomId" element={<RoomDetailPage />} />,
   <Route path="/quick-search/:searchInput" element={<QuickSearchPage />} />,
 
@@ -60,7 +66,7 @@ const FooterRoutes = [<Route path="/terms" element={<TermsAndService />} />,
 const UserRoutes = [
   <Route path="/wishlist" element={<Wishlist />} />,
   <Route path="/notify_rooms" element={<NotifyRoom />} />,
-  <Route path="*" element={<Navigate to="/home" />} />,
+  <Route path="*" element={<Navigate to="/" />} />,
 ]
 
 
