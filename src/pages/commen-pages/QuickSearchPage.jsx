@@ -9,7 +9,7 @@ function QuickSearchPage() {
   const { searchInput } = useParams();
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(false);
-
+   console.log(searchInput)
   function loadRoomByQuickSearch() {
     setLoading(true);
 

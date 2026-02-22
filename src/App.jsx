@@ -18,7 +18,7 @@ function App() {
   return (
     <Router>
       <WishlistProvider>
-           <ScrollToTop />
+        <ScrollToTop />
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={role === "ROLE_ADMIN" ? <Navigate to="/admin/dashboard" /> : <Homepage />} />
