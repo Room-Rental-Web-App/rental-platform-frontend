@@ -1,4 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import React from "react";
+window.useState = React.useState;
+window.useEffect = React.useEffect;
 import { WishlistProvider } from "./context/WishlistContext";
 import {
   PublicRoutes,
