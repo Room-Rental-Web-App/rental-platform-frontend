@@ -12,11 +12,13 @@ const categories = [
 const CategorySection = () => {
   const navigate = useNavigate();
 
-  const handleCategoryClick = (categoryType) => {
-    // Search page par redirect karega query param ke saath
-    // Example: /search?type=PG
-    navigate(`/search?type=${categoryType}`);
+  const handleCategoryClick = (value) => {
+    const trimmed = value.trim();
+    if (!trimmed) return;
+
+    navigate(`/quick-search/${encodeURIComponent(trimmed)}`);
   };
+
 
   return (
     <div className="category-section">

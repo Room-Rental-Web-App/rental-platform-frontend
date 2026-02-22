@@ -19,6 +19,7 @@ function QuickSearchInput() {
   const navigate = useNavigate();
   const { searchInput } = useParams();
 
+
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
