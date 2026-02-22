@@ -12,23 +12,38 @@ import Homepage from "./pages/commen-pages/HomePage";
 import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
-  const role = localStorage.getItem("role"); // ROLE_OWNER | ROLE_USER |  ROLE_ADMIN | null
+  // Role ko state mein rakho taaki login ke baad React ko pata chale
+  const [role, setRole] = useState(localStorage.getItem("role"));
 
-
+  // Ye effect check karega ki role update hua ya nahi
+  useEffect(() => {
+    const currentRole = localStorage.getItem("role");
+    if (currentRole !== role) {
+      setRole(currentRole);
+    }
+  }, []);
   return (
     <Router>
       <WishlistProvider>
-           <ScrollToTop />
+        <ScrollToTop />
         <Routes>
           <Route element={<Layout />}>
-            <Route path="/" element={role === "ROLE_ADMIN" ? <Navigate to="/admin/dashboard" /> : <Homepage />} />
+            <Route
+              path="/"
+              element={
+                role === "ROLE_ADMIN" ? (
+                  <Navigate to="/admin/dashboard" />
+                ) : (
+                  <Homepage />
+                )
+              }
+            />
             {PublicRoutes}
             {role !== "ROLE_ADMIN" && FooterRoutes}
             {role === "ROLE_USER" && UserRoutes}
             {role === "ROLE_OWNER" && RoomOwnerRoutes}
             {role === "ROLE_ADMIN" && AdminRoutes}
           </Route>
-
         </Routes>
       </WishlistProvider>
     </Router>

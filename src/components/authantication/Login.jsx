@@ -28,7 +28,7 @@ export default function Login() {
     localStorage.setItem("userId", data.id);
     localStorage.setItem("fullName", data.fullName);
     localStorage.setItem("phone", data.phone);
-    navigate("/");
+    window.location.href = "/";
   };
 
   const login = async (e) => {

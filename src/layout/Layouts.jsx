@@ -10,36 +10,46 @@ export default function UserLayout() {
   const [role, setRole] = useState(null);
   const [isPremium, setIsPremium] = useState(false);
 
-  useEffect(() => {
+  // Function jo storage se state sync karega
+  const checkAuth = () => {
     const token = localStorage.getItem("token");
     const savedRole = localStorage.getItem("role");
-    const premiumStatus =
-      localStorage.getItem("isPremium") === "true";
+    const premiumStatus = localStorage.getItem("isPremium") === "true";
 
     if (token) {
       setIsLoggedIn(true);
       setRole(savedRole);
       setIsPremium(premiumStatus);
+    } else {
+      setIsLoggedIn(false);
+      setRole(null);
+      setIsPremium(false);
     }
+  };
+
+  useEffect(() => {
+    checkAuth();
+
+    // Agar doosre tab mein login/logout ho toh sync rahega
+    window.addEventListener("storage", checkAuth);
+    return () => window.removeEventListener("storage", checkAuth);
   }, []);
 
   const handleLogout = () => {
-    if (!window.confirm("Are you sure you want to logout?"))
-      return;
+    if (!window.confirm("Are you sure you want to logout?")) return;
 
     localStorage.clear();
     setIsLoggedIn(false);
     setRole(null);
     setIsPremium(false);
-    window.location.href = "/";
+
+    // Hard refresh taaki saara cache clear ho jaye
+    window.location.href = "/login";
   };
 
-  
-
   /* =============================
-     ADMIN LAYOUT
+      ADMIN LAYOUT
   ============================== */
-
   if (role === "ROLE_ADMIN") {
     return (
       <div className="admin-layout">
@@ -52,9 +62,8 @@ export default function UserLayout() {
   }
 
   /* =============================
-     USER / OWNER LAYOUT
+      USER / OWNER LAYOUT
   ============================== */
-
   return (
     <>
       <Navbar
@@ -64,10 +73,11 @@ export default function UserLayout() {
       />
 
       <main className="page-container">
-        <Outlet />
+        {/* Context Provider ki tarah isLoggedIn aur role pass kar sakte ho */}
+        <Outlet context={{ isLoggedIn, role }} />
       </main>
 
-      <Footer />
+      {role !== "ROLE_ADMIN" && <Footer />}
     </>
   );
 }
