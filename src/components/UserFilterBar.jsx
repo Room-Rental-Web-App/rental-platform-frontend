@@ -1,4 +1,4 @@
-import React from "react";
+import React  from "react";
 import "../CSS/userFilterBar.css";
 
 const UserFilterBar = ({ filters, setFilters }) => {
