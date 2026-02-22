@@ -1,8 +1,12 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "../CSS/createReport.css";
 import Api from "../api/Api";
 
-export default function CreateReport({ reporterId, reportType: initialReportType, targetId: initialTargetId }) {
+export default function CreateReport({
+  reporterId,
+  reportType: initialReportType,
+  targetId: initialTargetId,
+}) {
   const [reportType, setReportType] = useState(initialReportType || "ROOM");
   const [targetId, setTargetId] = useState(initialTargetId || "");
   const [reason, setReason] = useState("");
@@ -49,7 +53,9 @@ export default function CreateReport({ reporterId, reportType: initialReportType
     } catch (err) {
       console.error(err);
       setStatus("error");
-      setErrorMsg(err.response?.data || "Failed to submit report. Please try again.");
+      setErrorMsg(
+        err.response?.data || "Failed to submit report. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -59,26 +65,48 @@ export default function CreateReport({ reporterId, reportType: initialReportType
     return (
       <div className="cr-success">
         <div className="cr-success-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
             <polyline points="22 4 12 14.01 9 11.01" />
           </svg>
         </div>
         <p className="cr-success-title">Report submitted</p>
-        <p className="cr-success-msg">Thank you. Our team will review this shortly.</p>
-        <button className="cr-reset-btn" onClick={() => setStatus("idle")}>Submit another</button>
+        <p className="cr-success-msg">
+          Thank you. Our team will review this shortly.
+        </p>
+        <button className="cr-reset-btn" onClick={() => setStatus("idle")}>
+          Submit another
+        </button>
       </div>
     );
   }
 
   return (
     <div className="cr-form">
-
       {/* Locked context chip */}
       {isLocked && (
         <div className="cr-context-chip">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
           </svg>
           Reporting {reportType.replace("_", " ")} · ID {targetId}
         </div>
@@ -98,8 +126,13 @@ export default function CreateReport({ reporterId, reportType: initialReportType
               <option value="ROOM_OWNER">Room Owner</option>
               <option value="USER">User</option>
             </select>
-            <svg className="cr-select-icon" width="12" height="12" viewBox="0 0 12 12">
-              <path fill="currentColor" d="M6 8L1 3h10z"/>
+            <svg
+              className="cr-select-icon"
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+            >
+              <path fill="currentColor" d="M6 8L1 3h10z" />
             </svg>
           </div>
         </div>
@@ -136,7 +169,9 @@ export default function CreateReport({ reporterId, reportType: initialReportType
 
         {/* Character bar */}
         <div className="cr-char-row">
-          <span className={`cr-char-count ${isOver ? "cr-char--over" : isUnder && reason.length > 0 ? "cr-char--under" : ""}`}>
+          <span
+            className={`cr-char-count ${isOver ? "cr-char--over" : isUnder && reason.length > 0 ? "cr-char--under" : ""}`}
+          >
             {charRaw} / 500
           </span>
           <div className="cr-char-bar-track">
@@ -151,8 +186,19 @@ export default function CreateReport({ reporterId, reportType: initialReportType
       {/* Error */}
       {status === "error" && (
         <div className="cr-error">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
           </svg>
           {errorMsg}
         </div>
@@ -171,8 +217,18 @@ export default function CreateReport({ reporterId, reportType: initialReportType
           </>
         ) : (
           <>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
             </svg>
             Submit Report
           </>
