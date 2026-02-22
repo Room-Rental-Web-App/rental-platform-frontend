@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Api from "../api/Api";
-import "../css/notify-when-available.css";
+import "../CSS/notify-when-available.css";
 
 function NotifiedWhenAvailable({ userId, roomId }) {
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
