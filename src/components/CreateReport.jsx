@@ -2,19 +2,13 @@ import React, { useState } from "react";
 import "../CSS/createReport.css";
 import Api from "../api/Api";
 
-export default function CreateReport({
-  reporterId,
-  reportType: initialReportType,
-  targetId: initialTargetId,
-}) {
-  const [reportType, setReportType] = useState(initialReportType || "ROOM");
-  const [targetId, setTargetId] = useState(initialTargetId || "");
+export default function CreateReport({ reporterId, reportType, targetId, }) {
+
   const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("idle"); // idle | success | error
   const [errorMsg, setErrorMsg] = useState("");
 
-  const isLocked = initialReportType && initialTargetId;
   const charCount = reason.trim().length;
   const charRaw = reason.length;
   const isUnder = charCount < 20;
@@ -26,6 +20,8 @@ export default function CreateReport({
     setErrorMsg("");
 
     if (!targetId || !reason.trim()) {
+      console.log("targetId: ", targetId);
+      console.log("reason: ", reason.trim());
       setStatus("error");
       setErrorMsg("All fields are required.");
       return;
@@ -93,68 +89,10 @@ export default function CreateReport({
   return (
     <div className="cr-form">
       {/* Locked context chip */}
-      {isLocked && (
-        <div className="cr-context-chip">
-          <svg
-            width="13"
-            height="13"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-          </svg>
-          Reporting {reportType.replace("_", " ")} · ID {targetId}
-        </div>
-      )}
 
-      {/* Unlocked: type selector */}
-      {!isLocked && (
-        <div className="cr-field">
-          <label className="cr-label">Report Type</label>
-          <div className="cr-select-wrap">
-            <select
-              className="cr-select"
-              value={reportType}
-              onChange={(e) => setReportType(e.target.value)}
-            >
-              <option value="ROOM">Room</option>
-              <option value="ROOM_OWNER">Room Owner</option>
-              <option value="USER">User</option>
-            </select>
-            <svg
-              className="cr-select-icon"
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-            >
-              <path fill="currentColor" d="M6 8L1 3h10z" />
-            </svg>
-          </div>
-        </div>
-      )}
 
-      {/* Unlocked: target ID */}
-      {!isLocked && (
-        <div className="cr-field">
-          <label className="cr-label">
-            {reportType === "ROOM" && "Room ID"}
-            {reportType === "ROOM_OWNER" && "Owner ID"}
-            {reportType === "USER" && "User ID"}
-          </label>
-          <input
-            className="cr-input"
-            type="number"
-            placeholder="Enter ID"
-            value={targetId}
-            onChange={(e) => setTargetId(e.target.value)}
-          />
-        </div>
-      )}
+
+
 
       {/* Reason */}
       <div className="cr-field">

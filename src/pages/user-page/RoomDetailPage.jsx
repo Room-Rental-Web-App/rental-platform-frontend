@@ -7,6 +7,7 @@ import CreateReport from "../../components/CreateReport";
 import NotifiedWhenAvailable from "../../components/NotifiedWhenAvailable";
 import usePremiumStatus from "../../customHook/usePremiumStatus";
 import MyLoader from "../../components/MyLoader";
+// if room owner then send target id of room owner else room -> 
 
 function RoomDetailPage() {
   const { roomId } = useParams();
@@ -17,6 +18,7 @@ function RoomDetailPage() {
   const [loading, setLoading] = useState(true);
   const [reportType, setReportType] = useState("ROOM_OWNER");
   const [imgLoaded, setImgLoaded] = useState(false);
+  const targetId = reportType === "ROOM_OWNER" ? roomOwner?.id : roomId;
 
   const userId = localStorage.getItem("userId") || null;
   const role = localStorage.getItem("role") || null;
@@ -43,6 +45,8 @@ function RoomDetailPage() {
       .then(() => console.log("Interest recorded"))
       .catch((err) => console.error("Error recording interest", err));
   };
+
+
 
   const handleThumbClick = (img) => {
     setImgLoaded(false);
@@ -100,7 +104,7 @@ function RoomDetailPage() {
               <div>
                 <h1 className="rd-title">{room.title}</h1>
                 <p className="rd-location">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
                   {room.city}, {room.pincode}
                 </p>
               </div>
@@ -189,7 +193,7 @@ function RoomDetailPage() {
                 <p className="rd-locked-desc">Upgrade to Premium to view owner details and get in touch directly.</p>
                 <button className="rd-upgrade-btn">
                   <span>Upgrade to Premium</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                 </button>
               </div>
             ) : (
@@ -209,7 +213,7 @@ function RoomDetailPage() {
                   className="rd-contact-btn"
                   onClick={handleCallOwner}
                 >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.65 3.38 2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.7a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.65 3.38 2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.7a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
                   Contact Owner
                 </a>
                 <p className="rd-contact-note">Usually responds within 2 hours</p>
@@ -222,22 +226,15 @@ function RoomDetailPage() {
                 <div className="rd-panel-divider" />
                 <div className="rd-report-section">
                   <p className="rd-panel-label">🚩 Report this listing</p>
-                  <select
-                    value={reportType}
-                    onChange={(e) => setReportType(e.target.value)}
-                    className="rd-select"
-                  >
+                  <select value={reportType} onChange={(e) => setReportType(e.target.value)}
+                    className="rd-select">
                     <option value="ROOM">Inaccurate Details</option>
                     <option value="ROOM_OWNER">Suspicious Owner</option>
                   </select>
 
-                  {reportType === "ROOM" ? (
-                    <CreateReport reporterId={userId} reportType="ROOM" targetId={room.id} />
-                  ) : roomOwner ? (
-                    <CreateReport reporterId={userId} reportType="ROOM_OWNER" targetId={roomOwner.id} />
-                  ) : (
-                    <p className="rd-error-text">Reporting unavailable: Owner details not verified.</p>
-                  )}
+
+                  <CreateReport reporterId={userId} reportType={reportType} targetId={targetId} />
+
                 </div>
               </>
             )}
