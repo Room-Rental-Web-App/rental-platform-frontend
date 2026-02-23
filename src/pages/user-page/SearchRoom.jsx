@@ -24,7 +24,8 @@ export default function SearchRoom({ approved }) {
     applyFilters,
     loadRooms,
     hasMore,
-    loading,
+    initialLoading,
+    loadingMore,
     page,
     setLocation,
   } = useRoomSearch({
@@ -35,34 +36,30 @@ export default function SearchRoom({ approved }) {
   /* ==========================
      URL TYPE SYNC
   ========================== */
-
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const typeFromUrl = queryParams.get("type");
 
     if (typeFromUrl) {
-      setDraftFilters((prev) => {
-        const updated = { ...prev, roomType: typeFromUrl };
-        applyFilters(updated);
-        return updated;
-      });
+      const updated = { ...draftFilters, roomType: typeFromUrl };
+      setDraftFilters(updated);
+      applyFilters(updated);
     }
-  }, [location.search, applyFilters, setDraftFilters]);
+    // eslint-disable-next-line
+  }, [location.search]);
 
   /* ==========================
      Infinite Scroll
   ========================== */
-
   useInfiniteScroll({
     hasMore,
-    loading,
+    loading: loadingMore,
     onLoadMore: () => loadRooms(page + 1, true),
   });
 
   /* ==========================
      Handlers
   ========================== */
-
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setDraftFilters((prev) => ({
@@ -91,8 +88,14 @@ export default function SearchRoom({ approved }) {
 
       {/* MOBILE FILTER BUTTON */}
       <div className="mobile-filter-btn-wrapper">
-        <button className="mobile-filter-btn" onClick={() => setShowMobileFilters(true)}>Filters</button>
+        <button
+          className="mobile-filter-btn"
+          onClick={() => setShowMobileFilters(true)}
+        >
+          Filters
+        </button>
       </div>
+
       <div className="search-layout">
 
         {/* DESKTOP SIDEBAR */}
@@ -111,27 +114,43 @@ export default function SearchRoom({ approved }) {
 
           <div className="results-header">
             <h2>Available Rooms</h2>
-            {!loading && (
+            {!initialLoading && (
               <span className="result-count">
                 {rooms.length} results
               </span>
             )}
           </div>
 
-          {loading && <MyLoader data="Loading Rooms..." />}
+          {/* Initial Full Loader */}
+          {initialLoading && (
+            <MyLoader data="Loading Rooms..." />
+          )}
 
-          {!loading && rooms.length === 0 && (
+          {/* Empty State */}
+          {!initialLoading && rooms.length === 0 && (
             <div className="empty-state">
               No rooms found. Try adjusting your filters.
             </div>
           )}
 
-          {!loading && rooms.length > 0 && (
-            <RoomGrid rooms={rooms} applyFilters={applyFilters} />
-          )}
+          {/* Room Grid */}
+          {!initialLoading && rooms.length > 0 && (
+            <>
+              <RoomGrid rooms={rooms} applyFilters={applyFilters} />
 
-          {!loading && !hasMore && rooms.length > 0 && (
-            <div className="loader">No more rooms</div>
+              {/* Bottom Loader for Infinite Scroll */}
+              {loadingMore && (
+                <div className="bottom-loader">
+                  <MyLoader data="Loading more rooms..." />
+                </div>
+              )}
+
+              {!hasMore && (
+                <div className="loader">
+                  No more rooms
+                </div>
+              )}
+            </>
           )}
 
         </div>
@@ -139,7 +158,6 @@ export default function SearchRoom({ approved }) {
 
       {/* MOBILE FILTER DRAWER */}
       {showMobileFilters && (
-        
         <div
           className="mobile-filter-overlay"
           onClick={() => setShowMobileFilters(false)}
