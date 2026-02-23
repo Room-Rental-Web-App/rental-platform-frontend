@@ -68,16 +68,16 @@ const Navbar = ({ isLoggedIn, onLogout, isPremiumUser }) => {
     return (
       <>
         <Link className="nav-link" to="/" onClick={onClick}>
-          {isMobile && <Home />} Home
+          {isMobile && <Home />} Explore
         </Link>
 
         <Link className="nav-link" to="/about" onClick={onClick}>
-          {isMobile && <Info />} About
+          {isMobile && <Info />} About Us
         </Link>
 
-        {(!isLoggedIn || role === "ROLE_USER") && (
+        {(!isLoggedIn || role !== "ROLE_ADMIN") && (
           <Link className="nav-link" to="/search" onClick={onClick}>
-            {isMobile && <Search />} Search Rooms
+            {isMobile && <Search />} Browse Stays
           </Link>
         )}
 
@@ -85,14 +85,14 @@ const Navbar = ({ isLoggedIn, onLogout, isPremiumUser }) => {
           <>
             <Link className="nav-link" to="/wishlist" onClick={onClick}>
               {isMobile && <Heart />}
-              Saved Rooms
+              Saved
               {wishlistCount > 0 && (
                 <span className="wishlist-badge">{wishlistCount}</span>
               )}
             </Link>
 
             <Link className="nav-link" to="/premium" onClick={onClick}>
-              {isMobile && <Crown />} Premium
+              {isMobile && <Crown />} Upgrade
             </Link>
           </>
         )}
@@ -100,26 +100,22 @@ const Navbar = ({ isLoggedIn, onLogout, isPremiumUser }) => {
         {isLoggedIn && role === "ROLE_OWNER" && (
           <>
             <Link className="nav-link" to="/add-room" onClick={onClick}>
-              {isMobile && <PlusCircle />} List Room
+              {isMobile && <PlusCircle />} Add Property
             </Link>
 
             <Link className="nav-link" to="/my-listings" onClick={onClick}>
-              {isMobile && <Building2 />} My Listings
+              {isMobile && <Building2 />} My Properties
             </Link>
 
             <Link className="nav-link" to="/premium" onClick={onClick}>
-              {isMobile && <Crown />} Premium
-            </Link>
-
-            <Link className="nav-link" to="/owner/users" onClick={onClick}>
-              {isMobile && <Users />} Users
+              {isMobile && <Crown />} Upgrade
             </Link>
           </>
         )}
 
         {isLoggedIn && role === "ROLE_ADMIN" && (
           <Link className="nav-link" to="/admin/all-users" onClick={onClick}>
-            {isMobile && <LayoutDashboard />} Dashboard
+            {isMobile && <LayoutDashboard />} Admin Panel
           </Link>
         )}
       </>
