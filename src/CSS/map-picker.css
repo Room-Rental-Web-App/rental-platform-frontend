@@ -58,6 +58,8 @@
   padding: 14px;
   border-bottom: 1px solid var(--border-primary);
   background: var(--bg-secondary);
+    z-index: 2000;
+
 }
 
 .map-search input {
@@ -102,7 +104,7 @@
   padding: 6px 0;
   margin: 0;
 
-  z-index: 10;
+  z-index: 20000;
 }
 
 .suggestions li {

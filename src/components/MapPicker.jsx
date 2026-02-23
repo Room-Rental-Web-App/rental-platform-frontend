@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import "../CSS/map-picker.css";
+import Api from "../api/Api";
 
 // Fix marker icons
 delete L.Icon.Default.prototype._getIconUrl;
@@ -37,6 +38,21 @@ export default function MapPicker({ center, onConfirm, onClose }) {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
+  async function loadLocationSuggestions(query, signal) {
+    try {
+      const res = await Api.get("/location/search", {
+        params: { query },
+        signal: signal
+      });
+      console.log(res.data);
+      setSuggestions(res.data);
+    } catch (err) {
+      if (err.name !== "CanceledError") {
+        console.error("Error fetching location suggestions:", err);
+      }
+    }
+  }
+
   // 🔍 SEARCH API (Nominatim)
   useEffect(() => {
     if (query.length < 3) {
@@ -46,13 +62,7 @@ export default function MapPicker({ center, onConfirm, onClose }) {
 
     const controller = new AbortController();
 
-    fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${query}&addressdetails=1&limit=5`,
-      { signal: controller.signal }
-    )
-      .then((res) => res.json())
-      .then((data) => setSuggestions(data))
-      .catch(() => { });
+    loadLocationSuggestions(query, controller.signal)
 
     return () => controller.abort();
   }, [query]);
