@@ -4,7 +4,7 @@ export default function useInfiniteScroll({ hasMore, loading, onLoadMore }) {
   useEffect(() => {
     const onScroll = () => {
       if (
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 &&
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 200 &&
         hasMore &&
         !loading
       ) {

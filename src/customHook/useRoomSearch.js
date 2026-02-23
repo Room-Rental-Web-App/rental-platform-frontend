@@ -6,10 +6,10 @@ export default function useRoomSearch({ mode = "PUBLIC", approved = true } = {})
     const [rooms, setRooms] = useState([]);
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
-    const [loading, setLoading] = useState(false);
+    const [initialLoading, setInitialLoading] = useState(false);
+    const [loadingMore, setLoadingMore] = useState(false);
     const [userLocation, setUserLocation] = useState(null);
 
-    const location = useLocation();
 
     const [draftFilters, setDraftFilters] = useState({
         city: "",
@@ -21,57 +21,65 @@ export default function useRoomSearch({ mode = "PUBLIC", approved = true } = {})
     });
 
     const [appliedFilters, setAppliedFilters] = useState(draftFilters);
-    const loadRooms = async (pageNo, append) => {
-        if (loading) return;
-        setLoading(true);
-        try {
-            const res = await Api.get("/rooms/filter", {
-                params: {
-                    approved: approved,
-                    city: appliedFilters.city || null,
-                    pincode: appliedFilters.pincode || null,
-                    roomType: appliedFilters.roomType || null,
-                    minPrice: appliedFilters.minPrice || null,
-                    maxPrice: appliedFilters.maxPrice || null,
+const loadRooms = async (pageNo, append) => {
+    if (initialLoading || loadingMore) return;
 
-                    radiusKm: mode === "PUBLIC" ? appliedFilters.radiusKm : null,
-                    userLat: mode === "PUBLIC" ? userLocation?.lat : null,
-                    userLng: mode === "PUBLIC" ? userLocation?.lng : null,
+    if (append) {
+        setLoadingMore(true);
+    } else {
+        setInitialLoading(true);
+    }
 
-                    page: pageNo,
-                    size: 4,
-                },
-            });
+    try {
+        const res = await Api.get("/rooms/filter", {
+            params: {
+                approved,
+                city: appliedFilters.city || null,
+                pincode: appliedFilters.pincode || null,
+                roomType: appliedFilters.roomType || null,
+                minPrice: appliedFilters.minPrice || null,
+                maxPrice: appliedFilters.maxPrice || null,
+                radiusKm: mode === "PUBLIC" ? appliedFilters.radiusKm : null,
+                userLat: mode === "PUBLIC" ? userLocation?.lat : null,
+                userLng: mode === "PUBLIC" ? userLocation?.lng : null,
+                page: pageNo,
+                size: 12,
+            },
+        });
 
-            setRooms(prev => append ? [...prev, ...res.data.content] : res.data.content
-            );
-            setHasMore(!res.data.last);
-            setPage(pageNo);
-        } finally {
-            setLoading(false);
-        }
-    };
+        setRooms(prev =>
+            append ? [...prev, ...res.data.content] : res.data.content
+        );
 
-    const applyFilters = () => {
+        setHasMore(!res.data.last);
+        setPage(pageNo);
+    } finally {
+        setInitialLoading(false);
+        setLoadingMore(false);
+    }
+};
+
+    const applyFilters = (filters) => {
         setRooms([]);
         setPage(0);
         setHasMore(true);
-        setAppliedFilters({ ...draftFilters });
+        setAppliedFilters({ ...filters });
     };
 
     useEffect(() => {
         loadRooms(0, false);
-    }, [appliedFilters, userLocation, location]);
+    }, [appliedFilters, userLocation]);
 
-    return {
-        rooms,
-        draftFilters,
-        setDraftFilters,
-        applyFilters,
-        loadRooms,
-        hasMore,
-        loading,
-        page,
-        setLocation: (lat, lng) => setUserLocation({ lat, lng })
-    };
+return {
+    rooms,
+    draftFilters,
+    setDraftFilters,
+    applyFilters,
+    loadRooms,
+    hasMore,
+    initialLoading,
+    loadingMore,
+    page,
+    setLocation: (lat, lng) => setUserLocation({ lat, lng })
+};
 }
