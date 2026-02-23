@@ -24,20 +24,19 @@ const AdminSidebar = ({onLogout}) => {
 
 
 
-  const navItems = [
-    { to: "/admin/dashboard", icon: Gauge, label: "Dashboard" },
-    { to: "/admin/revenue-report", icon: BarChart3, label: "Revenue" },
-    { to: "/admin/all-users", icon: Users, label: "Users" },
-    { to: "/admin/all-owners", icon: UserCog, label: "Owners" },
-    { to: "/admin/pending-users", icon: UserX, label: "Pending Users" },
-    { to: "/admin/pending-owners", icon: UserPlus, label: "Pending Owners" },
-    { to: "/admin/search", icon: Building2, label: "Rooms" },
-    { to: "/admin/pending-rooms", icon: ClipboardCheck, label: "Pending Rooms" },
-    { to: "/admin/high-interest", icon: AlertCircle, label: "High Interest", special: true },
-    { to: "/admin/reports", icon: Shield, label: "Reports" },
-    { to: "/admin/support", icon: Shield, label: "Support" },
-  ];
-
+const navItems = [
+  { to: "/admin/dashboard", icon: Gauge, label: "Overview" },
+  { to: "/admin/revenue-report", icon: BarChart3, label: "Revenue Analytics" },
+  { to: "/admin/all-users", icon: Users, label: "User Management" },
+  { to: "/admin/all-owners", icon: UserCog, label: "Owner Management" },
+  { to: "/admin/pending-users", icon: UserX, label: "User Approvals" },
+  { to: "/admin/pending-owners", icon: UserPlus, label: "Owner Approvals" },
+  { to: "/admin/search", icon: Building2, label: "Property Listings" },
+  { to: "/admin/pending-rooms", icon: ClipboardCheck, label: "Listing Approvals" },
+  { to: "/admin/high-interest", icon: AlertCircle, label: "Flagged Activity", special: true },
+  { to: "/admin/reports", icon: Shield, label: "System Reports" },
+  { to: "/admin/support", icon: Shield, label: "Support Center" },
+];
   return (
     <>
       {/* Mobile Toggle Button */}
