@@ -1,45 +1,130 @@
-import React from "react";
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import React, { useEffect, useState } from "react";
+import { MapPin as PinIcon } from "lucide-react";
+import MapPicker from "../../../components/MapPicker";
 
-import { MapPin as PinIcon, Navigation } from "lucide-react";
+const DEFAULT_LOCATION = {
+  lat: 23.2599,
+  lng: 77.4126,
+};
 
 const Step2 = ({ formData, setFormData, setStep }) => {
-  const LocationPicker = () => {
-    useMapEvents({
-      click(e) {
-        setFormData({
-          ...formData,
-          latitude: e.latlng.lat,
-          longitude: e.latlng.lng,
-        });
-      },
-    });
-    return <Marker position={[formData.latitude, formData.longitude]} />;
+  const [openMap, setOpenMap] = useState(false);
+  const [loadingLocation, setLoadingLocation] = useState(true);
+
+  const handleConfirmLocation = (lat, lng) => {
+    setFormData((prev) => ({
+      ...prev,
+      latitude: lat,
+      longitude: lng,
+    }));
+    setOpenMap(false);
   };
+
+  useEffect(() => {
+    const userAccepted = window.confirm(
+      "We need your location to pin your room accurately on the map. Allow location access?"
+    );
+
+    if (!userAccepted) {
+      // User clicked cancel → use fallback
+      setFormData((prev) => ({
+        ...prev,
+        latitude: DEFAULT_LOCATION.lat,
+        longitude: DEFAULT_LOCATION.lng,
+      }));
+      setLoadingLocation(false);
+      setOpenMap(true);
+      return;
+    }
+
+    if (!("geolocation" in navigator)) {
+      alert("Geolocation is not supported in your browser.");
+      setFormData((prev) => ({
+        ...prev,
+        latitude: DEFAULT_LOCATION.lat,
+        longitude: DEFAULT_LOCATION.lng,
+      }));
+      setLoadingLocation(false);
+      setOpenMap(true);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setFormData((prev) => ({
+          ...prev,
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+        }));
+
+        setLoadingLocation(false);
+        setOpenMap(true);
+      },
+      (err) => {
+        alert("Location permission denied. Using default location.");
+
+        setFormData((prev) => ({
+          ...prev,
+          latitude: DEFAULT_LOCATION.lat,
+          longitude: DEFAULT_LOCATION.lng,
+        }));
+
+        setLoadingLocation(false);
+        setOpenMap(true);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    );
+  }, []);
 
   return (
     <div className="fade-in">
       <h3>
         <PinIcon size={20} /> Location & Contact
       </h3>
+
       <p className="hint-text">
-        Click on the map to pin your exact room location.
+        Choose your exact room location.
       </p>
 
-      <div
-        className="map-container"
-        style={{ height: "250px", marginBottom: "15px" }}
-      >
-        <MapContainer
-          center={[formData.latitude, formData.longitude]}
-          zoom={13}
-          style={{ height: "100%", width: "100%" }}
-        >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <LocationPicker />
-        </MapContainer>
-      </div>
+      {loadingLocation && (
+        <p style={{ marginBottom: "15px" }}>
+          Detecting your location...
+        </p>
+      )}
 
+      {!loadingLocation && (
+        <div className="map-preview-box">
+          <div className="coordinates">
+            <strong>Latitude:</strong> {formData.latitude}
+            <br />
+            <strong>Longitude:</strong> {formData.longitude}
+          </div>
+
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={() => setOpenMap(true)}
+          >
+            Select / Change Location
+          </button>
+        </div>
+      )}
+
+      {openMap && formData.latitude && formData.longitude && (
+        <MapPicker
+          center={{
+            lat: formData.latitude,
+            lng: formData.longitude,
+          }}
+          onConfirm={handleConfirmLocation}
+          onClose={() => setOpenMap(false)}
+        />
+      )}
+      {/* ADDRESS */}
       <div className="input-box">
         <label>Full Address</label>
         <textarea
@@ -59,9 +144,12 @@ const Step2 = ({ formData, setFormData, setStep }) => {
             type="text"
             required
             value={formData.city}
-            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, city: e.target.value })
+            }
           />
         </div>
+
         <div className="input-box">
           <label>Pincode</label>
           <input
@@ -88,10 +176,19 @@ const Step2 = ({ formData, setFormData, setStep }) => {
       </div>
 
       <div className="btn-row">
-        <button type="button" onClick={() => setStep(1)} className="btn-prev">
+        <button
+          type="button"
+          onClick={() => setStep(1)}
+          className="btn-prev"
+        >
           Back
         </button>
-        <button type="button" onClick={() => setStep(3)} className="btn-next">
+
+        <button
+          type="button"
+          onClick={() => setStep(3)}
+          className="btn-next"
+        >
           Next Step
         </button>
       </div>
