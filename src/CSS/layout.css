@@ -28,6 +28,7 @@
   }
 }
 
+
 /* =========================================
    USER LAYOUT
 ========================================= */
@@ -37,4 +38,11 @@
   padding: 20px;
   background: var(--bg-primary);
   overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .page-container {
+    margin-left: 0;
+    padding: 0;
+  }
 }
