@@ -45,6 +45,9 @@ export default function MapPicker({ center, onConfirm, onClose }) {
         signal: signal
       });
       console.log(res.data);
+      if (res.data && Array.isArray(res.data)) {
+        setSuggestions(res.data);
+      }
       setSuggestions(res.data);
     } catch (err) {
       if (err.name !== "CanceledError") {
