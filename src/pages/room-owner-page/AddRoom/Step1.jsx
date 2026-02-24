@@ -67,7 +67,6 @@ const Step1 = ({ formData, setFormData, setStep }) => {
           />
         </div>
       </div>
-
       <div className="row">
         <div className="input-box">
           <label>Room Type</label>
@@ -76,10 +75,25 @@ const Step1 = ({ formData, setFormData, setStep }) => {
             onChange={(e) =>
               setFormData({ ...formData, roomType: e.target.value })
             }
+            required
           >
-            <option>Single Room</option>
-            <option>Double Room</option>
-            <option>Flat / Apartment</option>
+            <option value="" disabled>
+              Select Room Type
+            </option>
+            <option value="Single Room">Single Room</option>
+            <option value="Double Room">Double Room</option>
+            {/* <option value="Flat / Apartment">Flat / Apartment</option>
+             */}
+             <option value="1 BHK">1 BHK</option>
+            <option value="2 BHK">2 BHK</option>
+            <option value="3 BHK">3 BHK</option>  
+              <option value="Boys Hostel">Boys Hostel</option>
+            <option value=" Girls Hostel">Girls Hostel</option>
+
+
+            {/* <option value="PG / Hostel">PG / Hostel</option> */}
+            {/* <option value="Studio Apartment">Studio Apartment</option> */}
+            {/* <option value="Office Space">Office Space</option> */}
           </select>
         </div>
         <div className="input-box">
