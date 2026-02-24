@@ -1,7 +1,7 @@
 import "../CSS/hero.css";
 import { useNavigate } from "react-router-dom";
 import QuickSearchInput from "./QuickSearchInput";
-
+import { HomeShow } from "../data/roomsDekhoData";
 const stats = [
   { value: "50+", label: "Cities" },
   { value: "12K+", label: "Verified Rooms" },
@@ -80,7 +80,7 @@ function HeroSection() {
           {/* Popular tags */}
           <div className="popular-tags">
             <span className="tags-label">Popular:</span>
-            {["Mumbai", "Bangalore", "Delhi", "Pune", "Hyderabad"].map((city) => (
+            {HomeShow.map((city) => (
               <button
                 key={city}
                 className="city-tag"

@@ -183,3 +183,53 @@ export const getPriceFromPlan = (planCode) => {
   if (planCode.includes("365D")) return 4499;
   return 0;
 };
+export const POPULAR_CITIES = [
+  // North India
+  "Delhi",
+  "Noida",
+  "Gurgaon",
+  "Chandigarh",
+  "Jaipur",
+  "Lucknow",
+
+  // West India
+  "Mumbai",
+  "Pune",
+  "Ahmedabad",
+  "Surat",
+  "Vadodara",
+
+  // South India
+  "Bangalore",
+  "Hyderabad",
+  "Chennai",
+  "Coimbatore",
+  "Kochi",
+
+  // East India
+  "Kolkata",
+  "Bhubaneswar",
+  "Patna",
+  "Ranchi",
+
+  // Central India (MP & Nearby)
+  "Bhopal",
+  "Indore",
+  "Jabalpur",
+  "Gwalior",
+  "Ujjain",
+  "Sagar",
+  "Rewa",
+  "Satna",
+  "Vidisha",
+  "Hoshangabad",
+  "Sehore",
+  "Raisen",
+  "Itarsi",
+  "Betul",
+  "Dewas",
+  "Raipur",
+  "Nagpur"
+];
+
+export const HomeShow = ["Bhopal", "Indore", "Jablpur", "Ujjain", "Nagpur","Gwalior"];

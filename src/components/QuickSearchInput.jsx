@@ -4,16 +4,7 @@ import { Search, MapPin } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../CSS/quickSearchInput.css";
 
-const POPULAR_CITIES = [
-  "Delhi",
-  "Mumbai",
-  "Bangalore",
-  "Hyderabad",
-  "Pune",
-  "Chennai",
-  "Kolkata",
-  "Bhopal",
-];
+import { POPULAR_CITIES } from "../data/roomsDekhoData";
 
 function QuickSearchInput() {
   const navigate = useNavigate();

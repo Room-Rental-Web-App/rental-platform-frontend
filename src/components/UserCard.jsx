@@ -1,22 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import "../CSS/userCard.css";
 import Api from "../api/Api";
 
 
 function UserCard({ users, setAadhaarUrl, fetchUsers }) {
-  console.log(users)
+  const [loadingAction, setLoadingAction] = useState(null);
 
   function onApproveOrReject(userId, status) {
+    const actionKey = `${status.toLowerCase()}-${userId}`;
+    setLoadingAction(actionKey);
     Api.put(`/admin/user-status/${userId}`, null, {
       params: { status: status }
     })
       .then(res => alert(res.data))
       .catch(err => console.log(err))
-      .finally(() => fetchUsers()); 
+      .finally(() => fetchUsers());
 
   }
 
   const handleToggleBlock = async (id, enabled) => {
+    const actionKey = `block-${id}`;
+    setLoadingAction(actionKey);
     Api.put(`/admin/block/${id}`, null, {
       params: {
         enabled: !enabled,
@@ -97,30 +101,34 @@ function UserCard({ users, setAadhaarUrl, fetchUsers }) {
                   <div className="uc-moderation-actions">
                     <button
                       className="uc-btn uc-btn-success"
+                      disabled={loadingAction === `approved-${u.id}` || loadingAction === `approve-${u.id}`}
                       onClick={() => onApproveOrReject(u.id, "APPROVED")}
                     >
-                      Approve
+                      {loadingAction === `approved-${u.id}` || loadingAction === `approve-${u.id}`
+                        ? "Approving..."
+                        : "Approve"}
                     </button>
 
                     <button
                       className="uc-btn uc-btn-warning"
+                      disabled={loadingAction === `rejected-${u.id}` || loadingAction === `reject-${u.id}`}
                       onClick={() => onApproveOrReject(u.id, "REJECTED")}
                     >
-                      Reject
+                      {loadingAction === `rejected-${u.id}` || loadingAction === `reject-${u.id}`
+                        ? "Rejecting..."
+                        : "Reject"}
                     </button>
                   </div>
                 )}
 
                 <button
-                  className={`uc-btn ${u.enabled
-                    ? "uc-btn-danger"
-                    : "uc-btn-secondary"
-                    }`}
-                  onClick={() =>
-                    handleToggleBlock(u.id, u.enabled)
-                  }
+                  className={`uc-btn ${u.enabled ? "uc-btn-danger" : "uc-btn-secondary"}`}
+                  disabled={loadingAction === `block-${u.id}`}
+                  onClick={() => handleToggleBlock(u.id, u.enabled)}
                 >
-                  {u.enabled ? "Block" : "Unblock"}
+                  {loadingAction === `block-${u.id}`
+                    ? u.enabled ? "Blocking..." : "Unblocking..."
+                    : u.enabled ? "Block" : "Unblock"}
                 </button>
               </div>
             </div>
