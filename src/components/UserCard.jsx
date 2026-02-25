@@ -21,7 +21,7 @@ function UserCard({ users, setAadhaarUrl, fetchUsers }) {
   const handleToggleBlock = async (id, enabled) => {
     const actionKey = `block-${id}`;
     setLoadingAction(actionKey);
-    Api.put(`/admin/block/${id}`, null, {
+    Api.patch(`/admin/block/${id}`, null, {
       params: {
         enabled: !enabled,
       },
