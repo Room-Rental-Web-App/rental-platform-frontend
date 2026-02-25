@@ -1,19 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
 import { Home, ChevronRight, Wifi, Wind, Car, Utensils } from "lucide-react";
 
+const amenitiesList = [
+  { id: "wifi", label: "WiFi", icon: <Wifi size={16} /> },
+  { id: "ac", label: "AC", icon: <Wind size={16} /> },
+  { id: "parking", label: "Parking", icon: <Car size={16} /> },
+  { id: "kitchen", label: "Kitchen", icon: <Utensils size={16} /> },
+];
+
 const Step1 = ({ formData, setFormData, setStep }) => {
-  const allAmenities = [
-    { id: "wifi", label: "WiFi", icon: <Wifi size={16} /> },
-    { id: "ac", label: "AC", icon: <Wind size={16} /> },
-    { id: "parking", label: "Parking", icon: <Car size={16} /> },
-    { id: "kitchen", label: "Kitchen", icon: <Utensils size={16} /> },
-  ];
+  const [errors, setErrors] = useState({});
 
   const handleAmenityChange = (id) => {
-    const updated = formData.amenities.includes(id)
-      ? formData.amenities.filter((a) => a !== id)
-      : [...formData.amenities, id];
+    const currentAmenities = formData.amenities || [];
+
+    const updated = currentAmenities.includes(id)
+      ? currentAmenities.filter((a) => a !== id)
+      : [...currentAmenities, id];
+
     setFormData({ ...formData, amenities: updated });
+  };
+
+  const validate = () => {
+    const newErrors = {};
+
+    if (!formData.title?.trim()) {
+      newErrors.title = "Title is required";
+    }
+
+    if (!formData.price || Number(formData.price) <= 0) {
+      newErrors.price = "Enter valid rent amount";
+    }
+
+    if (!formData.area || Number(formData.area) <= 0) {
+      newErrors.area = "Enter valid area";
+    }
+
+    if (!formData.roomType) {
+      newErrors.roomType = "Please select room type";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNext = () => {
+    if (validate()) {
+      setStep(2);
+    }
   };
 
   return (
@@ -22,22 +57,27 @@ const Step1 = ({ formData, setFormData, setStep }) => {
         <Home size={20} /> Basic Details
       </h3>
 
+      {/* Title */}
       <div className="input-box">
         <label>Property Title</label>
         <input
           type="text"
-          required
-          value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          value={formData.title || ""}
+          onChange={(e) =>
+            setFormData({ ...formData, title: e.target.value })
+          }
           placeholder="Enter catchy title"
+          className={errors.title ? "input-error" : ""}
         />
+        {errors.title && <small className="error-text">{errors.title}</small>}
       </div>
 
+      {/* Description */}
       <div className="input-box">
         <label>Description</label>
         <textarea
           rows="3"
-          value={formData.description}
+          value={formData.description || ""}
           onChange={(e) =>
             setFormData({ ...formData, description: e.target.value })
           }
@@ -45,61 +85,76 @@ const Step1 = ({ formData, setFormData, setStep }) => {
         />
       </div>
 
+      {/* Price + Area */}
       <div className="row">
         <div className="input-box">
           <label>Rent (₹/Month)</label>
           <input
             type="number"
-            required
-            value={formData.price}
+            min="1"
+            value={formData.price || ""}
             onChange={(e) =>
-              setFormData({ ...formData, price: e.target.value })
+              setFormData({
+                ...formData,
+                price: Number(e.target.value),
+              })
             }
+            className={errors.price ? "input-error" : ""}
           />
+          {errors.price && (
+            <small className="error-text">{errors.price}</small>
+          )}
         </div>
+
         <div className="input-box">
           <label>Area (Sq. Ft)</label>
           <input
             type="number"
-            required
-            value={formData.area}
-            onChange={(e) => setFormData({ ...formData, area: e.target.value })}
+            min="1"
+            value={formData.area || ""}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                area: Number(e.target.value),
+              })
+            }
+            className={errors.area ? "input-error" : ""}
           />
+          {errors.area && (
+            <small className="error-text">{errors.area}</small>
+          )}
         </div>
       </div>
+
+      {/* Room Type + Available For */}
       <div className="row">
         <div className="input-box">
           <label>Room Type</label>
           <select
-            value={formData.roomType}
+            value={formData.roomType || ""}
             onChange={(e) =>
               setFormData({ ...formData, roomType: e.target.value })
             }
-            required
+            className={errors.roomType ? "input-error" : ""}
           >
-            <option value="" disabled>
-              Select Room Type
-            </option>
+            <option value="">Select Room Type</option>
             <option value="Single Room">Single Room</option>
             <option value="Double Room">Double Room</option>
-            {/* <option value="Flat / Apartment">Flat / Apartment</option>
-             */}
-             <option value="1 BHK">1 BHK</option>
+            <option value="1 BHK">1 BHK</option>
             <option value="2 BHK">2 BHK</option>
-            <option value="3 BHK">3 BHK</option>  
-              <option value="Boys Hostel">Boys Hostel</option>
-            <option value=" Girls Hostel">Girls Hostel</option>
-
-
-            {/* <option value="PG / Hostel">PG / Hostel</option> */}
-            {/* <option value="Studio Apartment">Studio Apartment</option> */}
-            {/* <option value="Office Space">Office Space</option> */}
+            <option value="3 BHK">3 BHK</option>
+            <option value="Boys Hostel">Boys Hostel</option>
+            <option value="Girls Hostel">Girls Hostel</option>
           </select>
+          {errors.roomType && (
+            <small className="error-text">{errors.roomType}</small>
+          )}
         </div>
+
         <div className="input-box">
           <label>Available For</label>
           <select
-            value={formData.availableFor}
+            value={formData.availableFor || "Anyone"}
             onChange={(e) =>
               setFormData({ ...formData, availableFor: e.target.value })
             }
@@ -112,23 +167,31 @@ const Step1 = ({ formData, setFormData, setStep }) => {
         </div>
       </div>
 
+      {/* Amenities */}
       <div className="input-box">
         <label>Amenities</label>
         <div className="amenities-grid">
-          {allAmenities.map((item) => (
-            <div
-              key={item.id}
-              className={`amenity-card ${formData.amenities.includes(item.id) ? "selected" : ""}`}
-              onClick={() => handleAmenityChange(item.id)}
-            >
-              {item.icon} <span>{item.label}</span>
-            </div>
-          ))}
+          {amenitiesList.map((item) => {
+            const isSelected = (formData.amenities || []).includes(item.id);
+
+            return (
+              <div
+                key={item.id}
+                className={`amenity-card ${
+                  isSelected ? "selected" : ""
+                }`}
+                onClick={() => handleAmenityChange(item.id)}
+              >
+                {item.icon} <span>{item.label}</span>
+              </div>
+            );
+          })}
         </div>
       </div>
 
+      {/* Next Button */}
       <div className="btn-row" style={{ justifyContent: "flex-end" }}>
-        <button type="button" onClick={() => setStep(2)} className="btn-next">
+        <button type="button" onClick={handleNext} className="btn-next">
           Next Step <ChevronRight size={18} />
         </button>
       </div>

@@ -10,6 +10,7 @@ const DEFAULT_LOCATION = {
 const Step2 = ({ formData, setFormData, setStep }) => {
   const [openMap, setOpenMap] = useState(false);
   const [loadingLocation, setLoadingLocation] = useState(true);
+  const [errors, setErrors] = useState({});
 
   const handleConfirmLocation = (lat, lng) => {
     setFormData((prev) => ({
@@ -20,25 +21,9 @@ const Step2 = ({ formData, setFormData, setStep }) => {
     setOpenMap(false);
   };
 
+  // Detect location on mount
   useEffect(() => {
-    const userAccepted = window.confirm(
-      "We need your location to pin your room accurately on the map. Allow location access?"
-    );
-
-    if (!userAccepted) {
-      // User clicked cancel → use fallback
-      setFormData((prev) => ({
-        ...prev,
-        latitude: DEFAULT_LOCATION.lat,
-        longitude: DEFAULT_LOCATION.lng,
-      }));
-      setLoadingLocation(false);
-      setOpenMap(true);
-      return;
-    }
-
     if (!("geolocation" in navigator)) {
-      alert("Geolocation is not supported in your browser.");
       setFormData((prev) => ({
         ...prev,
         latitude: DEFAULT_LOCATION.lat,
@@ -56,29 +41,60 @@ const Step2 = ({ formData, setFormData, setStep }) => {
           latitude: pos.coords.latitude,
           longitude: pos.coords.longitude,
         }));
-
         setLoadingLocation(false);
         setOpenMap(true);
       },
-      (err) => {
-        alert("Location permission denied. Using default location.");
-
+      () => {
+        // fallback silently
         setFormData((prev) => ({
           ...prev,
           latitude: DEFAULT_LOCATION.lat,
           longitude: DEFAULT_LOCATION.lng,
         }));
-
         setLoadingLocation(false);
         setOpenMap(true);
       },
       {
         enableHighAccuracy: true,
-        timeout: 10000,
+        timeout: 8000,
         maximumAge: 0,
       }
     );
-  }, []);
+  }, [setFormData]);
+
+  const validate = () => {
+    const newErrors = {};
+
+    if (!formData.address?.trim()) {
+      newErrors.address = "Address is required";
+    }
+
+    if (!formData.city?.trim()) {
+      newErrors.city = "City is required";
+    }
+
+    if (!/^[0-9]{6}$/.test(formData.pincode || "")) {
+      newErrors.pincode = "Enter valid 6-digit pincode";
+    }
+
+    if (!/^[0-9]{10}$/.test(formData.contactNumber || "")) {
+      newErrors.contactNumber = "Enter valid 10-digit phone number";
+    }
+
+    if (!formData.latitude || !formData.longitude) {
+      newErrors.location = "Location is required";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNext = () => {
+    if (validate()) {
+      setStep(3);
+    }
+  };
 
   return (
     <div className="fade-in">
@@ -86,14 +102,10 @@ const Step2 = ({ formData, setFormData, setStep }) => {
         <PinIcon size={20} /> Location & Contact
       </h3>
 
-      <p className="hint-text">
-        Choose your exact room location.
-      </p>
+      <p className="hint-text">Choose your exact room location.</p>
 
       {loadingLocation && (
-        <p style={{ marginBottom: "15px" }}>
-          Detecting your location...
-        </p>
+        <p style={{ marginBottom: "15px" }}>Detecting your location...</p>
       )}
 
       {!loadingLocation && (
@@ -103,6 +115,10 @@ const Step2 = ({ formData, setFormData, setStep }) => {
             <br />
             <strong>Longitude:</strong> {formData.longitude}
           </div>
+
+          {errors.location && (
+            <small className="error-text">{errors.location}</small>
+          )}
 
           <button
             type="button"
@@ -124,17 +140,21 @@ const Step2 = ({ formData, setFormData, setStep }) => {
           onClose={() => setOpenMap(false)}
         />
       )}
+
       {/* ADDRESS */}
       <div className="input-box">
         <label>Full Address</label>
         <textarea
-          required
-          value={formData.address}
+          value={formData.address || ""}
           onChange={(e) =>
             setFormData({ ...formData, address: e.target.value })
           }
           placeholder="Building name, Street..."
+          className={errors.address ? "input-error" : ""}
         />
+        {errors.address && (
+          <small className="error-text">{errors.address}</small>
+        )}
       </div>
 
       <div className="row">
@@ -142,37 +162,54 @@ const Step2 = ({ formData, setFormData, setStep }) => {
           <label>City</label>
           <input
             type="text"
-            required
-            value={formData.city}
+            value={formData.city || ""}
             onChange={(e) =>
               setFormData({ ...formData, city: e.target.value })
             }
+            className={errors.city ? "input-error" : ""}
           />
+          {errors.city && (
+            <small className="error-text">{errors.city}</small>
+          )}
         </div>
 
         <div className="input-box">
           <label>Pincode</label>
           <input
-            type="number"
-            required
-            value={formData.pincode}
+            type="text"
+            maxLength="6"
+            value={formData.pincode || ""}
             onChange={(e) =>
-              setFormData({ ...formData, pincode: e.target.value })
+              setFormData({
+                ...formData,
+                pincode: e.target.value.replace(/\D/g, ""),
+              })
             }
+            className={errors.pincode ? "input-error" : ""}
           />
+          {errors.pincode && (
+            <small className="error-text">{errors.pincode}</small>
+          )}
         </div>
       </div>
 
       <div className="input-box">
         <label>Contact Number</label>
         <input
-          type="number"
-          required
-          value={formData.contactNumber}
+          type="text"
+          maxLength="10"
+          value={formData.contactNumber || ""}
           onChange={(e) =>
-            setFormData({ ...formData, contactNumber: e.target.value })
+            setFormData({
+              ...formData,
+              contactNumber: e.target.value.replace(/\D/g, ""),
+            })
           }
+          className={errors.contactNumber ? "input-error" : ""}
         />
+        {errors.contactNumber && (
+          <small className="error-text">{errors.contactNumber}</small>
+        )}
       </div>
 
       <div className="btn-row">
@@ -186,7 +223,7 @@ const Step2 = ({ formData, setFormData, setStep }) => {
 
         <button
           type="button"
-          onClick={() => setStep(3)}
+          onClick={handleNext}
           className="btn-next"
         >
           Next Step
