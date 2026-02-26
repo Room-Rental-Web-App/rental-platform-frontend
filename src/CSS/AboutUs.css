@@ -18,7 +18,7 @@
 }
 
 .hero-title {
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 800;
   margin-bottom: 15px;
 }
@@ -27,7 +27,7 @@
   color: var(--text-secondary); /* */
   font-size: 1.2rem;
   max-width: 700px;
-  margin: 0 auto;
+  /* margin: 0 auto; */
 }
 
 .mission-vision-grid {
@@ -55,6 +55,8 @@
 .card-icon {
   color: var(--primary); /* */
   margin-bottom: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .section-title {

@@ -28,11 +28,14 @@ const categories = [
       { name: "Girls Hostel", type: "GIRLS_HOSTEL" },
     ],
   },
-  // {
-  //   name: "PG",
-  //   icon: Bed,
-  //   options: [{ name: "Shared PG", type: "PG" }],
-  // },
+  {
+    name: "PG",
+    icon: Bed,
+    options: [
+      { name: "Boys Pg", type: "PG" },
+      { name: "Girls Pg", type: "PG" },
+    ],
+  },
 ];
 
 const CategorySection = () => {

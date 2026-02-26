@@ -1,8 +1,32 @@
-import React from "react";
-import { Camera, Upload, X, Video, Loader2 } from "lucide-react"; // Loader2 add kiya
+import React, { useState, useEffect } from "react";
+import { Camera, Upload, X, Video, Loader2, Play } from "lucide-react";
 
-const Step3 = ({ images, setImages, previews, setPreviews, setVideo, uploading, progress, setStep, }) => {
-  
+const Step3 = ({
+  images,
+  setImages,
+  previews,
+  setPreviews,
+  video,
+  setVideo,
+  uploading,
+  progress,
+  setStep,
+}) => {
+  const [videoUrl, setVideoUrl] = useState(null);
+
+  // 1. Jab bhi video file change ho, uska temporary URL banao taaki player mein dikhe
+  useEffect(() => {
+    if (!video) {
+      setVideoUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(video);
+    setVideoUrl(url);
+
+    // Cleanup memory: Purane URL ko delete karna zaroori hai
+    return () => URL.revokeObjectURL(url);
+  }, [video]);
+
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     setImages([...images, ...files]);
@@ -15,10 +39,11 @@ const Step3 = ({ images, setImages, previews, setPreviews, setVideo, uploading, 
         <Camera size={20} /> Photos & Video
       </h3>
 
+      {/* --- PHOTO PREVIEWS --- */}
       <div className="upload-section">
         <label className="upload-card">
           <Upload size={30} />
-          <span>Upload Room Photos</span>
+          <span>Add Photos</span>
           <input
             type="file"
             multiple
@@ -45,33 +70,75 @@ const Step3 = ({ images, setImages, previews, setPreviews, setVideo, uploading, 
         ))}
       </div>
 
-      <div className="input-box" style={{ marginTop: "20px" }}>
-        <label>
-          <Video size={18} /> Tour Video (Optional)
+      <hr style={{ margin: "30px 0", borderColor: "var(--border-primary)" }} />
+
+      {/* --- VIDEO PREVIEW & CHANGE SECTION --- */}
+      <div className="video-upload-section">
+        <label
+          style={{
+            fontWeight: "600",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            marginBottom: "15px",
+          }}
+        >
+          <Video size={18} /> Room Tour Video
         </label>
-        <input
-          type="file"
-          accept="video/*"
-          onChange={(e) => setVideo(e.target.files[0])}
-        />
+
+        {!video ? (
+          /* Case 1: Agar video nahi hai toh upload box dikhao */
+          <div className="video-dropzone">
+            <input
+              type="file"
+              accept="video/*"
+              id="v-up"
+              hidden
+              onChange={(e) => setVideo(e.target.files[0])}
+            />
+            <label htmlFor="v-up" className="video-upload-ui">
+              <Play size={24} />
+              <span>Select Video to Preview</span>
+            </label>
+          </div>
+        ) : (
+          /* Case 2: Agar video hai toh Player aur Remove button dikhao */
+          <div className="video-preview-wrapper">
+            <div className="video-card">
+              <video src={videoUrl} controls className="actual-video-player" />
+              <div className="video-footer">
+                <div className="v-name-box">
+                  <Video size={14} />
+                  <span>{video.name}</span>
+                </div>
+                {/* Yahan se user video hata kar change kar sakta hai */}
+                <button
+                  type="button"
+                  className="remove-video-btn"
+                  onClick={() => setVideo(null)}
+                >
+                  <X size={16} /> Remove & Change Video
+                </button>
+              </div>
+            </div>
+            <p className="v-hint">
+              Check the video above. You can change it before publishing.
+            </p>
+          </div>
+        )}
       </div>
 
+      {/* --- PROGRESS & PUBLISH --- */}
       {uploading && (
-        <div className="progress-wrapper" style={{ marginTop: "15px" }}>
-          <div className="progress-text">
-            <span>Uploading Assets</span>
-            <span>{progress}%</span>
-          </div>
-          <div className="progress-bar-container">
-            <div
-              className="progress-bar-fill"
-              style={{ width: `${progress}%` }}
-            ></div>
+        <div className="uploading-status">
+          <p>Uploading Files... {progress}%</p>
+          <div className="p-bar">
+            <div className="p-fill" style={{ width: `${progress}%` }}></div>
           </div>
         </div>
       )}
 
-      <div className="btn-row">
+      <div className="btn-row" style={{ marginTop: "30px" }}>
         <button
           type="button"
           onClick={() => setStep(2)}
@@ -82,10 +149,7 @@ const Step3 = ({ images, setImages, previews, setPreviews, setVideo, uploading, 
         </button>
         <button type="submit" className="btn-publish" disabled={uploading}>
           {uploading ? (
-            <>
-              <Loader2 className="spinner" size={18} />
-              <span>Publishing...</span>
-            </>
+            <Loader2 className="spinner" size={18} />
           ) : (
             "Publish Listing"
           )}
@@ -94,4 +158,5 @@ const Step3 = ({ images, setImages, previews, setPreviews, setVideo, uploading, 
     </div>
   );
 };
+
 export default Step3;

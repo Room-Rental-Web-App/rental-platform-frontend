@@ -6,6 +6,7 @@ import {
   ShieldCheck,
   AlertCircle,
   Loader2,
+  MailCheck, // Naya icon add kiya
 } from "lucide-react";
 
 export default function OtpVerify() {
@@ -26,7 +27,6 @@ export default function OtpVerify() {
       const interval = setInterval(() => {
         setTimer((prev) => prev - 1);
       }, 1000);
-
       return () => clearInterval(interval);
     }
   }, [timer]);
@@ -53,10 +53,10 @@ export default function OtpVerify() {
         email,
         otp,
       });
-
       nav("/auth");
     } catch {
-      setError("Invalid OTP. Please try again.");
+      // Failed hone par message update kiya
+      setError("Invalid OTP. Please check your registered mail again.");
     } finally {
       setLoading(false);
       setLoadingText("");
@@ -70,15 +70,16 @@ export default function OtpVerify() {
     try {
       setLoading(true);
       setLoadingText("Resending OTP");
+      setError(""); // Purana error clear karo
 
       await axios.post(API_ENDPOINTS.RESEND_OTP || "/auth/resend-otp", {
         email,
       });
 
       setTimer(60);
-      setError("");
+      // Resend success hone par niche wala banner user ko dikhta rahega
     } catch {
-      setError("Failed to resend OTP");
+      setError("Failed to resend. Check your registered mail connection.");
     } finally {
       setLoading(false);
       setLoadingText("");
@@ -88,7 +89,6 @@ export default function OtpVerify() {
   return (
     <div className="auth-card-wrapper">
       <div className="auth-container-card">
-
         {/* LEFT BRANDING */}
         <div className="auth-image-side">
           <h1>RoomsDekho</h1>
@@ -99,6 +99,15 @@ export default function OtpVerify() {
         <div className="form-side">
           <form className="login-form" onSubmit={verifyOtp}>
             <h2>Verify Your OTP</h2>
+
+            {/* SUCCESS / INFO BANNER: Jo hamesha dikhayega ki email check karo */}
+            <div className="info-banner">
+              <MailCheck size={18} color="var(--primary)" />
+              <p>
+                An OTP has been sent to <b>{email || "your mail"}</b>. Please
+                check your registered mail inbox or spam.
+              </p>
+            </div>
 
             {error && (
               <div className="error-banner">
@@ -113,9 +122,7 @@ export default function OtpVerify() {
                 placeholder="Enter 6-digit OTP"
                 maxLength="6"
                 value={otp}
-                onChange={(e) =>
-                  setOtp(e.target.value.replace(/\D/g, ""))
-                }
+                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
                 required
               />
             </div>
@@ -124,7 +131,7 @@ export default function OtpVerify() {
               {timer > 0 ? (
                 <p>Resend OTP in {timer}s</p>
               ) : (
-                <span onClick={resendOtp}>
+                <span className="resend-link" onClick={resendOtp}>
                   Resend OTP
                 </span>
               )}
@@ -143,16 +150,11 @@ export default function OtpVerify() {
 
             <div className="toggle-container">
               <p>
-                Back to{" "}
-                <span onClick={() => nav("/auth")}>
-                  Login
-                </span>
+                Back to <span onClick={() => nav("/auth")}>Login</span>
               </p>
             </div>
-
           </form>
         </div>
-
       </div>
     </div>
   );
