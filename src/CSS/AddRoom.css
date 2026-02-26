@@ -9,6 +9,205 @@
   min-height: 80vh;
 }
 
+/* Video Feedback Styles */
+.video-upload-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--bg-secondary);
+  border: 2px dashed var(--border-primary);
+  padding: 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+
+.video-attached-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: #2ecc7115; /* Halka green background feedback ke liye */
+  border: 1px solid #2ecc7155;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.video-preview-mini {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.video-preview-mini video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+}
+
+.play-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.video-meta-info {
+  flex: 1;
+}
+
+.v-status {
+  color: #27ae60;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.v-name {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  margin: 4px 0;
+}
+
+.remove-video-link {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 5px;
+  text-decoration: underline;
+}.video-select-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--bg-secondary);
+  border: 2px dashed var(--primary);
+  padding: 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  color: var(--primary);
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.video-success-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #2ecc7110; /* Light Green */
+  border: 2px solid #2ecc71;
+  padding: 20px;
+  border-radius: 15px;
+  animation: slideIn 0.3s ease-out;
+}
+
+.v-status {
+  color: #27ae60;
+  font-weight: 800;
+  font-size: 1rem;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.v-filename {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.v-change-btn {
+  background: #ff4757;
+  color: white;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}.video-upload-ui {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  border: 2px dashed var(--border-primary);
+  border-radius: 12px;
+  cursor: pointer;
+  background: var(--bg-secondary);
+  gap: 10px;
+}
+
+.video-preview-wrapper {
+  background: var(--bg-secondary);
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid var(--primary);
+}
+
+.actual-video-player {
+  width: 100%;
+  max-height: 250px;
+  border-radius: 8px;
+  background: #000;
+}
+
+.video-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.v-name-box {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.remove-video-btn {
+  background: #ff4757;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.v-hint {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin-top: 8px;
+  text-align: center;
+}
 /* ==========================================================================
    ANIMATIONS
    ========================================================================== */

@@ -63,9 +63,7 @@ const Step1 = ({ formData, setFormData, setStep }) => {
         <input
           type="text"
           value={formData.title || ""}
-          onChange={(e) =>
-            setFormData({ ...formData, title: e.target.value })
-          }
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           placeholder="Enter catchy title"
           className={errors.title ? "input-error" : ""}
         />
@@ -76,12 +74,27 @@ const Step1 = ({ formData, setFormData, setStep }) => {
       <div className="input-box">
         <label>Description</label>
         <textarea
-          rows="3"
+          className="custom-desc"
+          rows="5" // Isko 5-6 rakho taaki lamba placeholder dikhe
           value={formData.description || ""}
           onChange={(e) =>
             setFormData({ ...formData, description: e.target.value })
           }
-          placeholder="Describe your room..."
+          placeholder={
+            "Mention things like:\n" +
+            "• Is it near a Metro or Bus stand?\n" +
+            "• Does it have AC, WiFi or Geyser?\n" +
+            "• Any specific rules (e.g. No pets)?"
+          }
+          style={{
+            padding: "12px",
+            lineHeight: "1.5",
+            borderRadius: "10px",
+            width: "100%",
+            border: "1px solid var(--border-primary)",
+            outline: "none",
+            fontSize: "0.95rem",
+          }}
         />
       </div>
 
@@ -101,9 +114,7 @@ const Step1 = ({ formData, setFormData, setStep }) => {
             }
             className={errors.price ? "input-error" : ""}
           />
-          {errors.price && (
-            <small className="error-text">{errors.price}</small>
-          )}
+          {errors.price && <small className="error-text">{errors.price}</small>}
         </div>
 
         <div className="input-box">
@@ -120,9 +131,7 @@ const Step1 = ({ formData, setFormData, setStep }) => {
             }
             className={errors.area ? "input-error" : ""}
           />
-          {errors.area && (
-            <small className="error-text">{errors.area}</small>
-          )}
+          {errors.area && <small className="error-text">{errors.area}</small>}
         </div>
       </div>
 
@@ -145,6 +154,8 @@ const Step1 = ({ formData, setFormData, setStep }) => {
             <option value="3 BHK">3 BHK</option>
             <option value="Boys Hostel">Boys Hostel</option>
             <option value="Girls Hostel">Girls Hostel</option>
+            <option value="PG">Boys PG</option>
+            <option value="Girls PG">Girls PG</option>
           </select>
           {errors.roomType && (
             <small className="error-text">{errors.roomType}</small>
@@ -177,9 +188,7 @@ const Step1 = ({ formData, setFormData, setStep }) => {
             return (
               <div
                 key={item.id}
-                className={`amenity-card ${
-                  isSelected ? "selected" : ""
-                }`}
+                className={`amenity-card ${isSelected ? "selected" : ""}`}
                 onClick={() => handleAmenityChange(item.id)}
               >
                 {item.icon} <span>{item.label}</span>

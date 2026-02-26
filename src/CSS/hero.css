@@ -274,6 +274,9 @@
   flex-direction: column;
   gap: 20px;
   animation: slideLeft 0.6s 0.25s cubic-bezier(0.4, 0, 0.2, 1) both;
+  z-index: 10;
+  position: relative;
+  overflow: visible !important;
 }
 
 [data-theme="dark"] .hero-search-card {
@@ -303,6 +306,7 @@
   font-size: 0.78rem;
   color: var(--text-tertiary);
   margin-top: 2px;
+  z-index: 999;
 }
 
 /* Popular city tags */
@@ -313,6 +317,7 @@
   flex-wrap: wrap;
   padding-top: 4px;
   border-top: 1px solid var(--border-primary);
+  z-index: 1;
 }
 
 .tags-label {
@@ -332,6 +337,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: color 0.18s, border-color 0.18s, background 0.18s;
+  z-index: 1;
 }
 
 .city-tag:hover {
@@ -339,7 +345,51 @@
   border-color: var(--primary);
   background: var(--bg-overlay);
 }
+.search-suggestions-dropdown {
+  position: absolute; /* Bahut zaroori */
+  top: 100%; /* Search input ke theek neeche se shuru hoga */
+  left: 0;
+  right: 0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  margin-top: 8px;
+  box-shadow: var(--shadow-lg);
+  z-index: 999; /* Isse ye tags ke upar aayega */
+  max-height: 300px;
+  overflow-y: auto;
+}.hero-search-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 10;
+  overflow: visible !important; /* Dropdown bahar aane ke liye */
+}
 
+/* Popular tags ko mobile pe sahi dikhane ke liye */
+.popular-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding-top: 15px;
+  border-top: 1px solid var(--border-primary);
+  position: relative;
+  z-index: 1; /* Dropdown iske upar aayega */
+}
+
+@media (max-width: 480px) {
+  .hero-search-card {
+    padding: 15px; /* Mobile pe kam space */
+    border-radius: 15px;
+  }
+  
+  .city-tag {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
+}
 /* ============================================================
    ANIMATIONS
    ============================================================ */

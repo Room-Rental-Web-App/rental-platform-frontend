@@ -11,10 +11,23 @@ function HomeSec() {
   const [searchQuery, setSearchQuery] = useState("");
   const [propertyType, setPropertyType] = useState("");
 
+  // LocalStorage se data nikaalo check karne ke liye
+  const token = localStorage.getItem("token");
+  const userRole = localStorage.getItem("role"); // User ka role (USER ya OWNER)
+
   const handleSearch = (e) => {
     e.preventDefault();
-    // Search parameters Controller ke @GetMapping("/filter") se match karte hain
     navigate(`/search?city=${searchQuery}&roomType=${propertyType}`);
+  };
+
+  const handleOwnerAction = () => {
+    if (!token) {
+      // Agar login nahi hai, toh registration/login pe bhejo
+      navigate("/login");
+    } else {
+      // Agar owner hai toh add room pe
+      navigate("/add-room");
+    }
   };
 
   return (
@@ -68,18 +81,22 @@ function HomeSec() {
         <FeaturedProperties />
       </section>
 
-      {/* OWNER CTA */}
-      <section className="owner-cta-section">
-        <div className="owner-cta-content">
-          <h2>Got a Property to List? Post it for FREE!</h2>
-        </div>
-        <button
-          className="owner-cta-button"
-          onClick={() => navigate("/add-room")} // apiConfig ADD_ROOM endpoint
-        >
-          Add Your Property
-        </button>
-      </section>
+      {/* --- UPDATED OWNER CTA LOGIC --- */}
+      {/* Yahan check ho raha hai:
+          1. Agar token nahi hai (Logged out) -> SHOW (Taaki naya owner aaye)
+          2. Agar token hai aur role 'OWNER' hai -> SHOW
+          3. Agar token hai aur role 'USER' hai -> HIDE (Section gayab ho jayega)
+      */}
+      {(!token || userRole === "OWNER") && (
+        <section className="owner-cta-section">
+          <div className="owner-cta-content">
+            <h2>Got a Property to List? Post it for FREE!</h2>
+          </div>
+          <button className="owner-cta-button" onClick={handleOwnerAction}>
+            Add Your Property
+          </button>
+        </section>
+      )}
     </div>
   );
 }
