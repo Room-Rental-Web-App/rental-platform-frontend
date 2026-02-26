@@ -157,3 +157,252 @@
   font-weight: 600;
   cursor: pointer;
 }
+/* --- OwnerCTA Main Section --- */
+.owner-cta-section {
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-primary);
+  border-radius: 20px;
+  padding: 40px 20px;
+  text-align: center;
+  margin: 40px 0;
+  transition: transform 0.3s ease;
+}
+
+.owner-cta-section:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary);
+}
+
+.trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary-light);
+  color: var(--text-inverse);
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.owner-cta-content h2 {
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin-bottom: 15px;
+  font-weight: 800;
+}
+
+.owner-cta-content p {
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 30px;
+}
+
+.owner-cta-button {
+  background-color: var(--primary);
+  color: var(--text-inverse);
+  padding: 14px 28px;
+  border-radius: 12px;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: 0.3s all ease;
+  box-shadow: var(--shadow-md);
+}
+
+.owner-cta-button:hover {
+  background-color: var(--primary-hover);
+  box-shadow: var(--shadow-lg);
+  transform: scale(1.05);
+}
+
+/* --- Modal Overlay & Container --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.role-modal {
+  background: var(--bg-primary);
+  width: 100%;
+  max-width: 480px;
+  padding: 35px;
+  border-radius: 24px;
+  position: relative;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-primary);
+  animation: zoomIn 0.3s ease-out;
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.close-x {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--bg-tertiary);
+  border: none;
+  color: var(--text-primary);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.close-x:hover {
+  background: var(--error);
+  color: white;
+}
+
+/* --- Modal Typography --- */
+.modal-icon-header {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.role-modal h3 {
+  color: var(--text-primary);
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.role-modal p {
+  color: var(--text-secondary);
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+/* --- Instruction Items --- */
+.ins-list {
+  background: var(--bg-secondary);
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 30px;
+}
+
+.ins-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* --- Aadhar Upload Area --- */
+.aadhar-upload-area {
+  margin-bottom: 25px;
+}
+
+.file-drop-zone {
+  border: 2px dashed var(--border-secondary);
+  border-radius: 16px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  color: var(--text-tertiary);
+}
+
+.file-drop-zone:hover, .file-drop-zone.has-file {
+  border-color: var(--primary);
+  background: var(--bg-overlay);
+  color: var(--primary);
+}
+
+/* --- Footer Buttons --- */
+.modal-footer-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.confirm-btn {
+  background: var(--primary);
+  color: white;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.confirm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cancel-btn {
+  background: transparent;
+  color: var(--text-primary);
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border-primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background: var(--bg-tertiary);
+}
+
+/* Success State */
+.modal-success-state {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.modal-error-msg {
+  background: rgba(220, 53, 69, 0.1);
+  color: var(--error);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+.spinner {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

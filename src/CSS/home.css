@@ -409,4 +409,141 @@
 @media (max-width: 480px) {
 
   .category-card { width: 100%; } /* Each category on its own line */
+}/* --- OWNER INSTRUCTION MODAL --- */
+
+/* 1. Background Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent bg */
+  backdrop-filter: blur(8px); /* Modern blur effect */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+/* 2. Main Modal Box */
+.instruction-modal {
+  background-color: var(--bg-secondary);
+  width: 100%;
+  max-width: 450px;
+  border-radius: 20px;
+  padding: 30px;
+  position: relative;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-primary);
+  text-align: center;
+  animation: modalSlideUp 0.4s ease-out;
+}
+
+@keyframes modalSlideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* 3. Close Button */
+.close-modal-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.close-modal-btn:hover {
+  color: var(--error);
+  transform: rotate(90deg);
+}
+
+/* 4. Icon & Text Styling */
+.modal-header-icon {
+  margin-bottom: 20px;
+  display: inline-block;
+  padding: 15px;
+  background: var(--bg-overlay);
+  border-radius: 50%;
+}
+
+.instruction-modal h2 {
+  color: var(--text-primary);
+  font-weight: 800;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.modal-intro {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 25px;
+}
+
+/* 5. Instruction List */
+.instruction-list {
+  text-align: left;
+  margin-bottom: 30px;
+  background: var(--bg-tertiary);
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.ins-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.ins-icon {
+  color: var(--success);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* 6. Action Buttons */
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.register-owner-btn {
+  background-color: var(--primary);
+  color: var(--text-inverse);
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.register-owner-btn:hover {
+  background-color: var(--primary-hover);
+  box-shadow: var(--shadow-md);
+}
+
+.login-owner-btn {
+  background-color: transparent;
+  color: var(--primary);
+  padding: 12px;
+  border-radius: 10px;
+  border: 2px solid var(--primary);
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-owner-btn:hover {
+  background-color: var(--bg-overlay);
 }

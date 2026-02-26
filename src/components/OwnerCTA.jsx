@@ -1,87 +1,52 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import {
-  PlusCircle,
-  Upload,
-  ShieldCheck,
-  Loader2,
-  AlertCircle,
-  Clock,
-  Zap,
-  CheckCircle,
-} from "lucide-react";
-import { API_ENDPOINTS, getAuthHeaders } from "../api/apiConfig";
-import "../CSS/OwnerCTA.css"; // Assuming you have a CSS file for styling
+import { PlusCircle, CheckCircle, Zap, X, Home, LogOut } from "lucide-react";
+import "../CSS/OwnerCTA.css";
 
 const OwnerCTA = () => {
   const navigate = useNavigate();
-
-  // States
   const [showModal, setShowModal] = useState(false);
-  const [aadharFile, setAadharFile] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [status, setStatus] = useState("idle"); // idle, success
+  const [modalType, setModalType] = useState(""); // "GUEST" or "USER"
 
-  // Data from LocalStorage
+  // LocalStorage se status check karo
   const role = localStorage.getItem("role");
   const token = localStorage.getItem("token");
-  const userEmail = localStorage.getItem("email");
 
   const handleAction = () => {
-    // 1. Check if Logged In
+    // 1. Agar login nahi hai (Guest)
     if (!token) {
-      navigate("/login");
+      setModalType("GUEST");
+      setShowModal(true);
       return;
     }
 
-    // 2. Check if already Owner or Admin
-    if (role === "ROLE_OWNER" || role === "ROLE_ADMIN") {
+    // 2. Agar already Owner ya Admin hai
+    if (
+      role === "ROLE_OWNER" ||
+      role === "ROLE_ADMIN" ||
+      role === "OWNER" ||
+      role === "ADMIN"
+    ) {
       navigate("/add-room");
-    } else {
-      // 3. If ROLE_USER, show Upgrade Modal
+    }
+    // 3. Agar User (Tenant) role se login hai
+    else {
+      setModalType("USER");
       setShowModal(true);
     }
   };
 
-  const handleUpgradeRequest = async (e) => {
-    e.preventDefault();
-    setError("");
+  // Logout aur Redirect ka pakka solution
+  const handleLogoutAndRegister = () => {
+    localStorage.clear(); // Sab saaf
+    sessionStorage.clear(); // Session bhi saaf
 
-    if (!aadharFile) {
-      setError("Please upload your Aadhar Card to proceed.");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("aadharCard", aadharFile);
-      formData.append("email", userEmail);
-
-      // Using the endpoint we added in apiConfig
-      await axios.post(API_ENDPOINTS.UPGRADE_TO_OWNER, formData, {
-        headers: {
-          ...getAuthHeaders(),
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      setStatus("success");
-    } catch (err) {
-      setError(
-        err.response?.data?.message ||
-          "Request failed. Please try again later.",
-      );
-    } finally {
-      setLoading(false);
-    }
+    // window.location use karne se poora app refresh hoga aur logout pakka ho jayega
+    window.location.href = "/register";
   };
 
   return (
     <>
-      {/* Main CTA Section */}
       <div className="owner-cta-section">
         <div className="owner-cta-content">
           <div className="trust-badge">
@@ -90,10 +55,9 @@ const OwnerCTA = () => {
           </div>
           <h2>Got a Property to List?</h2>
           <p>
-            Post your room for <b>FREE</b> and reach thousands of verified
-            tenants instantly!
+            Post your room for <b>FREE</b> and reach thousands of tenants
+            instantly!
           </p>
-
           <button className="owner-cta-button" onClick={handleAction}>
             <PlusCircle size={20} />
             <span>Add Your Property</span>
@@ -101,86 +65,82 @@ const OwnerCTA = () => {
         </div>
       </div>
 
-      {/* Role Upgrade Modal */}
       {showModal && (
-        <div className="modal-overlay">
-          <div className="role-modal">
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="role-modal" onClick={(e) => e.stopPropagation()}>
             <button className="close-x" onClick={() => setShowModal(false)}>
-              ×
+              <X size={20} />
             </button>
 
-            {status === "idle" ? (
-              <form onSubmit={handleUpgradeRequest}>
-                <div className="modal-icon-header">
-                  <ShieldCheck size={40} color="#ff6b6b" />
-                </div>
-                <h3>Upgrade to Owner Account</h3>
+            <div className="modal-icon-header">
+              {modalType === "GUEST" ? (
+                <Home size={40} color="var(--primary)" />
+              ) : (
+                <LogOut size={40} color="var(--error)" />
+              )}
+            </div>
+
+            {/* CASE 1: LOGGED OUT USER */}
+            {modalType === "GUEST" && (
+              <div className="instruction-content">
+                <h3>Start Listing Your Property</h3>
                 <p>
-                  To ensure trust, we need your Aadhar Card for verification.
-                  Admin approval typically takes 24 hours.
+                  To list a property, you need a verified <b>Owner Account</b>.
+                  One email can only be used for one role.
                 </p>
-
-                {error && (
-                  <div className="modal-error-msg">
-                    <AlertCircle size={16} />
-                    <span>{error}</span>
-                  </div>
-                )}
-
-                <div className="aadhar-upload-area">
-                  <label
-                    className={`file-drop-zone ${aadharFile ? "has-file" : ""}`}
-                  >
-                    <Upload size={24} />
-                    <span>
-                      {aadharFile
-                        ? aadharFile.name
-                        : "Click to upload Aadhar Image"}
-                    </span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => setAadharFile(e.target.files[0])}
-                      hidden
-                    />
-                  </label>
-                </div>
-
                 <div className="modal-footer-btns">
                   <button
-                    type="submit"
                     className="confirm-btn"
-                    disabled={loading}
+                    onClick={() => navigate("/register")}
                   >
-                    {loading ? (
-                      <Loader2 className="spinner" size={18} />
-                    ) : (
-                      "Submit for Approval"
-                    )}
+                    Register as Owner
                   </button>
                   <button
-                    type="button"
+                    className="cancel-btn"
+                    onClick={() => navigate("/login")}
+                  >
+                    Login as Owner
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* CASE 2: LOGGED IN AS TENANT/USER */}
+            {modalType === "USER" && (
+              <div className="instruction-content">
+                <h3>Account Type Required</h3>
+                <p>
+                  Aap abhi <b>Tenant Account</b> se login hain. Property list
+                  karne ke liye aapko alag <b>Owner Account</b> chahiye.
+                </p>
+                <div className="ins-list">
+                  <div className="ins-item">
+                    <CheckCircle size={16} color="var(--success)" />
+                    <span>
+                      Ek Email se ek hi Role (Tenant ya Owner) milta hai.
+                    </span>
+                  </div>
+                  <div className="ins-item">
+                    <CheckCircle size={16} color="var(--success)" />
+                    <span>
+                      Owner banne ke liye naya registration zaroori hai.
+                    </span>
+                  </div>
+                </div>
+                <div className="modal-footer-btns">
+                  <button
+                    className="confirm-btn"
+                    onClick={handleLogoutAndRegister}
+                  >
+                    Logout & Register as Owner
+                  </button>
+                  <button
                     className="cancel-btn"
                     onClick={() => setShowModal(false)}
                   >
-                    Cancel
+                    Stay as Tenant
                   </button>
                 </div>
-              </form>
-            ) : (
-              <div className="modal-success-state">
-                <CheckCircle size={60} color="#2ecc71" />
-                <h3>Request Sent!</h3>
-                <p>
-                  Your request is pending with the Admin. Once approved, you'll
-                  be able to list your properties.
-                </p>
-                <button
-                  className="confirm-btn"
-                  onClick={() => setShowModal(false)}
-                >
-                  Great, Understood!
-                </button>
               </div>
             )}
           </div>
