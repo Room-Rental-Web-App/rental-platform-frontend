@@ -972,3 +972,9 @@
     width: 100%;
   }
 }
+
+.error-text{
+  color: red;
+  font-size: 14px;
+  margin-top: 8px;
+}

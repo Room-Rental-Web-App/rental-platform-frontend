@@ -1,12 +1,46 @@
-import React from "react";
-import { Camera, Upload, X, Video, Loader2 } from "lucide-react"; // Loader2 add kiya
+import React, { useEffect, useState, useRef } from "react";
+import { Camera, Upload, X, Video, Loader2 } from "lucide-react";
+const Step3 = ({
+  images,
+  setImages,
+  previews,
+  setPreviews,
+  video,
+  setVideo,
+  uploading,
+  progress,
+  setStep,
+}) => {
 
-const Step3 = ({ images, setImages, previews, setPreviews, setVideo, uploading, progress, setStep, }) => {
-  
+  const [videoPreview, setVideoPreview] = useState(null);
+  const videoInputRef = useRef(null);
+  // Generate video preview
+  useEffect(() => {
+    if (video) {
+      const url = URL.createObjectURL(video);
+      setVideoPreview(url);
+
+      return () => URL.revokeObjectURL(url);
+    }
+  }, [video]);
+
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     setImages([...images, ...files]);
     setPreviews([...previews, ...files.map((f) => URL.createObjectURL(f))]);
+  };
+
+  const removeImage = (index) => {
+    setImages(images.filter((_, i) => i !== index));
+    setPreviews(previews.filter((_, i) => i !== index));
+  };
+
+  const removeVideo = () => {
+    setVideo(null);
+    setVideoPreview(null);
+      if (videoInputRef.current) {
+    videoInputRef.current.value = ""; // 🔥 THIS clears file path
+  }
   };
 
   return (
@@ -29,6 +63,7 @@ const Step3 = ({ images, setImages, previews, setPreviews, setVideo, uploading, 
         </label>
       </div>
 
+      {/* Image Previews */}
       <div className="previews">
         {previews.map((p, i) => (
           <div key={i} className="preview-item">
@@ -36,13 +71,26 @@ const Step3 = ({ images, setImages, previews, setPreviews, setVideo, uploading, 
             <X
               className="remove-icon"
               size={18}
-              onClick={() => {
-                setImages(images.filter((_, idx) => idx !== i));
-                setPreviews(previews.filter((_, idx) => idx !== i));
-              }}
+              onClick={() => removeImage(i)}
             />
           </div>
         ))}
+
+        {/* Video Preview */}
+        {videoPreview && (
+          <div className="preview-item">
+            <video
+              src={videoPreview}
+              className="thumb"
+              controls
+            />
+            <X
+              className="remove-icon"
+              size={18}
+              onClick={removeVideo}
+            />
+          </div>
+        )}
       </div>
 
       <div className="input-box" style={{ marginTop: "20px" }}>
@@ -52,6 +100,7 @@ const Step3 = ({ images, setImages, previews, setPreviews, setVideo, uploading, 
         <input
           type="file"
           accept="video/*"
+          ref={videoInputRef}
           onChange={(e) => setVideo(e.target.files[0])}
         />
       </div>
@@ -80,7 +129,12 @@ const Step3 = ({ images, setImages, previews, setPreviews, setVideo, uploading, 
         >
           Back
         </button>
-        <button type="submit" className="btn-publish" disabled={uploading}>
+
+        <button
+          type="submit"
+          className="btn-publish"
+          disabled={uploading}
+        >
           {uploading ? (
             <>
               <Loader2 className="spinner" size={18} />
@@ -94,4 +148,5 @@ const Step3 = ({ images, setImages, previews, setPreviews, setVideo, uploading, 
     </div>
   );
 };
+
 export default Step3;

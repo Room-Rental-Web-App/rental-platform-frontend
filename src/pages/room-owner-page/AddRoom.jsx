@@ -257,6 +257,7 @@ const AddRoom = () => {
             previews={previews}
             setPreviews={setPreviews}
             setVideo={setVideo}
+            video={video}
             uploading={uploading}
             progress={progress}
             setStep={setStep}
