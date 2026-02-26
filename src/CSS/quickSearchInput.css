@@ -61,6 +61,7 @@
   top: calc(100% + 8px); /* Input ke theek niche */
   left: 0;
   right: 0;
+  z-index: 5000;
   background: var(--bg-primary);
   border: 1px solid var(--border-primary);
   border-radius: 12px;

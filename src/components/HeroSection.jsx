@@ -5,6 +5,13 @@ import { HomeShow } from "../data/roomsDekhoData";
 
 function HeroSection() {
   const navigate = useNavigate();
+  const handleSearch = (value) => {
+    const trimmed = value.trim();
+    if (!trimmed) return;
+    navigate(`/quick-search/${encodeURIComponent(trimmed)}`);
+  };
+
+
 
   return (
     <section className="hero">
@@ -21,7 +28,14 @@ function HeroSection() {
 
           <h1 className="hero-title">
             Find Your <br />
-            Perfect <span className="highlight">Room</span> <br />
+            Perfect{" "}
+            <span className="highlight">
+              Room
+              <svg className="underline-svg" viewBox="0 0 220 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M2 9.5C50 3 110 2 218 9.5" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+              </svg>
+            </span>{" "}
+            <br />
             Anywhere in India
           </h1>
 
@@ -32,8 +46,18 @@ function HeroSection() {
           <div className="hero-actions">
             <button className="primary-cta" onClick={() => navigate("/search")}>
               <span>Browse Rooms</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+            </button>
+
+            <button
+              className="secondary-cta"
+              onClick={() => navigate("/premium")}
+            >
+              ★ Explore Premium
             </button>
           </div>
+
+
         </div>
 
         {/* --- SEARCH CARD --- */}
@@ -53,16 +77,17 @@ function HeroSection() {
 
           <div className="popular-tags">
             <span className="tags-label">Popular:</span>
-            {HomeShow &&
-              HomeShow.map((city) => (
-                <button
-                  key={city}
-                  className="city-tag"
-                  onClick={() => navigate(`/search?city=${city}`)}
-                >
-                  {city}
-                </button>
-              ))}
+
+            {HomeShow.map((city) => (
+              <button
+                key={city}
+                className="city-tag"
+                onClick={() => handleSearch(city)}
+              >
+                {city}
+              </button>
+            ))}
+
           </div>
         </div>
       </div>

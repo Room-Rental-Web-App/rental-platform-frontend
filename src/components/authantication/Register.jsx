@@ -101,7 +101,7 @@ export default function Register() {
                 }`}
               onClick={() => setForm({ ...form, role })}
             >
-              {role === "ROLE_USER" ? "Finder" : "Owner"}
+              {role === "ROLE_USER" ? "Room Finder" : "Room Owner"}
             </button>
           ))}
         </div>

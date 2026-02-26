@@ -104,7 +104,7 @@ export default function Login() {
           <p>
             Don’t have an account?{" "}
             <span onClick={() => navigate("/register")}>
-              Register here
+              Sign up / Registration
             </span>
           </p>
 

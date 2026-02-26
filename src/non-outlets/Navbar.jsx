@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 import {
   Menu,
@@ -28,6 +28,7 @@ import "../CSS/Navbar.css";
 import logo from "../assets/logo.png";
 
 const Navbar = ({ isLoggedIn, onLogout, isPremiumUser }) => {
+  const location = useLocation();
   const { wishlistCount } = useWishlist();
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const navTo = useNavigate();
@@ -41,7 +42,9 @@ const Navbar = ({ isLoggedIn, onLogout, isPremiumUser }) => {
   const showBadge = premium || isPremiumUser;
 
   const menuRef = useRef(null);
-
+  useEffect(() => {
+    setOpenMenu(false);
+  }, [location]);
   useEffect(() => {
     setRole(localStorage.getItem("role"));
   }, [isLoggedIn]);
@@ -192,7 +195,12 @@ const Navbar = ({ isLoggedIn, onLogout, isPremiumUser }) => {
                     </Link>
                   )}
 
-                  <button onClick={onLogout}>
+                  <button
+                    onClick={() => {
+                      setOpenMenu(false);
+                      onLogout();
+                    }}
+                  > 
                     <LogOut size={16} /> Logout
                   </button>
                 </div>
