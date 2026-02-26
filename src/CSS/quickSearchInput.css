@@ -103,7 +103,7 @@
   top: calc(100% + 8px);
   left: 0;
   right: 0;
-  z-index: 500;
+  z-index: 5000;
   background: var(--bg-primary);
   border: 1px solid var(--border-primary);
   border-radius: 14px;
