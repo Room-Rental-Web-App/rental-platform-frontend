@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Camera, Upload, X, Video, Loader2, Play } from "lucide-react";
+
+const MAX_IMAGE_SIZE = 4 * 1024 * 1024; // 4MB
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50MB
 
 const Step3 = ({
   images,
@@ -14,23 +17,87 @@ const Step3 = ({
 }) => {
   const [videoUrl, setVideoUrl] = useState(null);
 
-  // 1. Jab bhi video file change ho, uska temporary URL banao taaki player mein dikhe
+  /* =========================
+     VIDEO PREVIEW EFFECT
+  ========================== */
   useEffect(() => {
     if (!video) {
       setVideoUrl(null);
       return;
     }
+
     const url = URL.createObjectURL(video);
     setVideoUrl(url);
 
-    // Cleanup memory: Purane URL ko delete karna zaroori hai
-    return () => URL.revokeObjectURL(url);
+    return () => {
+      URL.revokeObjectURL(url);
+    };
   }, [video]);
 
-  const handleFileChange = (e) => {
+  /* =========================
+     IMAGE UPLOAD HANDLER
+  ========================== */
+  const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    setImages([...images, ...files]);
-    setPreviews([...previews, ...files.map((f) => URL.createObjectURL(f))]);
+
+    const validFiles = [];
+    const newPreviews = [];
+
+    files.forEach((file) => {
+      if (!file.type.startsWith("image/")) {
+        alert("Only image files are allowed.");
+        return;
+      }
+
+      if (file.size > MAX_IMAGE_SIZE) {
+        alert(`${file.name} exceeds 4MB limit.`);
+        return;
+      }
+
+      validFiles.push(file);
+      newPreviews.push(URL.createObjectURL(file));
+    });
+
+    setImages((prev) => [...prev, ...validFiles]);
+    setPreviews((prev) => [...prev, ...newPreviews]);
+  };
+
+  /* =========================
+     VIDEO UPLOAD HANDLER
+  ========================== */
+  const handleVideoChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Only allow MP4 and WebM (browser safe)
+    if (!["video/mp4", "video/webm"].includes(file.type)) {
+      alert("Only MP4 or WebM videos are supported.");
+      return;
+    }
+
+    if (file.size > MAX_VIDEO_SIZE) {
+      alert("Video must be less than 50MB.");
+      return;
+    }
+
+    setVideo(file);
+  };
+
+  /* =========================
+     REMOVE IMAGE
+  ========================== */
+  const removeImage = (index) => {
+    URL.revokeObjectURL(previews[index]);
+
+    setImages((prev) => prev.filter((_, i) => i !== index));
+    setPreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  /* =========================
+     REMOVE VIDEO
+  ========================== */
+  const removeVideo = () => {
+    setVideo(null);
   };
 
   return (
@@ -39,17 +106,17 @@ const Step3 = ({
         <Camera size={20} /> Photos & Video
       </h3>
 
-      {/* --- PHOTO PREVIEWS --- */}
+      {/* ================= IMAGE SECTION ================= */}
       <div className="upload-section">
         <label className="upload-card">
           <Upload size={30} />
-          <span>Add Photos</span>
+          <span>Add Photos (Max 4MB each)</span>
           <input
             type="file"
             multiple
             hidden
             accept="image/*"
-            onChange={handleFileChange}
+            onChange={handleImageChange}
           />
         </label>
       </div>
@@ -61,18 +128,15 @@ const Step3 = ({
             <X
               className="remove-icon"
               size={18}
-              onClick={() => {
-                setImages(images.filter((_, idx) => idx !== i));
-                setPreviews(previews.filter((_, idx) => idx !== i));
-              }}
+              onClick={() => removeImage(i)}
             />
           </div>
         ))}
       </div>
 
-      <hr style={{ margin: "30px 0", borderColor: "var(--border-primary)" }} />
+      <hr style={{ margin: "30px 0" }} />
 
-      {/* --- VIDEO PREVIEW & CHANGE SECTION --- */}
+      {/* ================= VIDEO SECTION ================= */}
       <div className="video-upload-section">
         <label
           style={{
@@ -83,71 +147,85 @@ const Step3 = ({
             marginBottom: "15px",
           }}
         >
-          <Video size={18} /> Room Tour Video
+          <Video size={18} /> Room Tour Video (MP4 / WebM, Max 50MB)
         </label>
 
         {!video ? (
-          /* Case 1: Agar video nahi hai toh upload box dikhao */
           <div className="video-dropzone">
             <input
               type="file"
-              accept="video/*"
-              id="v-up"
+              accept="video/mp4,video/webm"
+              id="video-upload"
               hidden
-              onChange={(e) => setVideo(e.target.files[0])}
+              onChange={handleVideoChange}
             />
-            <label htmlFor="v-up" className="video-upload-ui">
+            <label htmlFor="video-upload" className="video-upload-ui">
               <Play size={24} />
               <span>Select Video to Preview</span>
             </label>
           </div>
         ) : (
-          /* Case 2: Agar video hai toh Player aur Remove button dikhao */
           <div className="video-preview-wrapper">
-            <div className="video-card">
-              <video src={videoUrl} controls className="actual-video-player" />
-              <div className="video-footer">
-                <div className="v-name-box">
-                  <Video size={14} />
-                  <span>{video.name}</span>
-                </div>
-                {/* Yahan se user video hata kar change kar sakta hai */}
-                <button
-                  type="button"
-                  className="remove-video-btn"
-                  onClick={() => setVideo(null)}
-                >
-                  <X size={16} /> Remove & Change Video
-                </button>
-              </div>
+            {videoUrl && (
+              <video
+                key={videoUrl}
+                controls
+                style={{
+                  width: "100%",
+                  maxHeight: "400px",
+                  background: "#000",
+                }}
+              >
+                <source src={videoUrl} type={video.type} />
+                Your browser does not support the video tag.
+              </video>
+            )}
+
+            <div style={{ marginTop: "10px" }}>
+              <strong>{video.name}</strong>
             </div>
-            <p className="v-hint">
-              Check the video above. You can change it before publishing.
-            </p>
+
+            <button
+              type="button"
+              className="remove-icon"
+              onClick={removeVideo}
+              style={{ marginTop: "10px" }}
+            >
+              <X size={16} /> 
+            </button>
           </div>
         )}
       </div>
 
-      {/* --- PROGRESS & PUBLISH --- */}
+      {/* ================= PROGRESS ================= */}
       {uploading && (
         <div className="uploading-status">
           <p>Uploading Files... {progress}%</p>
           <div className="p-bar">
-            <div className="p-fill" style={{ width: `${progress}%` }}></div>
+            <div
+              className="p-fill"
+              style={{ width: `${progress}%` }}
+            ></div>
           </div>
         </div>
       )}
 
+      {/* ================= BUTTONS ================= */}
       <div className="btn-row" style={{ marginTop: "30px" }}>
         <button
           type="button"
-          onClick={() => setStep(2)}
           className="btn-prev"
+          onClick={() => setStep(2)}
           disabled={uploading}
         >
           Back
         </button>
-        <button type="submit" className="btn-publish" disabled={uploading}>
+
+        <button
+          type="submit"
+          className="btn-submit"
+          disabled={uploading}
+        >
           {uploading ? (
             <Loader2 className="spinner" size={18} />
           ) : (

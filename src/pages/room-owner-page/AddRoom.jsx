@@ -22,7 +22,7 @@ import Step3 from "../room-owner-page/AddRoom/Step3";
 
 const AddRoom = () => {
   const navigate = useNavigate();
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(3);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
 
@@ -116,7 +116,7 @@ const AddRoom = () => {
   };
 
   // Modern Loading View
-     if (loading) return <MyLoader data={"Verifying Your Listing Limit... Please wait..."} />
+  if (loading) return <MyLoader data={"Verifying Your Listing Limit... Please wait..."} />
 
   // Limit Check View
   if (canAddMoreRooms === false) {
@@ -256,6 +256,7 @@ const AddRoom = () => {
             setImages={setImages}
             previews={previews}
             setPreviews={setPreviews}
+            video={video}          // ✅ ADD THIS
             setVideo={setVideo}
             uploading={uploading}
             progress={progress}
