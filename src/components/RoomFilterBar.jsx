@@ -54,19 +54,30 @@ export default function RoomFilterBar({
           value={filters.pincode || ""}
           onChange={onChange}
         />
-
         <input
           type="number"
           name="radiusKm"
+          className={`radius-input ${!isPremiumUser ? "locked" : ""}`}
           placeholder="Radius (km)"
           value={filters.radiusKm || ""}
-          onChange={onChange}
+          onChange={(e) => {
+            if (!isPremiumUser) {
+              alert("Radius filter is available only for Premium users.");
+              return;
+            }
+            onChange(e);
+          }}
         />
 
         <button
           className="btn btn-outline btn-sm"
-          onClick={onUseLocation}
-          disabled={!isPremiumUser}
+          onClick={() => {
+            if (!isPremiumUser) {
+              alert("This feature is available only for Premium users.");
+              return;
+            }
+            onUseLocation();
+          }}
         >
           Use My Location
         </button>
