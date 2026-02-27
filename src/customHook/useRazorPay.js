@@ -1,25 +1,27 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Api from "../api/Api";
-import "../CSS/RazorPayConfig.css";
 
-function RazorPayConfig({
-  amountToPay,
-  value,
-  planCode,
-  onSuccess,
-  onFailure,
-}) {
+/**
+ * useRazorPay
+ * Razorpay script load karta hai aur ek `triggerPayment` function return karta hai
+ * jo directly call kiya ja sakta hai (e.g., T&C accept hone ke baad)
+ *
+ * @param {Function} onSuccess - Payment + verify success pe call hota hai
+ * @param {Function} onFailure - Koi bhi failure pe call hota hai ("create" | "verify" | "dismissed")
+ */
+export default function useRazorPay(onSuccess, onFailure) {
   const email = localStorage.getItem("email");
   const role = localStorage.getItem("role");
 
   useEffect(() => {
+    if (document.querySelector('script[src*="checkout.razorpay.com"]')) return;
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
     script.async = true;
     document.body.appendChild(script);
   }, []);
 
-  const handlePayment = async () => {
+  const triggerPayment = async ({ amountToPay, planCode }) => {
     try {
       const order = await Api.post("payment/create-order", {
         amountToPay,
@@ -63,7 +65,7 @@ function RazorPayConfig({
             if (onFailure) onFailure("dismissed");
           },
         },
-        prefill: { email: email },
+        prefill: { email },
         theme: { color: "#4f46e5" },
       };
 
@@ -75,11 +77,5 @@ function RazorPayConfig({
     }
   };
 
-  return (
-    <button className="upgrade-btn owner big" onClick={handlePayment}>
-      {value}
-    </button>
-  );
+  return { triggerPayment };
 }
-
-export default RazorPayConfig;

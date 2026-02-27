@@ -115,16 +115,16 @@ export const premiumPlans = {
 };
 // Keeping your original prices, just adding descriptive labels for the UI
 export const premiumOwnerPlans = [
-  { label: "Trial Boost", amount: 99, duration: "7 Days", code: "OWNER_TRIAL", note: "Quick visibility" },
-  { label: "1 Month Premium", amount: 199, duration: "1 Month", code: "OWNER_1M", note: "Standard" },
-  { label: "6 Months Premium", amount: 999, duration: "6 Months", code: "OWNER_6M", isPopular: true, save: "16% Off" },
-  { label: "1 Year Premium", amount: 1499, duration: "1 Year", code: "OWNER_12M", save: "25% Off" }
+  { label: "Trial Boost", amount:1, duration: "7 Days", code: "OWNER_TRIAL", note: "Quick visibility" },
+  { label: "1 Month Premium", amount: 49, duration: "1 Month", code: "OWNER_1M", note: "Standard" },
+  { label: "6 Months Premium", amount: 149, duration: "6 Months", code: "OWNER_6M", isPopular: true, save: "16% Off" },
+  { label: "1 Year Premium", amount: 999, duration: "1 Year", code: "OWNER_12M", save: "25% Off" }
 ];
 
 export const premiumUserPlans = [
-  { label: "1 Month Premium", amount: 69, duration: "1 Month", code: "USER_1M", note: "Basic access" },
-  { label: "6 Months Premium", amount: 299, duration: "6 Months", code: "USER_6M", isPopular: true, save: "15% Off" },
-  { label: "1 Year Premium", amount: 499, duration: "1 Year", code: "USER_12M", save: "25% Off" }
+  { label: "1 Month Premium", amount: 1, duration: "1 Month", code: "USER_1M", note: "Basic access" },
+  { label: "6 Months Premium", amount: 49, duration: "6 Months", code: "USER_6M", isPopular: true, save: "15% Off" },
+  { label: "1 Year Premium", amount: 199, duration: "1 Year", code: "USER_12M", save: "25% Off" }
 ];
 
 // Add this at the end of your roomsDekhoData.js
