@@ -27,6 +27,9 @@ const Step1 = ({ formData, setFormData, setStep }) => {
     if (!formData.title?.trim()) {
       newErrors.title = "Title is required";
     }
+    if (!formData.description?.trim() || formData.description.trim().length < 20) {
+      newErrors.description = "Description must be at least 20 characters long";
+    }
 
     if (!formData.price || Number(formData.price) <= 0) {
       newErrors.price = "Enter valid rent amount";
@@ -77,9 +80,7 @@ const Step1 = ({ formData, setFormData, setStep }) => {
           className="custom-desc"
           rows="5" // Isko 5-6 rakho taaki lamba placeholder dikhe
           value={formData.description || ""}
-          onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })
-          }
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           placeholder={
             "Mention things like:\n" +
             "• Is it near a Metro or Bus stand?\n" +
@@ -96,6 +97,7 @@ const Step1 = ({ formData, setFormData, setStep }) => {
             fontSize: "0.95rem",
           }}
         />
+          {errors.description && <small className="error-text">{errors.description}</small>}
       </div>
 
       {/* Price + Area */}
