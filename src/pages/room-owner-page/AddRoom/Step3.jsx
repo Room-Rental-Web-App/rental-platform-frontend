@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Camera, Upload, X, Video, Loader2, Play } from "lucide-react";
+import { Camera, Upload, X, Video, Loader , Play } from "lucide-react";
 
 const MAX_IMAGE_SIZE = 4 * 1024 * 1024; // 4MB
 const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50MB
@@ -227,7 +227,7 @@ const Step3 = ({
           disabled={uploading}
         >
           {uploading ? (
-            <Loader2 className="spinner" size={18} />
+            "Room Publishing..."
           ) : (
             "Publish Listing"
           )}
