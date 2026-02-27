@@ -108,22 +108,23 @@ const OwnerCTA = () => {
             {/* CASE 2: LOGGED IN AS TENANT/USER */}
             {modalType === "USER" && (
               <div className="instruction-content">
-                <h3>Account Type Required</h3>
+                <h3>Owner Account Required</h3>
                 <p>
-                  Aap abhi <b>Tenant Account</b> se login hain. Property list
-                  karne ke liye aapko alag <b>Owner Account</b> chahiye.
+                  You are currently logged in with a <b>Finder Account</b>. To
+                  list a property, you need a separate <b>Owner Account</b>.
                 </p>
                 <div className="ins-list">
                   <div className="ins-item">
                     <CheckCircle size={16} color="var(--success)" />
                     <span>
-                      Ek Email se ek hi Role (Tenant ya Owner) milta hai.
+                      This email is already registered as a Finder. Please{" "}
+                      <b>use a different email</b> to register as an Owner.
                     </span>
                   </div>
                   <div className="ins-item">
                     <CheckCircle size={16} color="var(--success)" />
                     <span>
-                      Owner banne ke liye naya registration zaroori hai.
+                      New registration is required to access Owner features.
                     </span>
                   </div>
                 </div>
@@ -138,7 +139,7 @@ const OwnerCTA = () => {
                     className="cancel-btn"
                     onClick={() => setShowModal(false)}
                   >
-                    Stay as Tenant
+                    Stay as Finder
                   </button>
                 </div>
               </div>

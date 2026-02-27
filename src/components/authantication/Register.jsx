@@ -12,8 +12,50 @@ import {
   Loader2,
   EyeOff,
   Eye,
+  CheckCircle,
+  X,
 } from "lucide-react";
+import "../../CSS/premiumModel.css";
 
+// ─── useToast Hook ─────────────────────────────────────────────────────────────
+function useToast() {
+  const [toasts, setToasts] = useState([]);
+
+  const removeToast = (id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  const addToast = (message, type = "info", duration = 4000) => {
+    const id = Date.now();
+    setToasts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => removeToast(id), duration);
+  };
+
+  return { toasts, addToast, removeToast };
+}
+
+// ─── Toast Component ───────────────────────────────────────────────────────────
+function Toast({ toasts, removeToast }) {
+  return (
+    <div className="toast-container">
+      {toasts.map((toast) => (
+        <div key={toast.id} className={`toast toast-${toast.type}`}>
+          <span className="toast-icon">
+            {toast.type === "success" && <CheckCircle size={18} />}
+            {toast.type === "error" && <X size={18} />}
+            {toast.type === "info" && <AlertCircle size={18} />}
+          </span>
+          <span className="toast-message">{toast.message}</span>
+          <button className="toast-close" onClick={() => removeToast(toast.id)}>
+            <X size={14} />
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── Register Component ────────────────────────────────────────────────────────
 export default function Register() {
   const [form, setForm] = useState({
     email: "",
@@ -21,16 +63,19 @@ export default function Register() {
     role: "ROLE_USER",
     phone: "",
   });
+
   const strength =
     (form.password.length >= 8 ? 1 : 0) +
     (/[A-Z]/.test(form.password) ? 1 : 0) +
     (/[0-9]/.test(form.password) ? 1 : 0) +
     (/[^A-Za-z0-9]/.test(form.password) ? 1 : 0);
+
   const [aadharFile, setAadharFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { toasts, addToast, removeToast } = useToast();
 
   const navigate = useNavigate();
 
@@ -41,24 +86,29 @@ export default function Register() {
     e.preventDefault();
     setError("");
 
+    // Validation toasts
     if (form.role === "ROLE_OWNER" && !aadharFile) {
-      setError("Aadhar card is required for owner registration.");
+      const msg = "Aadhar card is required for owner registration.";
+      setError(msg);
+      addToast(msg, "error");
       return;
     }
 
     if (strength < 3) {
-      setError("Password is too weak.");
+      const msg = "Password is too weak. Use uppercase, numbers & symbols.";
+      setError(msg);
+      addToast(msg, "error");
       return;
     }
 
-
     setLoading(true);
     setLoadingText("Creating your account");
+    addToast("Creating your account…", "info", 6000);
 
     try {
       const formData = new FormData();
       Object.entries(form).forEach(([key, value]) =>
-        formData.append(key, value)
+        formData.append(key, value),
       );
       if (aadharFile) formData.append("aadharCard", aadharFile);
 
@@ -66,11 +116,19 @@ export default function Register() {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      navigate("/verify-otp", {
-        state: { email: form.email },
-      });
+      addToast(
+        "✅ Account created! Redirecting to OTP verification…",
+        "success",
+        3000,
+      );
+
+      setTimeout(() => {
+        navigate("/verify-otp", { state: { email: form.email } });
+      }, 1200);
     } catch (err) {
-      setError(err.response?.data || "Registration failed.");
+      const msg = err.response?.data || "Registration failed.";
+      setError(msg);
+      addToast(msg, "error");
     } finally {
       setLoading(false);
       setLoadingText("");
@@ -82,6 +140,8 @@ export default function Register() {
       title="Join RoomsDekho"
       subtitle="Create your account to list or find trusted properties."
     >
+      <Toast toasts={toasts} removeToast={removeToast} />
+
       <form className="login-form" onSubmit={register}>
         <h2>Create Account</h2>
 
@@ -92,20 +152,30 @@ export default function Register() {
           </div>
         )}
 
+        {/* Role Selector */}
         <div className="role-pill-container">
           {["ROLE_USER", "ROLE_OWNER"].map((role) => (
             <button
               key={role}
               type="button"
-              className={`role-pill ${form.role === role ? "active" : ""
-                }`}
-              onClick={() => setForm({ ...form, role })}
+              className={`role-pill ${form.role === role ? "active" : ""}`}
+              onClick={() => {
+                setForm({ ...form, role });
+                addToast(
+                  role === "ROLE_USER"
+                    ? "Switched to Room Finder mode 🔍"
+                    : "Switched to Room Owner mode 🏠",
+                  "info",
+                  2000,
+                );
+              }}
             >
               {role === "ROLE_USER" ? "Room Finder" : "Room Owner"}
             </button>
           ))}
         </div>
 
+        {/* Email */}
         <div className="input-group">
           <Mail size={18} className="field-icon" />
           <input
@@ -117,6 +187,7 @@ export default function Register() {
           />
         </div>
 
+        {/* Password */}
         <div className="input-group password-group">
           <Lock size={18} className="field-icon" />
           <input
@@ -126,24 +197,20 @@ export default function Register() {
             onChange={handleChange}
             required
           />
-
           <span
             className="password-toggle"
-            onClick={() =>
-              setShowPassword(!showPassword)
-            }
+            onClick={() => setShowPassword(!showPassword)}
           >
-            {showPassword ? (
-              <EyeOff size={18} />
-            ) : (
-              <Eye size={18} />
-            )}
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </span>
         </div>
+
+        {/* Strength Meter */}
         <div className="strength-meter">
           <div className={`strength-bar strength-${strength}`} />
         </div>
 
+        {/* Phone */}
         <div className="input-group">
           <Phone size={18} className="field-icon" />
           <input
@@ -154,19 +221,23 @@ export default function Register() {
           />
         </div>
 
+        {/* Aadhar Upload (Owner only) */}
         {form.role === "ROLE_OWNER" && (
           <div className="input-group">
             <label className="file-label">
-              Upload Aadhar Card
+              Please Upload Aadhar Card For Verification
             </label>
             <div className="file-wrapper">
               <Upload size={18} className="field-icon" />
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) =>
-                  setAadharFile(e.target.files[0])
-                }
+                onChange={(e) => {
+                  setAadharFile(e.target.files[0]);
+                  if (e.target.files[0]) {
+                    addToast("Aadhar card uploaded ✅", "success", 2000);
+                  }
+                }}
               />
             </div>
           </div>
@@ -186,9 +257,7 @@ export default function Register() {
         <div className="toggle-container">
           <p>
             Already registered?{" "}
-            <span onClick={() => navigate("/auth")}>
-              Login
-            </span>
+            <span onClick={() => navigate("/auth")}>Login</span>
           </p>
         </div>
       </form>
