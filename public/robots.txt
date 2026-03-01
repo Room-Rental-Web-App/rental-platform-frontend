@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://roomsdekho.in/sitemap.xml
+Sitemap: https://api.roomsdekho.in/sitemap.xml
