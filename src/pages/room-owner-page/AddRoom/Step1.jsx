@@ -80,12 +80,15 @@ const Step1 = ({ formData, setFormData, setStep }) => {
           className="custom-desc"
           rows="5" // Isko 5-6 rakho taaki lamba placeholder dikhe
           value={formData.description || ""}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, description: e.target.value })
+          }
           placeholder={
-            "Mention things like:\n" +
-            "• Is it near a Metro or Bus stand?\n" +
-            "• Does it have AC, WiFi or Geyser?\n" +
-            "• Any specific rules (e.g. No pets)?"
+            "Tell us more about your property...\n" +
+            "• Proximity: Distance from Metro/Bus stand?\n" +
+            "• Amenities: WiFi, AC, RO, or Geyser available?\n" +
+            "• House Rules: Policies on pets, smoking, or visitors?\n" +
+            "• Preferred Users: Students or Working Professionals?"
           }
           style={{
             padding: "12px",
@@ -97,7 +100,9 @@ const Step1 = ({ formData, setFormData, setStep }) => {
             fontSize: "0.95rem",
           }}
         />
-          {errors.description && <small className="error-text">{errors.description}</small>}
+        {errors.description && (
+          <small className="error-text">{errors.description}</small>
+        )}
       </div>
 
       {/* Price + Area */}

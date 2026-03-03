@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 import { API_ENDPOINTS, getAuthHeaders } from "../../api/apiConfig";
 import {
   Edit,
@@ -25,6 +26,8 @@ const MyListings = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
+  const [togglingId, setTogglingId] = useState(null);
   const [imageErrors, setImageErrors] = useState({});
 
   useEffect(() => {
@@ -40,8 +43,7 @@ const MyListings = () => {
       });
       setRooms(res.data);
     } catch (err) {
-      console.error("Fetch Error:", err);
-      alert("Failed to load listings. Please refresh the page.");
+      toast.error("Failed to load listings.");
     } finally {
       setIsLoading(false);
     }
@@ -50,12 +52,12 @@ const MyListings = () => {
   const handleToggleStatus = async (room) => {
     const currentStatus = room.isAvailable ?? true;
     const newStatus = !currentStatus;
-
-    const confirmMsg = newStatus
-      ? "Are you sure you want to RE-LIST this property? It will be visible in search results again."
-      : "Are you sure you want to mark this property as BOOKED? It will be hidden from search results.";
+    const confirmMsg = newStatus ? "Re-list this property?" : "Mark as BOOKED?";
 
     if (!window.confirm(confirmMsg)) return;
+
+    setTogglingId(room.id);
+    const statusToast = toast.loading("Updating...");
 
     try {
       const res = await axios.put(
@@ -64,57 +66,42 @@ const MyListings = () => {
         { headers: getAuthHeaders() },
       );
       setRooms(rooms.map((r) => (r.id === room.id ? res.data : r)));
-      alert(
-        newStatus
-          ? "Property is now LIVE! ✅"
-          : "Property successfully marked as BOOKED! 🏠",
+      toast.success(
+        newStatus ? "Listing is Live! ✅" : "Marked as Booked! 🏠",
+        { id: statusToast },
       );
     } catch (err) {
-      console.error("Toggle Status Error:", err);
-      alert("Failed to update property status. Please try again.");
+      toast.error("Update failed.", { id: statusToast });
+    } finally {
+      setTogglingId(null);
     }
   };
 
   const handleDelete = async (id) => {
-    if (
-      !window.confirm(
-        "Are you sure you want to PERMANENTLY delete this listing? This action cannot be undone.",
-      )
-    )
-      return;
+    if (!window.confirm("Delete permanently? This cannot be undone.")) return;
+
+    setDeletingId(id);
+    const delToast = toast.loading("Deleting...");
+
     try {
       await axios.delete(API_ENDPOINTS.DELETE_ROOM(id), {
         params: { email: localStorage.getItem("email") },
         headers: getAuthHeaders(),
       });
       setRooms(rooms.filter((r) => r.id !== id));
-      alert("Listing deleted successfully.");
+      toast.success("Deleted successfully.", { id: delToast });
     } catch (err) {
-      console.error("Delete Error:", err);
-      alert("Deletion failed. Please contact support if the issue persists.");
+      toast.error("Deletion failed.", { id: delToast });
+    } finally {
+      setDeletingId(null);
     }
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-
-    // Validation
-    if (!editingRoom.title.trim()) {
-      alert("Property title cannot be empty!");
-      return;
-    }
-
-    if (editingRoom.price <= 0) {
-      alert("Please enter a valid rent amount!");
-      return;
-    }
-
-    if (!editingRoom.description.trim()) {
-      alert("Property description cannot be empty!");
-      return;
-    }
-
     setIsSaving(true);
+    const saveToast = toast.loading("Saving changes...");
+
     try {
       const res = await axios.put(
         API_ENDPOINTS.UPDATE_ROOM(editingRoom.id),
@@ -126,11 +113,9 @@ const MyListings = () => {
       );
       setRooms(rooms.map((r) => (r.id === editingRoom.id ? res.data : r)));
       setIsModalOpen(false);
-      setEditingRoom(null);
-      alert("Property details updated successfully!");
+      toast.success("Updated successfully!", { id: saveToast });
     } catch (err) {
-      console.error("Update Error:", err);
-      alert("Update failed. Please check the input data and try again.");
+      toast.error("Update failed.", { id: saveToast });
     } finally {
       setIsSaving(false);
     }
@@ -140,204 +125,181 @@ const MyListings = () => {
     setImageErrors((prev) => ({ ...prev, [roomId]: true }));
   };
 
-  const closeModal = () => {
-    if (isSaving) return; // Don't close if saving
-    setIsModalOpen(false);
-    setEditingRoom(null);
-  };
-
-  // Loading State
-  if (isLoading) return <MyLoader data={" Loading your properties... Please wait..."} />
-
-  // Empty State
-  if (rooms.length === 0) {
-    return (
-      <div className="my-listings-container">
-        <div className="my-listings-header">
-          <h2>Your Properties</h2>
-        </div>
-        <div className="empty-listings">
-          <Home size={80} color="#cbd5e1" strokeWidth={1.5} />
-          <h3 style={{ color: "#1e293b", marginTop: "20px" }}>
-            No Listings Yet
-          </h3>
-          <p style={{ color: "#64748b", marginTop: "10px", maxWidth: "400px" }}>
-            You haven't created any property listings yet. Start by adding your
-            first property to reach potential tenants!
-          </p>
-        </div>
-      </div>
-    );
-  }
+  if (isLoading) return <MyLoader data={"Loading your properties..."} />;
 
   return (
     <div className="my-listings-container">
+      {/* Dynamic Toaster matching your Orange/Dark Theme */}
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: "var(--bg-secondary)",
+            color: "var(--text-primary)",
+            border: "1px solid var(--border-primary)",
+            borderRadius: "12px",
+          },
+          success: {
+            iconTheme: { primary: "var(--success)", secondary: "#fff" },
+          },
+          error: { iconTheme: { primary: "var(--error)", secondary: "#fff" } },
+          loading: {
+            iconTheme: {
+              primary: "var(--primary)",
+              secondary: "var(--bg-tertiary)",
+            },
+          },
+        }}
+      />
+
       <div className="my-listings-header">
         <h2>Your Properties</h2>
-        <span style={{ color: "#64748b", fontSize: "14px" }}>
-          {rooms.length} {rooms.length === 1 ? "Listing" : "Listings"}
-        </span>
+        <span className="listing-count">{rooms.length} Listings</span>
       </div>
 
-      <div className="listings-grid">
-        {rooms.map((room) => (
-          <div
-            key={room.id}
-            className={`listing-card ${(room.isAvailable ?? true) === false ? "booked-opacity" : ""}`}
+      {rooms.length === 0 ? (
+        <div className="empty-listings">
+          <Home size={80} color="var(--text-tertiary)" strokeWidth={1.5} />
+          <h3>No Listings Yet</h3>
+          <button
+            onClick={() => (window.location.href = "/add-room")}
+            className="btn-primary"
           >
-            {/* Status Badges Overlay */}
-            <div className="badge-container">
-              {!(room.isApprovedByAdmin ?? false) ? (
-                <span className="badge pending">
-                  <Clock size={12} /> Under Review
-                </span>
-              ) : (room.isAvailable ?? true) ? (
-                <span className="badge available">
-                  <CheckCircle size={12} /> Live & Available
-                </span>
-              ) : (
-                <span className="badge booked">
-                  <AlertCircle size={12} /> Occupied / Booked
-                </span>
-              )}
+            Add New Room
+          </button>
+        </div>
+      ) : (
+        <div className="listings-grid">
+          {rooms.map((room) => (
+            <div
+              key={room.id}
+              className={`listing-card ${(room.isAvailable ?? true) === false ? "booked-opacity" : ""}`}
+            >
+              <div className="badge-container">
+                {!(room.isApprovedByAdmin ?? false) ? (
+                  <span className="badge pending">
+                    <Clock size={12} /> Review
+                  </span>
+                ) : (room.isAvailable ?? true) ? (
+                  <span className="badge available">
+                    <CheckCircle size={12} /> Live
+                  </span>
+                ) : (
+                  <span className="badge booked">
+                    <AlertCircle size={12} /> Booked
+                  </span>
+                )}
+              </div>
+
+              <img
+                src={
+                  imageErrors[room.id]
+                    ? "https://placehold.co/300x200?text=No+Image"
+                    : room.imageUrls?.[0] ||
+                      "https://placehold.co/300x200?text=No+Image"
+                }
+                alt="Property"
+                onError={() => handleImageError(room.id)}
+              />
+
+              <div className="card-info">
+                <h3 title={room.title}>{room.title}</h3>
+                <div className="price-location">
+                  <p>
+                    <IndianRupee size={14} /> <strong>{room.price}</strong>
+                  </p>
+                  <p>
+                    <MapPin size={14} /> {room.city}
+                  </p>
+                </div>
+
+                <div className="actions">
+                  <button
+                    onClick={() => {
+                      setEditingRoom(room);
+                      setIsModalOpen(true);
+                    }}
+                    className="edit-btn"
+                    disabled={
+                      !(room.isAvailable ?? true) || togglingId === room.id
+                    }
+                  >
+                    <Edit size={16} /> Edit
+                  </button>
+
+                  <button
+                    onClick={() => handleToggleStatus(room)}
+                    className={
+                      (room.isAvailable ?? true)
+                        ? "status-btn-mark-booked"
+                        : "status-btn-mark-available"
+                    }
+                    disabled={togglingId === room.id}
+                  >
+                    {togglingId === room.id ? (
+                      <Loader className="spinner" size={16} />
+                    ) : (room.isAvailable ?? true) ? (
+                      <>
+                        <BookCheck size={16} /> Booked
+                      </>
+                    ) : (
+                      <>
+                        <RotateCcw size={16} /> Re-list
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(room.id)}
+                    className="delete-btn"
+                    disabled={deletingId === room.id}
+                  >
+                    {deletingId === room.id ? (
+                      <Loader className="spinner" size={16} />
+                    ) : (
+                      <Trash2 size={16} />
+                    )}
+                  </button>
+                </div>
+              </div>
             </div>
-
-            <img
-              src={
-                imageErrors[room.id]
-                  ? "https://placehold.co/300x200/f1f5f9/64748b?text=No+Image"
-                  : room.imageUrls?.[0] ||
-                  "https://placehold.co/300x200/f1f5f9/64748b?text=No+Image"
-              }
-              alt={room.title || "Property"}
-              onError={() => handleImageError(room.id)}
-            />
-
-            <div className="card-info">
-              <h3 title={room.title}>{room.title}</h3>
-
-              <div className="price-location">
-                <p>
-                  <IndianRupee size={14} /> <strong>₹{room.price}</strong>/month
-                </p>
-                <p>
-                  <MapPin size={14} /> {room.city}
-                </p>
-              </div>
-
-              {/* Interest Metrics */}
-              <div className="interest-bar">
-                <Users size={14} />
-                <span>{room.contactViewCount ?? 0} Inquiries received</span>
-              </div>
-
-              <div className="actions">
-                <button
-                  onClick={() => {
-                    setEditingRoom(room);
-                    setIsModalOpen(true);
-                  }}
-                  className="edit-btn"
-                  disabled={!(room.isAvailable ?? true)}
-                  title={
-                    !(room.isAvailable ?? true)
-                      ? "Re-list the property to edit details"
-                      : "Edit Property"
-                  }
-                >
-                  <Edit size={16} /> Edit
-                </button>
-
-                {/* Status Toggle Button */}
-                <button
-                  onClick={() => handleToggleStatus(room)}
-                  className={
-                    (room.isAvailable ?? true)
-                      ? "status-btn-mark-booked"
-                      : "status-btn-mark-available"
-                  }
-                >
-                  {(room.isAvailable ?? true) ? (
-                    <>
-                      <BookCheck size={16} /> Mark Booked
-                    </>
-                  ) : (
-                    <>
-                      <RotateCcw size={16} /> Re-list
-                    </>
-                  )}
-                </button>
-
-                <button
-                  onClick={() => handleDelete(room.id)}
-                  className="delete-btn"
-                  title="Delete Listing"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Edit Modal */}
       {isModalOpen && editingRoom && (
-        <div className="modal-overlay" onClick={closeModal}>
-          <div
-            className="modal-content"
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
-          >
+        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>Update Property Details</h3>
-              <X
-                onClick={closeModal}
-                size={24}
-                style={{
-                  cursor: isSaving ? "not-allowed" : "pointer",
-                  opacity: isSaving ? 0.5 : 1,
-                }}
-              />
+              <h3>Update Details</h3>
+              <X onClick={() => setIsModalOpen(false)} size={24} />
             </div>
-
             <form onSubmit={handleUpdate}>
               <div className="form-group">
-                <label>
-                  Property Title <span style={{ color: "#ef4444" }}>*</span>
-                </label>
+                <label>Title</label>
                 <input
                   type="text"
                   value={editingRoom.title}
                   onChange={(e) =>
                     setEditingRoom({ ...editingRoom, title: e.target.value })
                   }
-                  placeholder="e.g., Spacious 2BHK Apartment"
                   required
-                  disabled={isSaving}
                 />
               </div>
-
               <div className="form-group">
-                <label>
-                  Monthly Rent (₹) <span style={{ color: "#ef4444" }}>*</span>
-                </label>
+                <label>Price (₹)</label>
                 <input
                   type="number"
                   value={editingRoom.price}
                   onChange={(e) =>
                     setEditingRoom({ ...editingRoom, price: e.target.value })
                   }
-                  placeholder="e.g., 15000"
-                  min="1"
                   required
-                  disabled={isSaving}
                 />
               </div>
-
               <div className="form-group">
-                <label>
-                  Description <span style={{ color: "#ef4444" }}>*</span>
-                </label>
+                <label>Description</label>
                 <textarea
                   value={editingRoom.description}
                   onChange={(e) =>
@@ -346,21 +308,15 @@ const MyListings = () => {
                       description: e.target.value,
                     })
                   }
-                  placeholder="Describe your property, amenities, location benefits, etc."
+                  rows="4"
                   required
-                  disabled={isSaving}
-                  rows="5"
                 />
               </div>
-
               <button type="submit" className="save-btn" disabled={isSaving}>
                 {isSaving ? (
-                  <>
-                    <Loader className="spinner" size={18} />
-                    Saving Changes...
-                  </>
+                  <Loader className="spinner" size={18} />
                 ) : (
-                  "Confirm Changes"
+                  "Save Changes"
                 )}
               </button>
             </form>

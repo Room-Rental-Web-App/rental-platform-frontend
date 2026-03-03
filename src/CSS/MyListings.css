@@ -425,3 +425,67 @@
     font-size: 16px; /* Prevents zoom on iOS */
   }
 }
+/* Spinner Animation - Using your Primary Orange */
+.spinner {
+  animation: spin 1s linear infinite;
+  color: var(--primary); /* Aapka Dark Orange color */
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Edit Button - Primary Theme */
+.edit-btn {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+}
+
+.edit-btn:hover {
+  background-color: var(--primary-light);
+  color: white;
+}
+
+/* Status: Mark Booked (Warning/Gray) */
+.status-btn-mark-booked {
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-primary);
+}
+
+.status-btn-mark-booked:hover {
+  background-color: var(--error);
+  color: white;
+}
+
+/* Status: Re-list (Success) */
+.status-btn-mark-available {
+  background-color: var(--bg-overlay); /* Light Orange tint */
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.status-btn-mark-available:hover {
+  background-color: var(--success);
+  color: white;
+}
+
+/* Delete Button */
+.delete-btn {
+  background-color: rgba(220, 53, 69, 0.1); /* Light red */
+  color: var(--error);
+  border: 1px solid transparent;
+}
+
+.delete-btn:hover {
+  background-color: var(--error);
+  color: white;
+}
+
+/* Disabled State */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
