@@ -22,7 +22,7 @@ import Step3 from "../room-owner-page/AddRoom/Step3";
 
 const AddRoom = () => {
   const navigate = useNavigate();
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
 
