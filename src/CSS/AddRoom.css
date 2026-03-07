@@ -1164,3 +1164,77 @@
 .error-text{
 color:red;
 }
+/* General Styling for Video Section */
+.video-upload-section {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.video-dropzone {
+  border: 2px dashed #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  background: #f8fafc;
+}
+
+.video-upload-ui {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #64748b;
+}
+
+/* --- MOBILE RESPONSIVE QUERIES --- */
+@media (max-width: 600px) {
+  .video-preview-wrapper {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  video {
+    height: auto !important; /* Mobile pe height adjust ho jayegi */
+    aspect-ratio: 16 / 9; /* Professional video ratio */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .video-dropzone {
+    padding: 15px; /* Kam space mobile ke liye */
+  }
+
+  .video-upload-ui span {
+    font-size: 14px;
+  }
+
+  /* File name and Remove button adjustment */
+  .video-preview-wrapper > div {
+    flex-direction: column; /* Mobile pe name upar, button niche */
+    align-items: flex-start !important;
+    gap: 12px;
+  }
+
+  .file-name {
+    font-size: 13px;
+    word-break: break-all; /* Lamba naam screen nahi todega */
+    color: #475569;
+    max-width: 100%;
+  }
+
+  .btn-remove-video {
+    width: 100%; /* Mobile pe bada touch target */
+    justify-content: center;
+    padding: 10px;
+    background: #fff1f2;
+    color: #e11d48;
+    border: 1px solid #fda4af;
+    border-radius: 6px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
