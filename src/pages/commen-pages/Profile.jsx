@@ -29,12 +29,21 @@ const Profile = () => {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+    const email = localStorage.getItem("email") || "notadded@rooksdekho.com";
+
+    const derivedName = email
+      .split("@")[0] // "vandanpatel15031986"
+      .replace(/[0-9]/g, "") // "vandanpatel"
+      .split(".") // ["vandanpatel"]
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1)) // ["Vandanpatel"]
+      .join(" "); // "Vandanpatel"
+
     setUser({
-      fullName: localStorage.getItem("fullName") || "Guest User",
-      email:    localStorage.getItem("email")    || "notadded@rooksdekho.com",
-      phone:    localStorage.getItem("phone")    || "Not Added",
-      role:     localStorage.getItem("role")     || "User",
-      userId:   localStorage.getItem("userId")   || "N/A",
+      fullName: derivedName,
+      email,
+      phone: localStorage.getItem("phone") || "Not Added",
+      role: localStorage.getItem("role") || "User",
+      userId: localStorage.getItem("userId") || "N/A",
     });
   }, []);
 
@@ -47,12 +56,12 @@ const Profile = () => {
     setSaving(true);
     try {
       await Api.patch("/users/profile", {
-        id:       localStorage.getItem("userId"),
+        id: localStorage.getItem("userId"),
         fullName: user.fullName,
-        phone:    user.phone,
+        phone: user.phone,
       });
       localStorage.setItem("fullName", user.fullName);
-      localStorage.setItem("phone",    user.phone);
+      localStorage.setItem("phone", user.phone);
       setEditMode(false);
       alert("Profile updated successfully!");
     } catch (err) {
@@ -70,11 +79,12 @@ const Profile = () => {
     }
   };
 
-  const roleLabel = {
-    ROLE_ADMIN: "Admin",
-    ROLE_OWNER: "Owner",
-    ROLE_USER:  "User",
-  }[user.role] ?? user.role;
+  const roleLabel =
+    {
+      ROLE_ADMIN: "Admin",
+      ROLE_OWNER: "Owner",
+      ROLE_USER: "Finder",
+    }[user.role] ?? user.role;
 
   return (
     <div className="profile-wrapper">
@@ -85,7 +95,6 @@ const Profile = () => {
       </div>
 
       <div className="profile-grid">
-
         {/* ══════════════════════════
             SIDEBAR
         ══════════════════════════ */}
@@ -113,7 +122,6 @@ const Profile = () => {
             DETAILS AREA
         ══════════════════════════ */}
         <div className="profile-details-area">
-
           {/* Personal Details Card */}
           <div className="details-card">
             <div className="card-top">
@@ -122,14 +130,22 @@ const Profile = () => {
                 className="edit-toggle-btn"
                 onClick={() => setEditMode((v) => !v)}
               >
-                {editMode ? "Cancel" : <><Edit3 size={14} /> Edit</>}
+                {editMode ? (
+                  "Cancel"
+                ) : (
+                  <>
+                    <Edit3 size={14} /> Edit
+                  </>
+                )}
               </button>
             </div>
 
             <div className="info-fields">
               {/* Full Name */}
               <div className="field-group">
-                <label><User size={14} /> Full Name</label>
+                <label>
+                  <User size={14} /> Full Name
+                </label>
                 {editMode ? (
                   <input
                     type="text"
@@ -145,13 +161,17 @@ const Profile = () => {
 
               {/* Email — always read-only */}
               <div className="field-group">
-                <label><Mail size={14} /> Email Address</label>
+                <label>
+                  <Mail size={14} /> Email Address
+                </label>
                 <p className="readonly-text">{user.email}</p>
               </div>
 
               {/* Phone */}
               <div className="field-group">
-                <label><Phone size={14} /> Phone Number</label>
+                <label>
+                  <Phone size={14} /> Phone Number
+                </label>
                 {editMode ? (
                   <input
                     type="tel"
@@ -207,7 +227,6 @@ const Profile = () => {
               </button>
             </div>
           </div>
-
         </div>
       </div>
     </div>
