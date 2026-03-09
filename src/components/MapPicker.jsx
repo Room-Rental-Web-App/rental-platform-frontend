@@ -44,11 +44,11 @@ export default function MapPicker({ center, onConfirm, onClose }) {
         params: { query },
         signal: signal
       });
-      console.log(res.data);
-      if (res.data && Array.isArray(res.data)) {
-        setSuggestions(res.data);
+      console.log(res.data.features);
+      if (res.data && res.data.features) {
+        setSuggestions(res.data.features);
       }
-      setSuggestions(res.data);
+
     } catch (err) {
       if (err.name !== "CanceledError") {
         console.error("Error fetching location suggestions:", err);
@@ -87,8 +87,19 @@ export default function MapPicker({ center, onConfirm, onClose }) {
 
           {suggestions.length > 0 && (
             <ul className="suggestions">
-              {suggestions.map((s) => (
-                <li key={s.place_id} onClick={() => selectLocation(s.lat, s.lon, s.display_name)}> {s.display_name}</li>
+              {suggestions.map((s, index) => (
+                <li
+                  key={index}
+                  onClick={() =>
+                    selectLocation(
+                      s.properties.lat,
+                      s.properties.lon,
+                      s.properties.formatted
+                    )
+                  }
+                >
+                  {s.properties.formatted}
+                </li>
               ))}
             </ul>
           )}
