@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // 1. useNavigate import kiya
 import Api from "../../api/Api";
 import "../../CSS/room-detail.css";
 import Reviews from "../../components/Reviews";
@@ -10,6 +10,7 @@ import MyLoader from "../../components/MyLoader";
 
 function RoomDetailPage() {
   const { roomId } = useParams();
+  const navigate = useNavigate(); // 2. navigate function initialize kiya
   const { isPremiumUser } = usePremiumStatus();
 
   const [room, setRoom] = useState(null);
@@ -22,6 +23,8 @@ function RoomDetailPage() {
 
   const userId = localStorage.getItem("userId") || null;
   const role = localStorage.getItem("role") || null;
+
+  // Isse thoda safe banaya taaki owner data load hone ka wait kare
   const targetId = reportType === "ROOM_OWNER" ? roomOwner?.id : roomId;
 
   useEffect(() => {
@@ -74,10 +77,14 @@ function RoomDetailPage() {
       {/* ───── GALLERY ───── */}
       <div className="rd-gallery-bar">
         <div className="rd-gallery-inner">
-          {/* Main media */}
           <div className={`rd-main-img-wrap ${imgLoaded ? "img-ready" : ""}`}>
             {activeMedia.type === "video" ? (
-              <video className="rd-main-img" controls autoPlay>
+              <video
+                className="rd-main-img"
+                controls
+                autoPlay
+                key={activeMedia.url}
+              >
                 <source src={activeMedia.url} type="video/mp4" />
               </video>
             ) : (
@@ -98,7 +105,6 @@ function RoomDetailPage() {
             </div>
           </div>
 
-          {/* Thumbnails */}
           <div className="rd-thumb-strip">
             {room.imageUrls?.map((img, i) => (
               <button
@@ -129,7 +135,6 @@ function RoomDetailPage() {
 
       {/* ───── CONTENT ───── */}
       <div className="rd-content-grid">
-        {/* LEFT */}
         <div className="rd-left">
           <div className="rd-card rd-header-card">
             <h1 className="rd-title">{room.title}</h1>
@@ -186,10 +191,8 @@ function RoomDetailPage() {
           </div>
         </div>
 
-        {/* RIGHT */}
         <div className="rd-right">
           <div className="rd-sticky-panel">
-            {/* Address */}
             <div className="rd-panel-section">
               <p className="rd-panel-label">Address</p>
               {isPremiumUser ? (
@@ -205,14 +208,19 @@ function RoomDetailPage() {
               ) : (
                 <p className="rd-address-blur">
                   {room.address?.split(" ")[0]}…
-                  <span className="rd-upgrade-chip">🔓 Upgrade to reveal</span>
+                  <span
+                    className="rd-upgrade-chip"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => navigate("/premium")} // Blur address par click se bhi redirect
+                  >
+                    🔓 Upgrade to reveal
+                  </span>
                 </p>
               )}
             </div>
 
             <div className="rd-panel-divider" />
 
-            {/* Owner / Locked */}
             {!isPremiumUser ? (
               <div className="rd-locked-card">
                 <div className="rd-lock-circle">🔒</div>
@@ -221,14 +229,17 @@ function RoomDetailPage() {
                   Upgrade to Premium to view owner details and get in touch
                   directly.
                 </p>
-                <button className="rd-upgrade-btn">
+                {/* 3. Button par click handler lagaya */}
+                <button
+                  className="rd-upgrade-btn"
+                  onClick={() => navigate("/premium")}
+                >
                   ⚡ Upgrade to Premium
                 </button>
               </div>
             ) : (
               <div className="rd-owner-card">
                 <p className="rd-panel-label">Property Owner</p>
-
                 <div className="rd-owner-row">
                   <div className="rd-owner-avatar">
                     {roomOwner?.email?.charAt(0).toUpperCase() || "?"}
@@ -240,12 +251,9 @@ function RoomDetailPage() {
                     <p className="rd-owner-email">{roomOwner?.email || ""}</p>
                   </div>
                 </div>
-
-                {/* Verified badge */}
                 <div className="rd-owner-meta">
                   <span className="rd-owner-badge">✔ Verified Owner</span>
                 </div>
-
                 <a
                   href={`tel:${roomOwner?.phone}`}
                   className="rd-contact-btn"
