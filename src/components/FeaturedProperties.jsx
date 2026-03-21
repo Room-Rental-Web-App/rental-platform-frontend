@@ -58,7 +58,7 @@ const FeaturedProperties = () => {
                   <Bed size={12} /> {room.roomType}
                 </span>
                 <span>
-                  <LayoutGrid size={12} /> {room.sqft || 0} sqft
+                  <LayoutGrid size={12} /> {room.area || 0} sqft
                 </span>
               </div>
             </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // 1. useNavigate import kiya
 import Api from "../../api/Api";
 import "../../CSS/room-detail.css";
 import Reviews from "../../components/Reviews";
@@ -10,6 +10,7 @@ import MyLoader from "../../components/MyLoader";
 
 function RoomDetailPage() {
   const { roomId } = useParams();
+  const navigate = useNavigate(); // 2. navigate function initialize kiya
   const { isPremiumUser } = usePremiumStatus();
 
   const [room, setRoom] = useState(null);
@@ -18,16 +19,13 @@ function RoomDetailPage() {
   const [imgLoaded, setImgLoaded] = useState(false);
   const [reportType, setReportType] = useState("ROOM_OWNER");
 
-  const [activeMedia, setActiveMedia] = useState({
-    type: "image",
-    url: "",
-  });
+  const [activeMedia, setActiveMedia] = useState({ type: "image", url: "" });
 
   const userId = localStorage.getItem("userId") || null;
   const role = localStorage.getItem("role") || null;
 
-  const targetId =
-    reportType === "ROOM_OWNER" ? roomOwner?.id : roomId;
+  // Isse thoda safe banaya taaki owner data load hone ka wait kare
+  const targetId = reportType === "ROOM_OWNER" ? roomOwner?.id : roomId;
 
   useEffect(() => {
     Api.get(`/rooms/roomDetails/${roomId}`)
@@ -36,23 +34,17 @@ function RoomDetailPage() {
         setRoom(roomData);
 
         if (roomData.imageUrls?.length > 0) {
-          setActiveMedia({
-            type: "image",
-            url: roomData.imageUrls[0],
-          });
+          setActiveMedia({ type: "image", url: roomData.imageUrls[0] });
         }
 
         if (roomData.ownerEmail) {
           Api.get(`/users/roomOwner/${roomId}/${roomData.ownerEmail}`)
-            .then((ownerRes) =>
-              setRoomOwner(ownerRes.data)
-            )
+            .then((ownerRes) => setRoomOwner(ownerRes.data))
             .catch((err) => {
               console.error("Owner API error:", err);
               setRoomOwner(null);
             });
         }
-
         setLoading(false);
       })
       .catch((err) => {
@@ -64,9 +56,7 @@ function RoomDetailPage() {
   const handleCallOwner = () => {
     Api.patch(`/rooms/${roomId}/increment-contact`)
       .then(() => console.log("Interest recorded"))
-      .catch((err) =>
-        console.error("Error recording interest", err)
-      );
+      .catch((err) => console.error("Error recording interest", err));
   };
 
   const handleImageClick = (img) => {
@@ -80,66 +70,47 @@ function RoomDetailPage() {
   };
 
   if (loading)
-    return (
-      <MyLoader data={"Fetching property data... Please wait..."} />
-    );
+    return <MyLoader data={"Fetching property data... Please wait..."} />;
 
   return (
     <div className="rd-page">
       {/* ───── GALLERY ───── */}
       <div className="rd-gallery-bar">
         <div className="rd-gallery-inner">
-          <div
-            className={`rd-main-img-wrap ${
-              imgLoaded ? "img-ready" : ""
-            }`}
-          >
+          <div className={`rd-main-img-wrap ${imgLoaded ? "img-ready" : ""}`}>
             {activeMedia.type === "video" ? (
               <video
                 className="rd-main-img"
                 controls
                 autoPlay
+                key={activeMedia.url}
               >
-                <source
-                  src={activeMedia.url}
-                  type="video/mp4"
-                />
+                <source src={activeMedia.url} type="video/mp4" />
               </video>
             ) : (
               <img
-                src={
-                  activeMedia.url ||
-                  "https://via.placeholder.com/800x500"
-                }
+                src={activeMedia.url || "https://via.placeholder.com/800x500"}
                 alt="Selected View"
                 className="rd-main-img"
                 onLoad={() => setImgLoaded(true)}
               />
             )}
-
             <div className="rd-img-overlay" />
-
             <div className="rd-img-badge">
               {room.isAvailable ? (
-                <span className="badge-available">
-                  ✦ Available
-                </span>
+                <span className="badge-available">✦ Available</span>
               ) : (
-                <span className="badge-booked">
-                  ✦ Booked
-                </span>
+                <span className="badge-booked">✦ Booked</span>
               )}
             </div>
           </div>
 
-          {/* THUMBNAILS */}
           <div className="rd-thumb-strip">
             {room.imageUrls?.map((img, i) => (
               <button
                 key={i}
                 className={`rd-thumb ${
-                  activeMedia.url === img &&
-                  activeMedia.type === "image"
+                  activeMedia.url === img && activeMedia.type === "image"
                     ? "rd-thumb--active"
                     : ""
                 }`}
@@ -151,18 +122,11 @@ function RoomDetailPage() {
 
             {room.videoUrl && (
               <button
-                className={`rd-thumb ${
-                  activeMedia.type === "video"
-                    ? "rd-thumb--active"
-                    : ""
-                }`}
+                className={`rd-thumb ${activeMedia.type === "video" ? "rd-thumb--active" : ""}`}
                 onClick={handleVideoClick}
               >
-                <video
-                  src={room.videoUrl}
-                  muted
-                  preload="metadata"
-                />
+                <video src={room.videoUrl} muted preload="metadata" />
+                <span className="rd-thumb-play">▶</span>
               </button>
             )}
           </div>
@@ -171,21 +135,37 @@ function RoomDetailPage() {
 
       {/* ───── CONTENT ───── */}
       <div className="rd-content-grid">
-        {/* LEFT */}
         <div className="rd-left">
           <div className="rd-card rd-header-card">
             <h1 className="rd-title">{room.title}</h1>
             <p className="rd-location">
-              {room.city}, {room.pincode}
+              📍 {room.city}, {room.pincode}
             </p>
             <div className="rd-price-block">
-              ₹{room.price?.toLocaleString()} /month
+              ₹{room.price?.toLocaleString()}{" "}
+              <span
+                style={{
+                  fontSize: "1rem",
+                  fontWeight: 500,
+                  color: "var(--text-tertiary)",
+                }}
+              >
+                /month
+              </span>
             </div>
           </div>
 
           <div className="rd-card">
             <h2>About this property</h2>
-            <p>{room.description}</p>
+            <p
+              style={{
+                fontSize: "0.925rem",
+                lineHeight: 1.8,
+                color: "var(--text-secondary)",
+              }}
+            >
+              {room.description}
+            </p>
           </div>
 
           <div className="rd-card">
@@ -199,16 +179,11 @@ function RoomDetailPage() {
             </div>
           </div>
 
-          {roomId &&
-            userId &&
-            !room.isAvailable && (
-              <div className="rd-card">
-                <NotifiedWhenAvailable
-                  userId={userId}
-                  roomId={roomId}
-                />
-              </div>
-            )}
+          {roomId && userId && !room.isAvailable && (
+            <div className="rd-card">
+              <NotifiedWhenAvailable userId={userId} roomId={roomId} />
+            </div>
+          )}
 
           <div className="rd-card">
             <h2>Reviews</h2>
@@ -216,22 +191,28 @@ function RoomDetailPage() {
           </div>
         </div>
 
-        {/* RIGHT */}
         <div className="rd-right">
           <div className="rd-sticky-panel">
-
-            {/* ADDRESS */}
             <div className="rd-panel-section">
-              <p className="rd-panel-label">
-                Address
-              </p>
-
+              <p className="rd-panel-label">Address</p>
               {isPremiumUser ? (
-                <p>{room.address}</p>
+                <p
+                  style={{
+                    fontSize: "0.9rem",
+                    color: "var(--text-secondary)",
+                    lineHeight: 1.55,
+                  }}
+                >
+                  {room.address}
+                </p>
               ) : (
                 <p className="rd-address-blur">
                   {room.address?.split(" ")[0]}…
-                  <span className="rd-upgrade-chip">
+                  <span
+                    className="rd-upgrade-chip"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => navigate("/premium")} // Blur address par click se bhi redirect
+                  >
                     🔓 Upgrade to reveal
                   </span>
                 </p>
@@ -240,54 +221,46 @@ function RoomDetailPage() {
 
             <div className="rd-panel-divider" />
 
-            {/* OWNER SECTION RESTORED */}
             {!isPremiumUser ? (
               <div className="rd-locked-card">
-                <div className="rd-lock-circle">
-                  🔒
-                </div>
-                <p className="rd-locked-title">
-                  Contact locked
-                </p>
+                <div className="rd-lock-circle">🔒</div>
+                <p className="rd-locked-title">Contact locked</p>
                 <p className="rd-locked-desc">
-                  Upgrade to Premium to view owner
-                  details and get in touch directly.
+                  Upgrade to Premium to view owner details and get in touch
+                  directly.
                 </p>
-                <button className="rd-upgrade-btn">
-                  Upgrade to Premium
+                {/* 3. Button par click handler lagaya */}
+                <button
+                  className="rd-upgrade-btn"
+                  onClick={() => navigate("/premium")}
+                >
+                  ⚡ Upgrade to Premium
                 </button>
               </div>
             ) : (
               <div className="rd-owner-card">
-                <p className="rd-panel-label">
-                  Property Owner
-                </p>
-
+                <p className="rd-panel-label">Property Owner</p>
                 <div className="rd-owner-row">
                   <div className="rd-owner-avatar">
-                    {roomOwner?.email
-                      ?.charAt(0)
-                      .toUpperCase() || "?"}
+                    {roomOwner?.email?.charAt(0).toUpperCase() || "?"}
                   </div>
                   <div>
                     <p className="rd-owner-name">
-                      {roomOwner?.fullName ||
-                        "Verified Owner"}
+                      {roomOwner?.fullName || "Verified Owner"}
                     </p>
-                    <p className="rd-owner-email">
-                      {roomOwner?.email || ""}
-                    </p>
+                    <p className="rd-owner-email">{roomOwner?.email || ""}</p>
                   </div>
                 </div>
-
+                <div className="rd-owner-meta">
+                  <span className="rd-owner-badge">✔ Verified Owner</span>
+                </div>
                 <a
                   href={`tel:${roomOwner?.phone}`}
                   className="rd-contact-btn"
                   onClick={handleCallOwner}
                 >
-                  Contact Owner
+                  📞 Contact Owner
                 </a>
-
                 <p className="rd-contact-note">
                   Usually responds within 2 hours
                 </p>
@@ -298,26 +271,14 @@ function RoomDetailPage() {
               <>
                 <div className="rd-panel-divider" />
                 <div className="rd-report-section">
-                  <p className="rd-panel-label">
-                    🚩 Report this listing
-                  </p>
-
+                  <p className="rd-panel-label">🚩 Report this listing</p>
                   <select
                     value={reportType}
-                    onChange={(e) =>
-                      setReportType(
-                        e.target.value
-                      )
-                    }
+                    onChange={(e) => setReportType(e.target.value)}
                   >
-                    <option value="ROOM">
-                      Inaccurate Details
-                    </option>
-                    <option value="ROOM_OWNER">
-                      Suspicious Owner
-                    </option>
+                    <option value="ROOM">Inaccurate Details</option>
+                    <option value="ROOM_OWNER">Suspicious Owner</option>
                   </select>
-
                   <CreateReport
                     reporterId={userId}
                     reportType={reportType}

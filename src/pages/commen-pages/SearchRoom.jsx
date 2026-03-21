@@ -94,7 +94,7 @@ export default function SearchRoom() {
       {loading && <div className="loader">Loading…</div>}
       {!loading && <RoomGrid rooms={rooms} applyFilters={applyFilters}/>}
       {!hasMore && rooms.length > 0 && (
-        <div className="loader">No more rooms</div>
+        <div className="loader"></div>
       )}
     </div>
   );
