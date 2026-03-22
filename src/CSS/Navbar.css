@@ -66,6 +66,16 @@
   justify-content: center;
 }
 
+
+.navbar-logo {
+  height: 52px;  /* 36px → 52px */
+  width: auto;
+  display: block;
+}
+
+.drawer-logo {
+  height: 82px;  /* 30px → 42px */
+}
 .nav-link {
   position: relative;
   display: inline-flex;

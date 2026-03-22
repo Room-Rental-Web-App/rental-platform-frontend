@@ -25,7 +25,7 @@ import { useWishlist } from "../context/WishlistContext";
 import usePremiumStatus from "../customHook/usePremiumStatus";
 
 import "../CSS/Navbar.css";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo2.jpeg";
 
 const Navbar = ({ isLoggedIn, onLogout, isPremiumUser }) => {
   const location = useLocation();
