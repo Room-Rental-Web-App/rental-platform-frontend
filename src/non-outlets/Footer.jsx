@@ -95,7 +95,7 @@ function Footer() {
               <Mail size={16} /> roomdekhobharat@gmail.com
             </span>
             <span className="contact-item">
-              <MapPin size={16} /> Bhopal , Madhya Pradesh, India
+              <MapPin size={16} /> Mauganj , Madhya Pradesh, India
             </span>
           </div>
         </div>
