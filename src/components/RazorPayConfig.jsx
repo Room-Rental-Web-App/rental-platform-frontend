@@ -31,7 +31,7 @@ function RazorPayConfig({
   const handlePayment = async () => {
     try {
       // Step 1: Create Order on your Backend
-      const response = await Api.post("payment/create-order", {
+      const response = await Api.post("/api/payment/create-order", {
         amountToPay,
         email,
         role,
