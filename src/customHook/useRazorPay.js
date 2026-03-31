@@ -1,78 +1,67 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Api from "../api/Api";
 
-/**
- * useRazorPay
- * Razorpay script load karta hai aur ek `triggerPayment` function return karta hai
- * jo directly call kiya ja sakta hai (e.g., T&C accept hone ke baad)
- *
- * @param {Function} onSuccess - Payment + verify success pe call hota hai
- * @param {Function} onFailure - Koi bhi failure pe call hota hai ("create" | "verify" | "dismissed")
- */
 export default function useRazorPay(onSuccess, onFailure) {
   const email = localStorage.getItem("email");
   const role = localStorage.getItem("role");
+  const [cashfree, setCashfree] = useState(null);
 
   useEffect(() => {
-    if (document.querySelector('script[src*="checkout.razorpay.com"]')) return;
+    if (document.querySelector('script[src*="cashfree.com"]')) return;
     const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.src = "https://sdk.cashfree.com/js/v3/cashfree.js";
     script.async = true;
+    script.onload = () => {
+      setCashfree(window.Cashfree({ mode: "production" }));
+    };
     document.body.appendChild(script);
   }, []);
 
   const triggerPayment = async ({ amountToPay, planCode }) => {
+    if (!cashfree) return;
+
     try {
       const order = await Api.post("payment/create-order", {
         amountToPay,
-        currency: "INR",
         email,
         role,
         planCode,
       });
 
-      const { orderId, razorpayKey } = order.data;
+      const { paymentSessionId, orderId } = order.data;
 
-      const options = {
-        key: razorpayKey,
-        amount: amountToPay * 100,
-        currency: "INR",
-        name: "RoomsDekho",
-        description: "Premium Plan Payment",
-        order_id: orderId,
-        handler: async (response) => {
+      cashfree
+        .checkout({
+          paymentSessionId,
+          redirectTarget: "_modal",
+        })
+        .then(async (result) => {
+          // result.error is null if payment process completes
+          if (result.error) {
+            if (onFailure) onFailure("dismissed");
+            return;
+          }
+
+          // Always verify with backend after modal interaction
           try {
             const verifyRes = await Api.post("payment/verify", {
-              razorpayPaymentId: response.razorpay_payment_id,
-              razorpayOrderId: response.razorpay_order_id,
-              razorpaySignature: response.razorpay_signature,
+              orderId,
               email,
               role,
               amountToPay,
               planCode,
             });
 
-            if (verifyRes.status === 200) {
-              if (onSuccess) onSuccess();
+            if (verifyRes.status === 200 && onSuccess) {
+              onSuccess(); // Ensure this handles your navigation
             }
-          } catch (verifyErr) {
-            console.error("Verification failed", verifyErr);
+          } catch (err) {
+            console.error("Verification failed", err);
             if (onFailure) onFailure("verify");
           }
-        },
-        modal: {
-          ondismiss: () => {
-            if (onFailure) onFailure("dismissed");
-          },
-        },
-        prefill: { email },
-        theme: { color: "#4f46e5" },
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.open();
+        });
     } catch (err) {
-      console.error(err);
+      console.error("Error:", err);
       if (onFailure) onFailure("create");
     }
   };
