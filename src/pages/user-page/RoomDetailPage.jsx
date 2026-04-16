@@ -255,7 +255,7 @@ function RoomDetailPage() {
                   <span className="rd-owner-badge">✔ Verified Owner</span>
                 </div>
                 <a
-                  href={`tel:${roomOwner?.phone}`}
+                  href={`tel:${roomOwner?.contactNumber}`}
                   className="rd-contact-btn"
                   onClick={handleCallOwner}
                 >
