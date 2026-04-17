@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // 1. useNavigate import kiya
+import { useParams, useNavigate } from "react-router-dom";
 import Api from "../../api/Api";
 import "../../CSS/room-detail.css";
 import Reviews from "../../components/Reviews";
@@ -10,7 +10,7 @@ import MyLoader from "../../components/MyLoader";
 
 function RoomDetailPage() {
   const { roomId } = useParams();
-  const navigate = useNavigate(); // 2. navigate function initialize kiya
+  const navigate = useNavigate();
   const { isPremiumUser } = usePremiumStatus();
 
   const [room, setRoom] = useState(null);
@@ -18,13 +18,13 @@ function RoomDetailPage() {
   const [loading, setLoading] = useState(true);
   const [imgLoaded, setImgLoaded] = useState(false);
   const [reportType, setReportType] = useState("ROOM_OWNER");
+  const [isActionLoading, setIsActionLoading] = useState(false); // To prevent multiple clicks
 
   const [activeMedia, setActiveMedia] = useState({ type: "image", url: "" });
 
   const userId = localStorage.getItem("userId") || null;
   const role = localStorage.getItem("role") || null;
 
-  // Isse thoda safe banaya taaki owner data load hone ka wait kare
   const targetId = reportType === "ROOM_OWNER" ? roomOwner?.id : roomId;
 
   useEffect(() => {
@@ -32,6 +32,7 @@ function RoomDetailPage() {
       .then((res) => {
         const roomData = res.data;
         setRoom(roomData);
+        console.log("Room Data Loaded:", roomData); // Debugging ke liye
 
         if (roomData.imageUrls?.length > 0) {
           setActiveMedia({ type: "image", url: roomData.imageUrls[0] });
@@ -53,10 +54,20 @@ function RoomDetailPage() {
       });
   }, [roomId]);
 
-  const handleCallOwner = () => {
+  // Unified function to record interest and handle action
+  const handleContactAction = (type) => {
+    if (isActionLoading) return;
+    setIsActionLoading(true);
+
     Api.patch(`/rooms/${roomId}/increment-contact`)
-      .then(() => console.log("Interest recorded"))
-      .catch((err) => console.error("Error recording interest", err));
+      .then(() => {
+        console.log(`Interest recorded for ${type}`);
+        setIsActionLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error recording interest", err);
+        setIsActionLoading(false);
+      });
   };
 
   const handleImageClick = (img) => {
@@ -71,6 +82,9 @@ function RoomDetailPage() {
 
   if (loading)
     return <MyLoader data={"Fetching property data... Please wait..."} />;
+
+  // Get the best available number
+  const finalContact = room?.contactNumber || roomOwner?.contactNumber;
 
   return (
     <div className="rd-page">
@@ -211,7 +225,7 @@ function RoomDetailPage() {
                   <span
                     className="rd-upgrade-chip"
                     style={{ cursor: "pointer" }}
-                    onClick={() => navigate("/premium")} // Blur address par click se bhi redirect
+                    onClick={() => navigate("/premium")}
                   >
                     🔓 Upgrade to reveal
                   </span>
@@ -229,7 +243,6 @@ function RoomDetailPage() {
                   Upgrade to Premium to view owner details and get in touch
                   directly.
                 </p>
-                {/* 3. Button par click handler lagaya */}
                 <button
                   className="rd-upgrade-btn"
                   onClick={() => navigate("/premium")}
@@ -251,16 +264,52 @@ function RoomDetailPage() {
                     <p className="rd-owner-email">{roomOwner?.email || ""}</p>
                   </div>
                 </div>
+
                 <div className="rd-owner-meta">
                   <span className="rd-owner-badge">✔ Verified Owner</span>
                 </div>
-                <a
-                  href={`tel:${roomOwner?.contactNumber}`}
-                  className="rd-contact-btn"
-                  onClick={handleCallOwner}
+
+                {/* --- ACTIONS SECTION --- */}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px",
+                    marginTop: "15px",
+                  }}
                 >
-                  📞 Contact Owner
-                </a>
+                  {/* CALL BUTTON */}
+                  <a
+                    href={finalContact ? `tel:+91${finalContact}` : "#"}
+                    className="rd-contact-btn"
+                    onClick={() => handleContactAction("Call")}
+                    style={{ textDecoration: "none", textAlign: "center" }}
+                  >
+                    📞 Call Owner
+                  </a>
+
+                  {/* WHATSAPP BUTTON */}
+                  <a
+                    href={
+                      finalContact
+                        ? `https://wa.me/91${finalContact}?text=Hi, I am interested in your property: ${room?.title}`
+                        : "#"
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rd-contact-btn"
+                    onClick={() => handleContactAction("WhatsApp")}
+                    style={{
+                      textDecoration: "none",
+                      textAlign: "center",
+                      backgroundColor: "#25D366",
+                      borderColor: "#25D366",
+                    }}
+                  >
+                    💬 WhatsApp
+                  </a>
+                </div>
+
                 <p className="rd-contact-note">
                   Usually responds within 2 hours
                 </p>
