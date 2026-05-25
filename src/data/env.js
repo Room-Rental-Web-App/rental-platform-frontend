@@ -7,5 +7,4 @@ export const razorPayKeyId = "rzp_test_1DP5mmOlF5G5ag";
 
 const isLocalhost = window.location.hostname === "localhost"
 const A="http://localhost:8080/api";
-
-export const API_BASE = isLocalhost ? "http://localhost:8080/api" : "https://api.roomsdekho.in/api";
+export const API_BASE = isLocalhost ? "http://localhost:8080/api" : "http://52.66.93.245:8080/api";

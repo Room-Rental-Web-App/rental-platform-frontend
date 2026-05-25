@@ -1,3 +1,10 @@
+// RoomFilterBar.js - Google Maps version
+// Kya badla:
+// - "Use My Location" button ab Google Maps Geocoding API se
+//   user ki current lat/lng ko proper address mein convert karta hai
+// - onUseLocation callback mein ab { lat, lng, city, pincode } pass hoga
+//   (parent component mein onUseLocation update karna hoga accordingly)
+
 import "../CSS/roomFilterBar.css";
 
 export default function RoomFilterBar({
@@ -7,7 +14,6 @@ export default function RoomFilterBar({
   onUseLocation,
   isPremiumUser,
 }) {
-
   const handleReset = () => {
     const emptyFilters = {
       city: "",
@@ -18,23 +24,80 @@ export default function RoomFilterBar({
       radiusKm: "",
     };
 
+    // ✅ Pehle draftFilters UI clear karo
     Object.keys(emptyFilters).forEach((key) => {
-      const fakeEvent = {
-        target: {
-          name: key,
-          value: "",
-        },
-      };
-      onChange(fakeEvent);
+      onChange({ target: { name: key, value: "" } });
     });
 
-    onApply();
+    // ✅ Directly empty filters pass karo — async state ka wait nahi
+    onApply(emptyFilters, null);
   };
 
+  // ✅ Google Maps Geocoding se current location ka city + pincode nikalo
+  // ✅ Ye wala handleUseMyLocation replace karo
+  const handleUseMyLocation = () => {
+    if (!isPremiumUser) {
+      alert("This feature is available only for Premium users.");
+      return;
+    }
+
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        try {
+          // ✅ importLibrary use karo — purana new Geocoder() nahi chalega
+          const { Geocoder } =
+            await window.google.maps.importLibrary("geocoding");
+          const geocoder = new Geocoder();
+
+          geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+            if (status !== "OK" || !results[0]) {
+              onUseLocation({ lat, lng, city: "", pincode: "" });
+              return;
+            }
+
+            const components = results[0].address_components;
+
+            const cityComp =
+              components.find((c) => c.types.includes("locality")) ||
+              components.find((c) =>
+                c.types.includes("administrative_area_level_2"),
+              );
+
+            const pincodeComp = components.find((c) =>
+              c.types.includes("postal_code"),
+            );
+
+            const city = cityComp ? cityComp.long_name : "";
+            const pincode = pincodeComp ? pincodeComp.long_name : "";
+
+            onUseLocation({ lat, lng, city, pincode });
+
+            if (city) onChange({ target: { name: "city", value: city } });
+            if (pincode)
+              onChange({ target: { name: "pincode", value: pincode } });
+          });
+        } catch (err) {
+          console.error("Geocoding error:", err);
+          onUseLocation({ lat, lng, city: "", pincode: "" });
+        }
+      },
+      (error) => {
+        console.error("Location error:", error);
+        alert("Location access denied. Please allow location permission.");
+      },
+      { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 },
+    );
+  };
   return (
     <div className="filter-wrapper">
-
-
       <h3 className="filter-title">Filters</h3>
 
       {/* LOCATION */}
@@ -54,6 +117,7 @@ export default function RoomFilterBar({
           value={filters.pincode || ""}
           onChange={onChange}
         />
+
         <input
           type="number"
           name="radiusKm"
@@ -69,17 +133,12 @@ export default function RoomFilterBar({
           }}
         />
 
+        {/* ✅ Google Maps Geocoding wala button */}
         <button
           className="btn btn-outline btn-sm"
-          onClick={() => {
-            if (!isPremiumUser) {
-              alert("This feature is available only for Premium users.");
-              return;
-            }
-            onUseLocation();
-          }}
+          onClick={handleUseMyLocation}
         >
-          Use My Location
+          📍 Use My Location
         </button>
       </div>
 
@@ -123,21 +182,14 @@ export default function RoomFilterBar({
 
       {/* ACTIONS */}
       <div className="filter-actions">
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={onApply}
-        >
+        <button className="btn btn-primary btn-sm" onClick={onApply}>
           Apply Filters
         </button>
 
-        <button
-          className="btn btn-ghost btn-sm"
-          onClick={handleReset}
-        >
+        <button className="btn btn-ghost btn-sm" onClick={handleReset}>
           Reset
         </button>
       </div>
-
     </div>
   );
 }

@@ -1,3 +1,8 @@
+// Step2.js - Google Maps compatible version
+// Kya badla: kuch nahi! Step2.js same rehta hai.
+// MapPicker.js ko replace karne se automatically Google Maps kaam karega.
+// Ye file as-is rakho. ✅
+
 import React, { useEffect, useState } from "react";
 import { MapPin as PinIcon } from "lucide-react";
 import MapPicker from "../../../components/MapPicker";
@@ -45,7 +50,6 @@ const Step2 = ({ formData, setFormData, setStep }) => {
         setOpenMap(true);
       },
       () => {
-        // fallback silently
         setFormData((prev) => ({
           ...prev,
           latitude: DEFAULT_LOCATION.lat,
@@ -58,7 +62,7 @@ const Step2 = ({ formData, setFormData, setStep }) => {
         enableHighAccuracy: true,
         timeout: 8000,
         maximumAge: 0,
-      }
+      },
     );
   }, [setFormData]);
 
@@ -163,14 +167,10 @@ const Step2 = ({ formData, setFormData, setStep }) => {
           <input
             type="text"
             value={formData.city || ""}
-            onChange={(e) =>
-              setFormData({ ...formData, city: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
             className={errors.city ? "input-error" : ""}
           />
-          {errors.city && (
-            <small className="error-text">{errors.city}</small>
-          )}
+          {errors.city && <small className="error-text">{errors.city}</small>}
         </div>
 
         <div className="input-box">
@@ -213,19 +213,11 @@ const Step2 = ({ formData, setFormData, setStep }) => {
       </div>
 
       <div className="btn-row">
-        <button
-          type="button"
-          onClick={() => setStep(1)}
-          className="btn-prev"
-        >
+        <button type="button" onClick={() => setStep(1)} className="btn-prev">
           Back
         </button>
 
-        <button
-          type="button"
-          onClick={handleNext}
-          className="btn-next"
-        >
+        <button type="button" onClick={handleNext} className="btn-next">
           Next Step
         </button>
       </div>

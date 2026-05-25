@@ -1,15 +1,15 @@
-import { useLocation } from "react-router-dom"; 
+import { useLocation } from "react-router-dom";
 import useInfiniteScroll from "../../customHook/useInfiniteScroll";
 import usePremiumStatus from "../../customHook/usePremiumStatus";
 import useRoomSearch from "../../customHook/useRoomSearch";
 import RoomFilterBar from "../../components/RoomFilterBar";
 import "../../CSS/search-room.css";
 import MapPicker from "../../components/MapPicker";
-import { useState, useEffect } from "react"; // useEffect add kiya
+import { useState, useEffect } from "react";
 import RoomGrid from "../../components/RoomGrid";
 
 export default function SearchRoom() {
-  const location = useLocation(); // URL track karne ke liye
+  const location = useLocation();
   const { isPremiumUser } = usePremiumStatus();
   const [openMap, setOpenMap] = useState(false);
   const [mapCenter, setMapCenter] = useState(null);
@@ -26,47 +26,49 @@ export default function SearchRoom() {
     setLocation,
   } = useRoomSearch({ mode: "PUBLIC" });
 
-  // --- NAYA LOGIC: URL se Type uthane ke liye ---
+  // URL se roomType uthana
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const typeFromUrl = queryParams.get("type");
-
     if (typeFromUrl) {
-      // URL mein 'type' milte hi use filters mein set karo
       setDraftFilters((prev) => ({ ...prev, roomType: typeFromUrl }));
-
-      // Turant filters apply karwa do taaki backend hit ho jaye
-      // Note: roomType wahi hona chahiye jo aapke Backend/FilterBar mein use ho raha hai
-      applyFilters({ ...draftFilters, roomType: typeFromUrl });
+      applyFilters({ roomType: typeFromUrl });
     }
-  }, [location.search]); // Jab bhi URL change ho, ye chale
-  // ----------------------------------------------
-
-  useInfiniteScroll({
-    hasMore,
-    loading,
-    onLoadMore: () => loadRooms(page + 1, true),
-  });
+  }, [location.search]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setDraftFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleUseLocation = () => {
+  // ✅ RoomFilterBar se { lat, lng, city, pincode } aata hai
+  // applyFilters mein location bhi pass karo — ek hi call mein sab ho jaega
+  const handleUseLocation = ({ lat, lng, city, pincode }) => {
     if (!isPremiumUser) return;
 
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setMapCenter({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        });
-        setOpenMap(true);
+    // Filters update karo
+    setDraftFilters((prev) => ({
+      ...prev,
+      city: city || prev.city,
+      pincode: pincode || prev.pincode,
+    }));
+
+    // ✅ applyFilters mein location pass karo — rooms fetch honge
+    applyFilters(
+      {
+        ...draftFilters,
+        city: city || draftFilters.city,
+        pincode: pincode || draftFilters.pincode,
       },
-      () => alert("Enable location access"),
+      { lat, lng }, // ✅ location bhi pass
     );
   };
+
+  useInfiniteScroll({
+    hasMore,
+    loading,
+    onLoadMore: () => loadRooms(page + 1, true),
+  });
 
   return (
     <div className="search-room-page">
@@ -89,13 +91,9 @@ export default function SearchRoom() {
         />
       )}
 
-     
-
       {loading && <div className="loader">Loading…</div>}
-      {!loading && <RoomGrid rooms={rooms} applyFilters={applyFilters}/>}
-      {!hasMore && rooms.length > 0 && (
-        <div className="loader"></div>
-      )}
+      {!loading && <RoomGrid rooms={rooms} applyFilters={applyFilters} />}
+      {!hasMore && rooms.length > 0 && <div className="loader"></div>}
     </div>
   );
 }
