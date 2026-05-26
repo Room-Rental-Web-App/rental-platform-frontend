@@ -1,121 +1,216 @@
-import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
-import { useEffect, useState } from "react";
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+// MapPicker.js - Google Maps (Async Loading version)
+// index.html mein ye script lagao (head ke andar):
+//
+// <script>
+//   (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[a-zA-Z].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
+//   ({key: "YOUR_API_KEY", libraries: ["places"]});
+// </script>
+
+import { useEffect, useRef, useState } from "react";
 import "../CSS/map-picker.css";
-import Api from "../api/Api";
-
-// Fix marker icons
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-  iconUrl:
-    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  shadowUrl:
-    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-});
-
-function ClickHandler({ onMove }) {
-  useMapEvents({
-    click(e) {
-      onMove(e.latlng.lat, e.latlng.lng);
-    },
-  });
-  return null;
-}
-
-function RecenterMap({ position }) {
-  const map = useMap();
-  useEffect(() => {
-    map.setView(position, 13);
-  }, [position, map]);
-  return null;
-}
 
 export default function MapPicker({ center, onConfirm, onClose }) {
+  const mapRef = useRef(null);
+  const markerRef = useRef(null);
+  const inputRef = useRef(null);
+
   const [draftPosition, setDraftPosition] = useState(center);
-  const [query, setQuery] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
+  const [address, setAddress] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  async function loadLocationSuggestions(query, signal) {
+  // 📍 Reverse Geocoding - lat/lng se address nikalo
+  const reverseGeocode = async (pos) => {
     try {
-      const res = await Api.get("/location/search", {
-        params: { query },
-        signal: signal
+      const { Geocoder } = await window.google.maps.importLibrary("geocoding");
+      const geocoder = new Geocoder();
+      geocoder.geocode({ location: pos }, (results, status) => {
+        if (status === "OK" && results[0]) {
+          const formattedAddress = results[0].formatted_address;
+          setAddress(formattedAddress);
+          if (inputRef.current) {
+            inputRef.current.value = formattedAddress;
+          }
+        }
       });
-      console.log(res.data.features);
-      if (res.data && res.data.features) {
-        setSuggestions(res.data.features);
-      }
-
     } catch (err) {
-      if (err.name !== "CanceledError") {
-        console.error("Error fetching location suggestions:", err);
+      console.error("Reverse geocoding error:", err);
+    }
+  };
+
+  // ✅ Google Maps async initialize
+  useEffect(() => {
+    async function initMap() {
+      try {
+        const { Map } = await window.google.maps.importLibrary("maps");
+        const { Marker } = await window.google.maps.importLibrary("marker");
+        const { Autocomplete } =
+          await window.google.maps.importLibrary("places");
+
+        // Map banao
+        const map = new Map(mapRef.current, {
+          center: draftPosition,
+          zoom: 15,
+          mapTypeControl: false,
+          streetViewControl: false,
+          fullscreenControl: false,
+          zoomControlOptions: {
+            position: window.google.maps.ControlPosition.RIGHT_CENTER,
+          },
+        });
+
+        // Draggable Marker
+        const marker = new Marker({
+          position: draftPosition,
+          map,
+          draggable: true,
+          title: "Drag karke exact location set karo",
+          animation: window.google.maps.Animation.DROP,
+        });
+
+        // Marker drag hone par update karo
+        marker.addListener("dragend", () => {
+          const pos = marker.getPosition();
+          const newPos = { lat: pos.lat(), lng: pos.lng() };
+          setDraftPosition(newPos);
+          reverseGeocode(newPos);
+        });
+
+        // Map click par marker move karo
+        map.addListener("click", (e) => {
+          const newPos = {
+            lat: e.latLng.lat(),
+            lng: e.latLng.lng(),
+          };
+          marker.setPosition(newPos);
+          setDraftPosition(newPos);
+          reverseGeocode(newPos);
+        });
+
+        markerRef.current = marker;
+
+        // Places Autocomplete
+        const autocomplete = new Autocomplete(inputRef.current, {
+          componentRestrictions: { country: "in" }, // Sirf India
+          fields: ["geometry", "formatted_address"],
+        });
+
+        autocomplete.addListener("place_changed", () => {
+          const place = autocomplete.getPlace();
+          if (!place.geometry) return;
+
+          const newPos = {
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng(),
+          };
+
+          map.setCenter(newPos);
+          map.setZoom(16);
+          marker.setPosition(newPos);
+          setDraftPosition(newPos);
+          setAddress(place.formatted_address || "");
+
+          if (inputRef.current) {
+            inputRef.current.value = place.formatted_address || "";
+          }
+        });
+
+        // Initial reverse geocode
+        reverseGeocode(draftPosition);
+        setLoading(false);
+      } catch (err) {
+        console.error("Google Maps load error:", err);
+        setError("Map load nahi ho saka. Please refresh karo.");
+        setLoading(false);
       }
     }
-  }
 
-  // 🔍 SEARCH API (Nominatim)
-  useEffect(() => {
-    if (query.length < 3) {
-      setSuggestions([]);
-      return;
-    }
-
-    const controller = new AbortController();
-
-    loadLocationSuggestions(query, controller.signal)
-
-    return () => controller.abort();
-  }, [query]);
-
-  const selectLocation = (lat, lon, displayName) => {
-    const pos = { lat: Number(lat), lng: Number(lon) };
-    setDraftPosition(pos);
-    setQuery(displayName);
-    setSuggestions([]);
-  };
+    initMap();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="map-overlay" onClick={onClose}>
       <div className="map-container" onClick={(e) => e.stopPropagation()}>
-
-        {/* 🔍 SEARCH INPUT */}
+        {/* 🔍 Search Input - Google Places Autocomplete */}
         <div className="map-search">
-          <input type="text" placeholder="Search location (city, area, landmark)" value={query} onChange={(e) => setQuery(e.target.value)} />
-
-          {suggestions.length > 0 && (
-            <ul className="suggestions">
-              {suggestions.map((s, index) => (
-                <li
-                  key={index}
-                  onClick={() =>
-                    selectLocation(
-                      s.properties.lat,
-                      s.properties.lon,
-                      s.properties.formatted
-                    )
-                  }
-                >
-                  {s.properties.formatted}
-                </li>
-              ))}
-            </ul>
-          )}
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="Search location (city, area, landmark...)"
+            defaultValue={address}
+          />
         </div>
 
-        <MapContainer center={draftPosition} zoom={13}>
-          <RecenterMap position={draftPosition} />
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="© OpenStreetMap contributors" />
-          <Marker position={draftPosition} draggable eventHandlers={{ dragend: (e) => { const { lat, lng } = e.target.getLatLng(); setDraftPosition({ lat, lng }); }, }} />
-          <ClickHandler onMove={(lat, lng) => setDraftPosition({ lat, lng })} />
-        </MapContainer>
+        {/* Loading State */}
+        {loading && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "400px",
+              fontSize: "14px",
+              color: "#666",
+            }}
+          >
+            🗺️ Map load ho raha hai...
+          </div>
+        )}
 
-        {/* ✅ ACTIONS */}
+        {/* Error State */}
+        {error && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "400px",
+              fontSize: "14px",
+              color: "red",
+            }}
+          >
+            {error}
+          </div>
+        )}
+
+        {/* 🗺️ Google Map */}
+        <div
+          ref={mapRef}
+          style={{
+            width: "100%",
+            height: "400px",
+            borderRadius: "8px",
+            display: loading || error ? "none" : "block",
+          }}
+        />
+
+        {/* 📌 Current Coordinates */}
+        {!loading && !error && (
+          <div
+            style={{
+              padding: "8px 4px",
+              fontSize: "12px",
+              color: "#555",
+              background: "#f9f9f9",
+              borderRadius: "4px",
+              marginTop: "6px",
+            }}
+          >
+            📍 <strong>Lat:</strong> {draftPosition.lat.toFixed(6)}{" "}
+            &nbsp;|&nbsp;
+            <strong>Lng:</strong> {draftPosition.lng.toFixed(6)}
+          </div>
+        )}
+
+        {/* ✅ Action Buttons */}
         <div className="map-actions">
           <button onClick={onClose}>Cancel</button>
-          <button className="confirm-btn" onClick={() => onConfirm(draftPosition.lat, draftPosition.lng)}>
+          <button
+            className="confirm-btn"
+            onClick={() => onConfirm(draftPosition.lat, draftPosition.lng)}
+            disabled={loading}
+          >
             Confirm Location
           </button>
         </div>
